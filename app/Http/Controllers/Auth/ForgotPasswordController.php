@@ -3,138 +3,205 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\View\View; // Import class View
-// Nanti Anda mungkin perlu:
-// use App\Models\User;
-// use Illuminate\Support\Facades\DB; // Jika menggunakan query builder untuk token/verifikasi
-// use Illuminate\Support\Str; // Untuk generate token
-// use Illuminate\Support\Facades\Mail; // Untuk kirim email (jika alurnya pakai email)
-// use App\Mail\PasswordResetMail; // Contoh Mailable
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 
 class ForgotPasswordController extends Controller
 {
     /**
-     * Menampilkan form untuk meminta link reset password (Step 1 - Email).
+     * Display the forgot password form.
      */
     public function showLinkRequestForm(): View
     {
-        return view('auth.forgotpassword-1');
+        return view('auth.forgot-password');
     }
 
     /**
-     * Menangani permintaan pengiriman link reset password (Proses dari Step 1).
-     * Untuk saat ini, kita akan langsung redirect ke step 2 dengan membawa email.
-     * Di aplikasi nyata, di sini Anda akan:
-     * 1. Validasi email.
-     * 2. Cek apakah email ada di database.
-     * 3. Jika ada, (opsional) generate token unik atau siapkan data untuk verifikasi.
-     * 4. Kirim email ke pengguna dengan link/instruksi atau siapkan sesi/flash data.
-     * 5. Redirect ke halaman step 2 atau halaman konfirmasi.
+     * Handle the email verification request.
      */
-    public function handleLinkRequest(Request $request)
+    public function handleLinkRequest(Request $request): JsonResponse
     {
         $request->validate([
-            'email' => 'required|email|string',
+            'email' => ['required', 'email', 'max:255'],
         ]);
 
-        $email = $request->input('email');
+        // Cari user berdasarkan email
+        $user = User::where('email', $request->email)->first();
 
-        // Logika placeholder: Langsung redirect ke form verifikasi kode
-        // Di aplikasi nyata, Anda mungkin ingin menyimpan email ini di sesi
-        // atau menggunakan token yang dikirim via email yang mengarah ke step 2.
-        // Untuk kesederhanaan, kita teruskan email sebagai query parameter.
-        return redirect()->route('password.show.verification.form', ['email' => $email])
-                         ->with('status', 'Silakan masukkan kode verifikasi.'); // Pesan opsional
-    }
-
-    /**
-     * Menampilkan form untuk memasukkan kode verifikasi (Step 2 - Kode Telepon).
-     */
-    public function showVerificationForm(Request $request): View
-    {
-        // Ambil email dari query parameter (atau sesi jika Anda menggunakannya)
-        $email = $request->query('email');
-
-        if (!$email) {
-            // Jika tidak ada email, redirect kembali ke step 1
-            return redirect()->route('password.request')->withErrors(['email' => 'Sesi tidak valid atau email tidak ditemukan.']);
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Email tidak ditemukan dalam sistem kami.'
+            ], 404);
         }
 
-        return view('auth.forgotpassword-2', ['email' => $email]);
+        if (!$user->tel_num) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Nomor telepon tidak terdaftar untuk akun ini.'
+            ], 400);
+        }
+
+        // Ambil 4 digit terakhir nomor telepon sebagai kode verifikasi STATIC
+        $phoneNumber = preg_replace('/[^0-9]/', '', $user->tel_num);
+        $last4Digits = substr($phoneNumber, -4);
+        
+        // Buat hint untuk ditampilkan (sembunyikan sebagian nomor)
+        $phoneHint = str_repeat('*', max(0, strlen($phoneNumber) - 4)) . $last4Digits;
+
+        // Simpan email dan kode verifikasi di session
+        Session::put('reset_email', $request->email);
+        Session::put('verification_code', $last4Digits); // Kode STATIC dari nomor telepon
+        Session::put('verification_expires', now()->addMinutes(15));
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Silakan masukkan 4 digit terakhir nomor telepon Anda.',
+            'phone_hint' => $phoneHint
+        ]);
     }
 
     /**
-     * Menangani verifikasi kode (Proses dari Step 2).
-     * Untuk saat ini, ini hanya placeholder.
-     * Di aplikasi nyata, di sini Anda akan:
-     * 1. Validasi input (email dan kode).
-     * 2. Ambil pengguna berdasarkan email.
-     * 3. Ambil 4 digit terakhir nomor telepon pengguna dari database.
-     * 4. Bandingkan kode yang dimasukkan dengan 4 digit terakhir nomor telepon.
-     * 5. Jika valid, redirect ke halaman untuk memasukkan password baru.
-     * 6. Jika tidak valid, kembali ke form step 2 dengan pesan error.
+     * Handle the verification code.
      */
-    public function handleVerificationCode(Request $request)
+    public function handleVerificationCode(Request $request): JsonResponse
     {
         $request->validate([
-            'email' => 'required|email|string', // Email bisa diambil dari hidden input atau sesi
-            'verification_code' => 'required|string|min:4|max:4', // Validasi dasar kode
+            'email' => ['required', 'email'],
+            'verification_code' => ['required', 'string', 'size:4'],
         ]);
 
-        $email = $request->input('email');
-        $verificationCode = $request->input('verification_code');
+        // Cek session
+        if (!Session::has('reset_email') || !Session::has('verification_code')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Session expired. Please start over.'
+            ], 400);
+        }
 
-        // --- Logika Placeholder untuk Verifikasi Kode ---
-        // Contoh: Ambil user berdasarkan email
-        // $user = User::where('email', $email)->first();
-        // if (!$user || !$user->telephone_number) {
-        //     return back()->withErrors(['verification_code' => 'User atau nomor telepon tidak ditemukan.'])->withInput();
-        // }
-        // $lastFourDigitsOfPhone = substr($user->telephone_number, -4);
-        // if ($verificationCode === $lastFourDigitsOfPhone) {
-        //     // Kode valid, siapkan untuk reset password
-        //     // Anda mungkin ingin menyimpan status ini di sesi dan membuat token reset
-        //     session(['password_reset_email' => $email, 'password_reset_verified' => true]);
-        //     return redirect()->route('password.reset.form'); // Route ke form input password baru
-        // } else {
-        //     return back()->withErrors(['verification_code' => 'Kode verifikasi tidak valid.'])->withInput();
-        // }
-        // --- Akhir Logika Placeholder ---
+        // Cek apakah session sudah expired
+        if (Session::get('verification_expires') < now()) {
+            Session::forget(['reset_email', 'verification_code', 'verification_expires']);
+            return response()->json([
+                'success' => false,
+                'message' => 'Verification session expired. Please request a new one.'
+            ], 400);
+        }
 
-        // Untuk saat ini, kita anggap berhasil dan tampilkan pesan
-        return redirect()->route('login')->with('status', "Verifikasi kode untuk $email berhasil (placeholder). Anda akan diarahkan ke form reset password.");
-        // Idealnya redirect ke form input password baru.
+        // Cek email dan kode verifikasi
+        $sessionEmail = Session::get('reset_email');
+        $sessionCode = Session::get('verification_code');
+
+        if ($request->email !== $sessionEmail) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Email mismatch.'
+            ], 400);
+        }
+
+        if ($request->verification_code !== $sessionCode) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Kode verifikasi salah. Masukkan 4 digit terakhir nomor telepon Anda.'
+            ], 400);
+        }
+
+        // Verifikasi berhasil
+        Session::put('verified_reset_email', $request->email);
+        Session::forget(['verification_code', 'verification_expires']);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Verification successful.',
+            'redirect_url' => route('password.reset')
+        ]);
     }
 
     /**
-     * (Opsional - Langkah Berikutnya) Menampilkan form untuk memasukkan password baru.
+     * Display the reset password form.
      */
-    // public function showResetForm(Request $request): View
-    // {
-    //     if (!session('password_reset_verified') || !session('password_reset_email')) {
-    //         return redirect()->route('password.request')->withErrors(['email' => 'Verifikasi tidak valid.']);
-    //     }
-    //     $email = session('password_reset_email');
-    //     return view('auth.reset-password', ['email' => $email]); // Anda perlu membuat view ini
-    // }
+    public function showResetForm(): View
+    {
+        if (!Session::has('verified_reset_email')) {
+            return redirect()->route('password.request')
+                ->with('error', 'Unauthorized access. Please verify your email first.');
+        }
+
+        $email = Session::get('verified_reset_email');
+        return view('auth.reset-password', compact('email'));
+    }
 
     /**
-     * (Opsional - Langkah Berikutnya) Menangani penyimpanan password baru.
+     * Handle the password reset.
      */
-    // public function updatePassword(Request $request)
-    // {
-    //     if (!session('password_reset_verified') || !session('password_reset_email')) {
-    //         return redirect()->route('password.request')->withErrors(['email' => 'Verifikasi tidak valid atau sesi telah berakhir.']);
-    //     }
-    //     $request->validate([
-    //         'email' => 'required|email',
-    //         'password' => 'required|string|min:8|confirmed',
-    //         // 'token' => 'required|string', // Jika menggunakan token
-    //     ]);
-    //     // Logika untuk update password user
-    //     // ...
-    //     session()->forget(['password_reset_email', 'password_reset_verified']);
-    //     return redirect()->route('login')->with('status', 'Password Anda telah berhasil direset.');
-    // }
+    public function handleReset(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        if (!Session::has('verified_reset_email') || Session::get('verified_reset_email') !== $request->email) {
+            return redirect()->route('password.request')
+                ->with('error', 'Unauthorized access.');
+        }
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return redirect()->route('password.request')
+                ->with('error', 'User not found.');
+        }
+
+        $user->update([
+            'password_hash' => Hash::make($request->password)
+        ]);
+
+        // Clear all reset sessions
+        Session::forget(['reset_email', 'verified_reset_email']);
+
+        return redirect()->route('login')
+            ->with('status', 'Password berhasil direset! Silakan login dengan password baru Anda.');
+    }
+
+    /**
+     * Resend verification code (tidak perlu kirim apapun, hanya refresh session).
+     */
+    public function resendCode(Request $request): JsonResponse
+    {
+        if (!Session::has('reset_email')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Session expired. Please start over.'
+            ], 400);
+        }
+
+        $email = Session::get('reset_email');
+        $user = User::where('email', $email)->first();
+
+        if (!$user || !$user->tel_num) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unable to resend code.'
+            ], 400);
+        }
+
+        // Kode tetap sama (4 digit terakhir nomor telepon)
+        $phoneNumber = preg_replace('/[^0-9]/', '', $user->tel_num);
+        $last4Digits = substr($phoneNumber, -4);
+
+        // Update session dengan extend expiry
+        Session::put('verification_code', $last4Digits);
+        Session::put('verification_expires', now()->addMinutes(15));
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Kode verifikasi tetap sama: 4 digit terakhir nomor telepon Anda.'
+        ]);
+    }
 }

@@ -3,48 +3,49 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\View\View; // Import class View
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\View\View;
 
 class RegisterController extends Controller
 {
     /**
-     * Menampilkan halaman registrasi.
+     * Display the registration form.
      */
-    public function create(): View // Tambahkan return type hint
+    public function create(): View
     {
-        return view('auth.register'); // Mengarahkan ke 'resources/views/auth/register.blade.php'
+        return view('auth.register');
     }
 
     /**
-     * Menangani proses registrasi pengguna baru.
-     * (Kita akan implementasikan ini nanti)
+     * Handle the registration.
      */
-    // public function store(Request $request)
-    // {
-    //     // Logika untuk validasi dan menyimpan pengguna baru
-    //     // Contoh:
-    //     // $validatedData = $request->validate([
-    //     //     'username' => 'required|string|max:255|unique:users',
-    //     //     'email' => 'required|string|email|max:255|unique:users',
-    //     //     'password' => 'required|string|min:8|confirmed',
-    //     //     'telephone' => 'required|string|max:15',
-    //     // ]);
+    public function store(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:100'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'tel_num' => ['required', 'string', 'max:15', 'regex:/^[0-9+\-\s]+$/'],
+            'is_organizer' => ['boolean'],
+        ]);
 
-    //     // // Buat user baru
-    //     // $user = User::create([
-    //     //     'username' => $validatedData['username'],
-    //     //     'email' => $validatedData['email'],
-    //     //     'password' => Hash::make($validatedData['password']),
-    //     //     'telephone_number' => $validatedData['telephone'],
-    //     // ]);
+        // Clean phone number (remove spaces and special chars except +)
+        $cleanPhone = preg_replace('/[^\d+]/', '', $validated['tel_num']);
 
-    //     // // Login user setelah registrasi (opsional)
-    //     // Auth::login($user);
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password_hash' => Hash::make($validated['password']),
+            'tel_num' => $cleanPhone,
+            'is_organizer' => $request->has('is_organizer') ? 1 : 0,
+        ]);
 
-    //     // // Redirect ke halaman yang sesuai
-    //     // return redirect('/dashboard'); // atau halaman lain
+        // Auto login after registration
+        Auth::login($user);
 
-    //     return redirect()->back()->with('success', 'Registrasi berhasil! Silakan login.'); // Contoh sederhana
-    // }
+        return redirect('/dashboard')->with('status', 'Akun berhasil dibuat!');
+    }
 }
