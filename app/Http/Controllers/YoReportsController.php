@@ -9,9 +9,6 @@ class YoReportsController extends Controller
 {
     public function index()
     {
-        // Ambil semua laporan dari database, urut berdasarkan tanggal terbaru
-        $reports = Report::orderBy('created_at', 'desc')->get();
-
-        return view('yoreports', compact('reports'));
+        return view('reports.yoreports');
     }
 }

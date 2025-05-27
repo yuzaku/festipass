@@ -9,7 +9,7 @@ class ReportController extends Controller
 {
     public function create()
     {
-        return view('reproblem');
+        return view('reports.reproblem');
     }
 
     public function store(Request $request)
