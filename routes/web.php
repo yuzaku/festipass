@@ -75,3 +75,12 @@ Route::middleware('auth')->group(function () {
         })->name('dashboard');
     });
 });
+
+use App\Http\Controllers\ReportController;
+
+Route::get('/report', [ReportController::class, 'create'])->name('report.create');
+Route::post('/report', [ReportController::class, 'store'])->name('report.store');
+
+use App\Http\Controllers\YoReportsController;
+
+Route::get('/your-reports', [YoReportsController::class, 'index'])->name('your.reports');
