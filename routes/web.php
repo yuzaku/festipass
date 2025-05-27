@@ -33,11 +33,11 @@ Route::middleware('guest')->group(function () {
     // Authentication routes
     Route::get('/', [SignInController::class, 'create'])->name('login');
     Route::post('/', [SignInController::class, 'store'])->name('login.attempt');
-    
+
     // Registration routes
     Route::get('/register', [RegisterController::class, 'create'])->name('register.form');
     Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
-    
+
     // Forgot Password routes
     Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
     Route::post('/forgot-password', [ForgotPasswordController::class, 'handleLinkRequest'])->name('password.email');
@@ -51,17 +51,17 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     // Logout route
     Route::post('/logout', [SignInController::class, 'destroy'])->name('logout');
-    
+
     // User dashboard
     Route::get('/dashboard', function() {
         $user = auth()->user();
         return view('dashboard', compact('user'));
     })->name('dashboard');
-    
+
     // Profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    
+
     // Organizer routes
     Route::middleware(['organizer'])->prefix('organizer')->name('organizer.')->group(function () {
         Route::get('/dashboard', function() {
