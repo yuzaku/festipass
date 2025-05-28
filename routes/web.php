@@ -7,7 +7,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\ProfileController;
 
-require __DIR__ . '/book-ticket.php';
+require __DIR__ . '/ticket.php';
 // Test database connection
 Route::get('/cek-db', function () {
     try {
