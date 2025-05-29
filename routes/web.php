@@ -86,4 +86,5 @@ use App\Http\Controllers\YoReportsController;
 
 Route::get('/your-reports', [YoReportsController::class, 'index'])->name('your.reports');
 
+require __DIR__ . '/dashboard.php';
 require __DIR__ . '/addingticket.php';
