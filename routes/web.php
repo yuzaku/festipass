@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\ProfileController;
 
+require __DIR__ . '/ticket.php';
 // Test database connection
 Route::get('/cek-db', function () {
     try {
@@ -86,3 +87,4 @@ use App\Http\Controllers\YoReportsController;
 Route::get('/your-reports', [YoReportsController::class, 'index'])->name('your.reports');
 
 require __DIR__ . '/dashboard.php';
+require __DIR__ . '/addingticket.php';
