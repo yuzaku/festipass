@@ -237,14 +237,14 @@
                     </label>
                     
                     <!-- Current Image Display -->
-                    <div class="mb-4">
+                    <div class="mb-4 text-center">
                         <p class="text-sm text-gray-600 mb-2">Current Image:</p>
                         <div class="relative inline-block">
-                            <img id="currentImage" src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=250&fit=crop" 
+                            <img id="currentImage" src="https://cdn.donmai.us/original/e2/8a/__chando_ado_and_1_more_drawn_by_orihara_ewkkyorhr__e28aebe3f6ea38eee875a5317ddc72ea.jpg" 
                                  alt="ADO Concert Image" 
-                                 class="w-full max-w-md h-48 object-cover rounded-lg shadow-md">
+                                 class="w-full max-w-md h-48 object-cover rounded-lg shadow-md mx-auto">
                             <button type="button" id="changeImageBtn" 
-                                    class="absolute top-2 right-2 bg-white text-gray-700 p-2 rounded-full shadow-lg hover:bg-gray-100 transition duration-200">
+                                    class="absolute top-2 right-2 bg-white text-gray-700 w-10 h-10 rounded-full shadow-lg hover:bg-gray-100 transition duration-200 flex items-center justify-center">
                                 <i class="fas fa-edit"></i>
                             </button>
                         </div>
