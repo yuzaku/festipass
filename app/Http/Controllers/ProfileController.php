@@ -48,19 +48,54 @@ class ProfileController extends Controller
     }
 
     /**
-     * Request organizer account
+     * Show organizer request form
      */
-    public function requestOrganizer(Request $request)
+    public function showOrganizerRequest()
+    {
+        $user = Auth::user();
+        
+        // Check if user is already an organizer
+        if ($user->is_organizer) {
+            return redirect()->route('profile.show')->with('info', 'Anda sudah memiliki akun organizer.');
+        }
+
+        return view('profile.request-organizer', compact('user'));
+    }
+
+    /**
+     * Store organizer request
+     */
+    public function storeOrganizerRequest(Request $request)
     {
         $user = Auth::user();
 
+        // Check if user is already an organizer
         if ($user->is_organizer) {
-            return redirect()->back()->with('info', 'Anda sudah memiliki akun organizer.');
+            return redirect()->route('profile.show')->with('info', 'Anda sudah memiliki akun organizer.');
         }
 
-        // Di sini bisa ditambahkan logic untuk request organizer
-        // Misalnya simpan ke tabel organizer_requests atau kirim email ke admin
-        
-        return redirect()->back()->with('success', 'Permintaan akun organizer telah dikirim. Tunggu konfirmasi dari admin.');
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:100'],
+            'company_name' => ['required', 'string', 'max:255'],
+            'company_email' => ['required', 'email', 'max:255'],
+            'description' => ['nullable', 'string', 'max:1000'],
+            'terms' => ['required', 'accepted'],
+        ]);
+
+        try {
+            // You can create OrganizerRequest model and save the data
+            // OrganizerRequest::create([
+            //     'user_id' => $user->id,
+            //     'name' => $validated['name'],
+            //     'company_name' => $validated['company_name'],
+            //     'company_email' => $validated['company_email'],
+            //     'description' => $validated['description'],
+            //     'status' => 'pending'
+            // ]);
+
+            return redirect()->back()->with('success', 'Permintaan akun organizer telah dikirim. Tunggu konfirmasi dari admin dalam 1-2 minggu dan cek email Anda!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengirim permintaan.');
+        }
     }
 }

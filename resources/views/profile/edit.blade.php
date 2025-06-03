@@ -130,31 +130,29 @@
                     </div>
 
                     <!-- Account Type Section -->
-                    <div class="space-y-4">
-                        <h4 class="text-xl font-bold text-black font-poppins">Account Type</h4>
-                        <div class="flex items-center space-x-4">
-                            <div class="flex-1">
-                                <select 
-                                    id="is_organizer" 
-                                    name="is_organizer" 
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed font-poppins"
-                                    disabled
-                                >
-                                    <option value="0" {{ !$user->is_organizer ? 'selected' : '' }}>Regular User</option>
-                                    <option value="1" {{ $user->is_organizer ? 'selected' : '' }}>Organizer</option>
-                                </select>
-                            </div>
-                            <div>
-                                <span class="text-gray-600 text-sm font-poppins">Request Organizer Account? </span>
-                                <form action="{{ route('profile.request-organizer') }}" method="POST" class="inline">
-                                    @csrf
-                                    <button type="submit" class="text-purple-600 hover:text-purple-800 underline text-sm font-poppins">
-                                        Click Here!
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+<div class="space-y-4">
+    <h4 class="text-xl font-bold text-black font-poppins">Account Type</h4>
+    <div class="flex items-center space-x-4">
+        <div class="flex-1">
+            <select 
+                id="is_organizer" 
+                name="is_organizer" 
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed font-poppins"
+                disabled
+            >
+                <option value="0" {{ (!($user->is_organizer ?? false)) ? 'selected' : '' }}>Regular User</option>
+                <option value="1" {{ ($user->is_organizer ?? false) ? 'selected' : '' }}>Organizer</option>
+            </select>
+        </div>
+        <div>
+            <span class="text-gray-600 text-sm font-poppins">Request Organizer Account? </span>
+            <!-- Ubah dari form POST menjadi link GET langsung -->
+            <a href="{{ route('organizer.request') }}" class="text-purple-600 hover:text-purple-800 underline text-sm font-poppins">
+                Click Here!
+            </a>
+        </div>
+    </div>
+</div>
 
                     <!-- Language Section -->
                     <div class="space-y-4">
