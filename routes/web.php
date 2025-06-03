@@ -86,5 +86,10 @@ use App\Http\Controllers\YoReportsController;
 
 Route::get('/your-reports', [YoReportsController::class, 'index'])->name('your.reports');
 
+use App\Http\Controllers\TicketController;
+
+Route::get('/my-tickets', [TicketController::class, 'myTickets'])->name('tickets.my');
+Route::get('/ticketlist', [TicketController::class, 'ticketList'])->name('tickets.list');
+
 require __DIR__ . '/dashboard.php';
 require __DIR__ . '/addingticket.php';
