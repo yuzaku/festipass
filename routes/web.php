@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\ProfileController;
 
+require __DIR__ . '/ticket.php';
 // Test database connection
 Route::get('/cek-db', function () {
     try {
@@ -90,3 +91,5 @@ use App\Http\Controllers\TicketController;
 Route::get('/my-tickets', [TicketController::class, 'myTickets'])->name('tickets.my');
 Route::get('/ticketlist', [TicketController::class, 'ticketList'])->name('tickets.list');
 
+require __DIR__ . '/dashboard.php';
+require __DIR__ . '/addingticket.php';
