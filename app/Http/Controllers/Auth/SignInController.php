@@ -95,7 +95,7 @@ class SignInController extends Controller
                 ->with('status', "Selamat datang kembali, {$user->name}! (Organizer)");
         }
         
-        return redirect()->intended('/profile')
+        return redirect()->intended('/dashboard')
             ->with('status', "Selamat datang kembali, {$user->name}!");
     }
 
