@@ -41,7 +41,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'password_hash' => 'hashed',
             'is_organizer' => 'boolean',
             'created_at' => 'datetime',
-            'updated_at' => 'datetime',
+            //'updated_at' => 'datetime',
         ];
     }
 

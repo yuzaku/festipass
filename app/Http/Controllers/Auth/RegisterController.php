@@ -43,9 +43,6 @@ class RegisterController extends Controller
             'is_organizer' => $request->has('is_organizer') ? 1 : 0,
         ]);
 
-        // Auto login after registration
-        Auth::login($user);
-
-        return redirect('/dashboard')->with('status', 'Akun berhasil dibuat!');
+        return redirect('/')->with('status', 'Akun berhasil dibuat! Silakan login untuk melanjutkan.');
     }
 }
