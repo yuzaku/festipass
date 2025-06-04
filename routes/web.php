@@ -65,7 +65,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/request-organizer', [ProfileController::class, 'requestOrganizer'])->name('profile.request-organizer');
     Route::post('/profile/request-organizer', [ProfileController::class, 'requestOrganizer'])->name('profile.request-organizer');
-    
+
     // Organizer request routes
     Route::get('/organizer/request', [ProfileController::class, 'showOrganizerRequest'])->name('organizer.request');
     Route::post('/organizer/request', [ProfileController::class, 'storeOrganizerRequest'])->name('organizer.request.store');
@@ -101,3 +101,4 @@ Route::get('/ticketlist', [TicketController::class, 'ticketList'])->name('ticket
 
 require __DIR__ . '/dashboard.php';
 require __DIR__ . '/addingticket.php';
+require __DIR__ . '/orgprofilehistory.php';
