@@ -101,3 +101,26 @@ Route::get('/ticketlist', [TicketController::class, 'ticketList'])->name('ticket
 
 require __DIR__ . '/dashboard.php';
 require __DIR__ . '/addingticket.php';
+
+use App\Http\Controllers\OrganizerController;
+
+// Routes untuk Organizer Dashboard
+Route::prefix('organizer')->name('organizer.')->group(function () {
+    
+    // Dashboard utama
+    Route::get('/dashboard', [OrganizerController::class, 'dashboard'])->name('dashboard');
+    
+    // Concerts management
+    Route::get('/concerts', [OrganizerController::class, 'concerts'])->name('concerts');
+    Route::get('/concerts/create', [OrganizerController::class, 'createConcert'])->name('concerts.create');
+    Route::post('/concerts', [OrganizerController::class, 'storeConcert'])->name('concerts.store');
+    Route::get('/concerts/{id}/edit', [OrganizerController::class, 'editConcert'])->name('concerts.edit');
+    Route::put('/concerts/{id}', [OrganizerController::class, 'updateConcert'])->name('concerts.update');
+    
+    // Sales reports
+    Route::get('/reports', [OrganizerController::class, 'reports'])->name('reports');
+    
+    // Profile
+    Route::get('/profile', [OrganizerController::class, 'profile'])->name('profile');
+    
+});
