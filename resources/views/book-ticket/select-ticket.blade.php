@@ -42,7 +42,7 @@
             <!-- Header -->
             <div class="text-center mb-8">
                 <h1 class="text-4xl font-bold text-purple-600 mb-2">Book Your Ticket</h1>
-                <h2 class="text-xl font-semibold text-gray-800">Panic! at The Disco</h2>
+                <h2 class="text-xl font-semibold text-gray-800">{{ $event->title }}</h2>
             </div>
             <div class="mb-6">
                 <img src="images/bernadya.jpeg" alt="Concert Image" class="rounded-lg shadow-md w-full object-cover">
