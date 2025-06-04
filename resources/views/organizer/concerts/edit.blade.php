@@ -120,22 +120,18 @@
                 Edit Concert
             </h1>
             <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-                Update your concert details and manage ticket sales.
+                Update your concert details. Ticket pricing and sales can be managed separately.
             </p>
 
-            <!-- Concert Stats Quick View -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-2xl mx-auto">
+            <!-- Concert Info Quick View -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-xl mx-auto">
                 <div class="bg-white/80 backdrop-blur rounded-lg p-4">
-                    <div class="text-2xl font-bold text-purple-600">892</div>
-                    <div class="text-sm text-gray-600">Tickets Sold</div>
+                    <div class="text-lg font-bold text-purple-600">ADO World Tour 2025</div>
+                    <div class="text-sm text-gray-600">Concert Series</div>
                 </div>
                 <div class="bg-white/80 backdrop-blur rounded-lg p-4">
-                    <div class="text-2xl font-bold text-green-600">Rp 178M</div>
-                    <div class="text-sm text-gray-600">Revenue</div>
-                </div>
-                <div class="bg-white/80 backdrop-blur rounded-lg p-4">
-                    <div class="text-2xl font-bold text-orange-600">108</div>
-                    <div class="text-sm text-gray-600">Available</div>
+                    <div class="text-lg font-bold text-purple-600">Sep 15, 2025</div>
+                    <div class="text-sm text-gray-600">Event Date</div>
                 </div>
             </div>
         </div>
@@ -240,7 +236,7 @@
                     <div class="mb-4 text-center">
                         <p class="text-sm text-gray-600 mb-2">Current Image:</p>
                         <div class="relative inline-block">
-                            <img id="currentImage" src="https://cdn.donmai.us/original/e2/8a/__chando_ado_and_1_more_drawn_by_orihara_ewkkyorhr__e28aebe3f6ea38eee875a5317ddc72ea.jpg" 
+                            <img id="currentImage" src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=250&fit=crop" 
                                  alt="ADO Concert Image" 
                                  class="w-full max-w-md h-48 object-cover rounded-lg shadow-md mx-auto">
                             <button type="button" id="changeImageBtn" 
@@ -297,182 +293,6 @@
                             <span class="ml-2 text-gray-700">Cancelled</span>
                         </label>
                     </div>
-                </div>
-
-                <!-- Ticket Pricing Section -->
-                <div class="bg-gray-50 rounded-xl p-6 mb-8">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-xl font-semibold text-gray-900">
-                            <i class="fas fa-ticket-alt mr-2 text-purple-600"></i>
-                            Ticket Categories
-                        </h3>
-                        <div class="text-sm text-gray-600">
-                            <span class="font-semibold">Total Capacity:</span> <span>1000</span> tickets
-                        </div>
-                    </div>
-                    
-                    <div id="ticketCategories">
-                        <!-- Early Bird Ticket -->
-                        <div class="bg-white rounded-lg p-4 border border-gray-200 mb-4 ticket-category">
-                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Category Name</label>
-                                    <input type="text" 
-                                           name="ticket_categories[0][name]" 
-                                           value="Early Bird"
-                                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                           required>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Price (Rp)</label>
-                                    <input type="number" 
-                                           name="ticket_categories[0][price]" 
-                                           value="450000"
-                                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                           required>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        Quantity 
-                                        <span class="text-xs text-gray-500">(Sold: 200)</span>
-                                    </label>
-                                    <input type="number" 
-                                           name="ticket_categories[0][quantity]" 
-                                           value="200"
-                                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                           required>
-                                </div>
-                                <div class="flex items-end">
-                                    <button type="button" class="remove-category w-full px-3 py-2 text-red-600 hover:text-red-800 border border-red-300 rounded-lg hover:bg-red-50 disabled:opacity-50" disabled>
-                                        <i class="fas fa-trash mr-1"></i>
-                                        Sold Out
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Regular Ticket -->
-                        <div class="bg-white rounded-lg p-4 border border-gray-200 mb-4 ticket-category">
-                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Category Name</label>
-                                    <input type="text" 
-                                           name="ticket_categories[1][name]" 
-                                           value="Regular"
-                                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                           required>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Price (Rp)</label>
-                                    <input type="number" 
-                                           name="ticket_categories[1][price]" 
-                                           value="550000"
-                                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                           required>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        Quantity 
-                                        <span class="text-xs text-gray-500">(Sold: 412)</span>
-                                    </label>
-                                    <input type="number" 
-                                           name="ticket_categories[1][quantity]" 
-                                           value="500"
-                                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                           required>
-                                </div>
-                                <div class="flex items-end">
-                                    <button type="button" class="remove-category w-full px-3 py-2 text-red-600 hover:text-red-800 border border-red-300 rounded-lg hover:bg-red-50">
-                                        <i class="fas fa-trash mr-1"></i>
-                                        Remove
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- VIP Ticket -->
-                        <div class="bg-white rounded-lg p-4 border border-gray-200 mb-4 ticket-category">
-                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Category Name</label>
-                                    <input type="text" 
-                                           name="ticket_categories[2][name]" 
-                                           value="VIP"
-                                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                           required>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Price (Rp)</label>
-                                    <input type="number" 
-                                           name="ticket_categories[2][price]" 
-                                           value="850000"
-                                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                           required>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        Quantity 
-                                        <span class="text-xs text-gray-500">(Sold: 180)</span>
-                                    </label>
-                                    <input type="number" 
-                                           name="ticket_categories[2][quantity]" 
-                                           value="200"
-                                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                           required>
-                                </div>
-                                <div class="flex items-end">
-                                    <button type="button" class="remove-category w-full px-3 py-2 text-red-600 hover:text-red-800 border border-red-300 rounded-lg hover:bg-red-50">
-                                        <i class="fas fa-trash mr-1"></i>
-                                        Remove
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- VVIP Ticket -->
-                        <div class="bg-white rounded-lg p-4 border border-gray-200 mb-4 ticket-category">
-                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Category Name</label>
-                                    <input type="text" 
-                                           name="ticket_categories[3][name]" 
-                                           value="VVIP Meet & Greet"
-                                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                           required>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Price (Rp)</label>
-                                    <input type="number" 
-                                           name="ticket_categories[3][price]" 
-                                           value="1500000"
-                                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                           required>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        Quantity 
-                                        <span class="text-xs text-gray-500">(Sold: 100)</span>
-                                    </label>
-                                    <input type="number" 
-                                           name="ticket_categories[3][quantity]" 
-                                           value="100"
-                                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                           required>
-                                </div>
-                                <div class="flex items-end">
-                                    <button type="button" class="remove-category w-full px-3 py-2 text-red-600 hover:text-red-800 border border-red-300 rounded-lg hover:bg-red-50">
-                                        <i class="fas fa-trash mr-1"></i>
-                                        Remove
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <button type="button" id="addTicketCategory" class="text-purple-600 hover:text-purple-800 font-medium">
-                        <i class="fas fa-plus mr-1"></i>
-                        Add Another Category
-                    </button>
                 </div>
 
                 <!-- Form Actions -->
@@ -581,84 +401,6 @@
                 reader.readAsDataURL(file);
             }
 
-            // Ticket category management
-            let categoryCount = 4;
-            
-            // Add ticket category functionality
-            document.getElementById('addTicketCategory').addEventListener('click', function() {
-                const container = document.getElementById('ticketCategories');
-                const newCategory = document.createElement('div');
-                newCategory.className = 'bg-white rounded-lg p-4 border border-gray-200 mb-4 ticket-category';
-                newCategory.innerHTML = `
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Category Name</label>
-                            <input type="text" 
-                                   name="ticket_categories[${categoryCount}][name]" 
-                                   placeholder="e.g., Premium"
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                   required>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Price (Rp)</label>
-                            <input type="number" 
-                                   name="ticket_categories[${categoryCount}][price]" 
-                                   placeholder="300000"
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                   required>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Quantity 
-                                <span class="text-xs text-gray-500">(Sold: 0)</span>
-                            </label>
-                            <input type="number" 
-                                   name="ticket_categories[${categoryCount}][quantity]" 
-                                   placeholder="50"
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                   required>
-                        </div>
-                        <div class="flex items-end">
-                            <button type="button" class="remove-category w-full px-3 py-2 text-red-600 hover:text-red-800 border border-red-300 rounded-lg hover:bg-red-50">
-                                <i class="fas fa-trash mr-1"></i>
-                                Remove
-                            </button>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(newCategory);
-                categoryCount++;
-
-                // Add remove functionality
-                newCategory.querySelector('.remove-category').addEventListener('click', function() {
-                    newCategory.remove();
-                    updateCategoryIndexes();
-                });
-            });
-
-            // Remove category functionality for existing categories
-            document.addEventListener('click', function(e) {
-                if (e.target.closest('.remove-category') && !e.target.closest('.remove-category').disabled) {
-                    const categoryDiv = e.target.closest('.ticket-category');
-                    categoryDiv.remove();
-                    updateCategoryIndexes();
-                }
-            });
-
-            // Update category indexes after removal
-            function updateCategoryIndexes() {
-                const categories = document.querySelectorAll('.ticket-category');
-                categories.forEach((category, index) => {
-                    const inputs = category.querySelectorAll('input[name*="ticket_categories"]');
-                    inputs.forEach(input => {
-                        const name = input.getAttribute('name');
-                        const newName = name.replace(/\[\d+\]/, `[${index}]`);
-                        input.setAttribute('name', newName);
-                    });
-                });
-                categoryCount = categories.length;
-            }
-
             // Form validation and enhancement
             const form = document.querySelector('form');
             form.addEventListener('submit', function(e) {
@@ -735,32 +477,6 @@
                     }, 1500);
                 }
             }
-
-            // Dynamic capacity calculation
-            function updateTotalCapacity() {
-                const quantityInputs = document.querySelectorAll('input[name*="[quantity]"]');
-                let total = 0;
-                
-                quantityInputs.forEach(input => {
-                    const value = parseInt(input.value) || 0;
-                    total += value;
-                });
-                
-                const capacityDisplay = document.querySelector('.text-sm.text-gray-600 span');
-                if (capacityDisplay) {
-                    capacityDisplay.textContent = total;
-                }
-            }
-
-            // Update capacity on quantity change
-            document.addEventListener('input', function(e) {
-                if (e.target.name && e.target.name.includes('[quantity]')) {
-                    updateTotalCapacity();
-                }
-            });
-
-            // Initialize capacity calculation
-            updateTotalCapacity();
 
             // Concert status change handling
             const statusRadios = document.querySelectorAll('input[name="status"]');
