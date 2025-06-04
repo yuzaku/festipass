@@ -18,7 +18,7 @@ class AddtickettypeController extends Controller
         // Langsung kembalikan view yang berisi HTML Anda.
         // Pastikan view 'concert_ticket_edit.blade.php' (atau nama yang Anda pilih)
         // ada di resources/views/
-        return view('addnewticket'); // Ganti 'concert_ticket_edit' jika nama file view Anda berbeda
+        return view('ticket.addnewticket'); // Ganti 'concert_ticket_edit' jika nama file view Anda berbeda
     }
 
     /**

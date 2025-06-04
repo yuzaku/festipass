@@ -96,10 +96,17 @@
         </section>
 
         <div class="flex justify-center mb-6">
+            {{-- PERUBAHAN: Tombol diubah menjadi link ke rute 'addnewticket.form' --}}
+            <a href="{{ route('addnewticket.form') }}"
+               class="bg-purple-600 text-white rounded-full w-12 h-12 md:w-14 md:h-14 flex items-center justify-center text-2xl md:text-3xl shadow-lg hover:bg-purple-700 transition-colors duration-200">
+                <i class="fas fa-plus"></i>
+            </a>
+        </div>
+        <!-- <div class="flex justify-center mb-6">
             <button class="bg-purple-600 text-white rounded-full w-12 h-12 md:w-14 md:h-14 flex items-center justify-center text-2xl md:text-3xl shadow-lg hover:bg-purple-700 transition-colors duration-200">
                 <i class="fas fa-plus"></i>
             </button>
-        </div>
+        </div> -->
 
         <div class="flex justify-center">
             <button class="w-full sm:w-auto bg-purple-600 text-white font-semibold py-3 px-16 rounded-lg shadow-md hover:bg-purple-700 transition-colors duration-200 text-base md:text-lg">
