@@ -101,6 +101,7 @@ Route::get('/ticketlist', [TicketController::class, 'ticketList'])->name('ticket
 
 require __DIR__ . '/dashboard.php';
 require __DIR__ . '/addingticket.php';
+require __DIR__ . '/newtickettype.php';
 
 use App\Http\Controllers\OrganizerController;
 
