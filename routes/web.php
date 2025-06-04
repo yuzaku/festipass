@@ -65,7 +65,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/request-organizer', [ProfileController::class, 'requestOrganizer'])->name('profile.request-organizer');
     Route::post('/profile/request-organizer', [ProfileController::class, 'requestOrganizer'])->name('profile.request-organizer');
-    
+
     // Organizer request routes
     Route::get('/organizer/request', [ProfileController::class, 'showOrganizerRequest'])->name('organizer.request');
     Route::post('/organizer/request', [ProfileController::class, 'storeOrganizerRequest'])->name('organizer.request.store');
@@ -101,6 +101,8 @@ Route::get('/ticketlist', [TicketController::class, 'ticketList'])->name('ticket
 
 require __DIR__ . '/dashboard.php';
 require __DIR__ . '/addingticket.php';
+require __DIR__ . '/orgprofilehistory.php';
+require __DIR__ . '/newtickettype.php';
 
 use App\Http\Controllers\OrganizerController;
 
@@ -124,3 +126,26 @@ Route::prefix('organizer')->name('organizer.')->group(function () {
     Route::get('/profile', [OrganizerController::class, 'profile'])->name('profile');
     
 });
+
+
+
+use App\Http\Controllers\ConcertTicketController; // Pastikan ini di-import
+
+// ... (kode guest routes, authenticated routes lainnya) ...
+
+
+// == MANAGE CONCERT TICKET (DI LUAR AUTH DAN ORGANIZER UNTUK SAAT INI) ==
+Route::prefix('manageconcertticket')      // Kita tetap menggunakan prefix URL
+     ->name('manageconcertticket.')       // Kita tetap menggunakan prefix nama rute
+     ->group(function () {
+    
+    // Rute untuk menampilkan halaman utama "Manage Ticket" (View 1)
+    Route::get('/', [ConcertTicketController::class, 'showPage'])->name('show');
+
+    // Rute BARU untuk menampilkan form "Adding New Tickets" (View 2)
+    Route::get('/add-ticket-type', [ConcertTicketController::class, 'showAddTicketForm'])->name('add_form');
+
+    // Rute untuk memproses form penambahan tiket bisa ditambahkan di sini nanti
+    // Route::post('/store-ticket-type', [ConcertTicketController::class, 'storeTicketType'])->name('store_type');
+});
+// == AKHIR DARI GRUP MANAGE CONCERT TICKET ==
