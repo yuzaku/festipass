@@ -173,7 +173,7 @@
                     
                     <h3 class="text-3xl font-bold text-gray-900 mb-4">No Concerts Yet</h3>
                     <p class="text-lg text-gray-600 mb-8 max-w-md mx-auto">
-                        Ready to create your first concert? Add event details, set ticket prices, and start selling tickets to music fans worldwide.
+                        Ready to create your first concert? Follow these simple steps to get started and reach music fans worldwide.
                     </p>
                     
                     <!-- Quick Start Actions -->
@@ -183,9 +183,6 @@
                             <i class="fas fa-plus mr-3"></i>
                             Create Your First Concert
                         </a>
-                        <div class="text-sm text-gray-500">
-                            or <a href="#" class="text-purple-600 hover:text-purple-800 font-medium">Import from CSV</a>
-                        </div>
                     </div>
 
                     <!-- Getting Started Tips -->
@@ -194,21 +191,21 @@
                             <div class="flex items-center justify-center w-16 h-16 btn-gradient rounded-full mx-auto mb-4">
                                 <i class="fas fa-pencil-alt text-white text-xl"></i>
                             </div>
-                            <h4 class="text-lg font-semibold text-gray-900 mb-2">1. Create Event</h4>
+                            <h4 class="text-lg font-semibold text-gray-900 mb-2">1. Concert Details</h4>
                             <p class="text-sm text-gray-600">Add concert details, date, venue, and artist information</p>
                         </div>
                         <div class="text-center">
                             <div class="flex items-center justify-center w-16 h-16 btn-gradient rounded-full mx-auto mb-4">
                                 <i class="fas fa-tag text-white text-xl"></i>
                             </div>
-                            <h4 class="text-lg font-semibold text-gray-900 mb-2">2. Set Pricing</h4>
+                            <h4 class="text-lg font-semibold text-gray-900 mb-2">2. Ticket Pricing</h4>
                             <p class="text-sm text-gray-600">Configure ticket categories and pricing tiers</p>
                         </div>
                         <div class="text-center">
                             <div class="flex items-center justify-center w-16 h-16 btn-gradient rounded-full mx-auto mb-4">
                                 <i class="fas fa-rocket text-white text-xl"></i>
                             </div>
-                            <h4 class="text-lg font-semibold text-gray-900 mb-2">3. Go Live</h4>
+                            <h4 class="text-lg font-semibold text-gray-900 mb-2">3. Publish</h4>
                             <p class="text-sm text-gray-600">Publish your concert and start selling tickets</p>
                         </div>
                     </div>
@@ -331,7 +328,7 @@
                     <h4 class="text-xl font-semibold text-gray-900">Dashboard</h4>
                 </div>
                 <p class="text-gray-600 leading-relaxed">
-                    Return to your main dashboard to access overall statistics and manage your events efficiently.
+                    Return to your main dashboard to see overall statistics and quick actions.
                 </p>
                 <div class="mt-4 text-purple-600 font-medium flex items-center">
                     Go to Dashboard <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition duration-200"></i>
