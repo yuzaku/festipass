@@ -60,8 +60,16 @@ Route::middleware('auth')->group(function () {
     })->name('dashboard');
 
     // Profile routes
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/request-organizer', [ProfileController::class, 'requestOrganizer'])->name('profile.request-organizer');
+    Route::post('/profile/request-organizer', [ProfileController::class, 'requestOrganizer'])->name('profile.request-organizer');
+    
+    // Organizer request routes
+    Route::get('/organizer/request', [ProfileController::class, 'showOrganizerRequest'])->name('organizer.request');
+    Route::post('/organizer/request', [ProfileController::class, 'storeOrganizerRequest'])->name('organizer.request.store');
+});
 
     // Organizer routes
     Route::middleware(['organizer'])->prefix('organizer')->name('organizer.')->group(function () {
@@ -93,3 +101,26 @@ Route::get('/ticketlist', [TicketController::class, 'ticketList'])->name('ticket
 
 require __DIR__ . '/dashboard.php';
 require __DIR__ . '/addingticket.php';
+
+use App\Http\Controllers\OrganizerController;
+
+// Routes untuk Organizer Dashboard
+Route::prefix('organizer')->name('organizer.')->group(function () {
+    
+    // Dashboard utama
+    Route::get('/dashboard', [OrganizerController::class, 'dashboard'])->name('dashboard');
+    
+    // Concerts management
+    Route::get('/concerts', [OrganizerController::class, 'concerts'])->name('concerts');
+    Route::get('/concerts/create', [OrganizerController::class, 'createConcert'])->name('concerts.create');
+    Route::post('/concerts', [OrganizerController::class, 'storeConcert'])->name('concerts.store');
+    Route::get('/concerts/{id}/edit', [OrganizerController::class, 'editConcert'])->name('concerts.edit');
+    Route::put('/concerts/{id}', [OrganizerController::class, 'updateConcert'])->name('concerts.update');
+    
+    // Sales reports
+    Route::get('/reports', [OrganizerController::class, 'reports'])->name('reports');
+    
+    // Profile
+    Route::get('/profile', [OrganizerController::class, 'profile'])->name('profile');
+    
+});

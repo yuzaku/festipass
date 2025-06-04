@@ -12,7 +12,6 @@
         theme: {
           extend: {
             fontFamily: {
-              // Menambahkan Poppins ke konfigurasi Tailwind CDN
               'poppins': ['Poppins', 'sans-serif'],
             }
           }
@@ -29,15 +28,40 @@
     <!-- Header -->
     <header class="bg-white shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center py-4">
+            <div class="flex justify-start items-center py-4">
                 <h1 class="text-2xl font-bold text-purple-600 font-poppins">FestiPass - Profile</h1>
             </div>
         </div>
     </header>
 
+    <!-- Success/Error Messages -->
+    @if(session('success'))
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                <span class="block sm:inline">{{ session('success') }}</span>
+            </div>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <span class="block sm:inline">{{ session('error') }}</span>
+            </div>
+        </div>
+    @endif
+
+    @if(session('info'))
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+            <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
+                <span class="block sm:inline">{{ session('info') }}</span>
+            </div>
+        </div>
+    @endif
+
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-        <h2 class="text-4xl font-bold text-center text-black mb-12 font-poppins">My Profile</h2>
+        <h2 class="text-4xl font-bold text-center mb-12 font-poppins bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 bg-clip-text text-transparent">My Profile</h2>
         
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <!-- Left Column - Personal Information -->
@@ -57,7 +81,7 @@
                             type="text" 
                             id="name" 
                             name="name" 
-                            value="{{ old('name', $user->name ?? 'Mas John Doe') }}"
+                            value="{{ old('name', $user->name) }}"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed font-poppins"
                             readonly
                             disabled
@@ -76,7 +100,7 @@
                             type="email" 
                             id="email" 
                             name="email" 
-                            value="{{ old('email', $user->email ?? 'johndoe@example.com') }}"
+                            value="{{ old('email', $user->email) }}"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed font-poppins"
                             readonly
                             disabled
@@ -95,7 +119,7 @@
                             type="tel" 
                             id="tel_num" 
                             name="tel_num" 
-                            value="{{ old('tel_num', $user->tel_num ?? '+62    812345678') }}"
+                            value="{{ old('tel_num', $user->formatted_phone) }}"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed font-poppins"
                             readonly
                             disabled
@@ -106,27 +130,29 @@
                     </div>
 
                     <!-- Account Type Section -->
-                    <div class="space-y-4">
-                        <h4 class="text-xl font-bold text-black font-poppins">Account Type</h4>
-                        <div class="flex items-center space-x-4">
-                            <div class="flex-1">
-                                <select 
-                                    id="is_organizer" 
-                                    name="is_organizer" 
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed font-poppins"
-                                    disabled
-                                >
-                                    <option value="0" {{ (!$user->is_organizer ?? true) ? 'selected' : '' }}>Regular User</option>
-                                    <option value="1" {{ ($user->is_organizer ?? false) ? 'selected' : '' }}>Organizer</option>
-                                </select>
-                            </div>
-                            <div>
-                                <a href="#" class="text-purple-600 hover:text-purple-800 underline text-sm font-poppins">
-                                    Request Organizer Account? Click Here!
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+<div class="space-y-4">
+    <h4 class="text-xl font-bold text-black font-poppins">Account Type</h4>
+    <div class="flex items-center space-x-4">
+        <div class="flex-1">
+            <select 
+                id="is_organizer" 
+                name="is_organizer" 
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed font-poppins"
+                disabled
+            >
+                <option value="0" {{ (!($user->is_organizer ?? false)) ? 'selected' : '' }}>Regular User</option>
+                <option value="1" {{ ($user->is_organizer ?? false) ? 'selected' : '' }}>Organizer</option>
+            </select>
+        </div>
+        <div>
+            <span class="text-gray-600 text-sm font-poppins">Request Organizer Account? </span>
+            <!-- Ubah dari form POST menjadi link GET langsung -->
+            <a href="{{ route('organizer.request') }}" class="text-purple-600 hover:text-purple-800 underline text-sm font-poppins">
+                Click Here!
+            </a>
+        </div>
+    </div>
+</div>
 
                     <!-- Language Section -->
                     <div class="space-y-4">
@@ -170,80 +196,51 @@
             </div>
 
             <!-- Right Column - Favourite Singer -->
-<div class="bg-white rounded-lg shadow-lg p-8">
-    <h3 class="text-2xl font-bold text-black mb-6 font-poppins">Favourite Singer</h3>
-    
-    <div class="space-y-6">
-        <!-- Tulus -->
-        <div class="flex items-start space-x-4 p-4 border border-gray-200 rounded-lg">
-            <img 
-                src="{{ asset('images/tulus.jpeg') }}" 
-                alt="Tulus" 
-                class="w-30 h-20 object-cover rounded-lg"
-            >
-            <div class="flex-1">
-                <div class="flex items-center justify-between mb-2">
-                    <h4 class="text-xl font-bold text-black font-poppins">Tulus</h4>
-                    <div class="flex space-x-1">
-                        <span class="text-purple-500">♥</span>
-                        <span class="text-purple-500">♥</span>
-                        <span class="text-purple-500">♥</span>
-                        <span class="text-purple-500">♥</span>
+            <div class="bg-white rounded-xl shadow-lg px-8 py-6">
+                <h3 class="text-2xl font-bold mb-6 font-poppins">Favourite Singer</h3>
+                <div class="flex flex-col gap-4">
+                    <!-- Tulus -->
+                    <div class="flex items-center bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                        <img src="{{ asset('images/tulus.jpeg') }}" alt="Tulus" class="w-16 h-16 object-cover rounded-md mr-4 flex-shrink-0">
+                        <div class="flex-1">
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-lg font-poppins">Tulus</span>
+                                <span class="text-purple-500 text-lg font-bold">♥♥♥♥</span>
+                            </div>
+                            <p class="text-sm text-gray-600 leading-tight mt-1">
+                                Tulus is an Indonesian singer-songwriter known for his soulful voice and heartfelt lyrics, blending jazz, pop, and contemporary styles.
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Bernadya -->
+                    <div class="flex items-center bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                        <img src="{{ asset('images/bernadya.jpeg') }}" alt="Bernadya" class="w-16 h-16 object-cover rounded-md mr-4 flex-shrink-0">
+                        <div class="flex-1">
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-lg font-poppins">Bernadya</span>
+                                <span class="text-purple-500 text-lg font-bold">♥♥♥♥</span>
+                            </div>
+                            <p class="text-sm text-gray-600 leading-tight mt-1">
+                                Bernadya is an Indonesian singer-songwriter known for her soothing voice and introspective lyrics, blending folk and pop influences to create heartfelt music.
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Juicy Lucy -->
+                    <div class="flex items-center bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                        <img src="{{ asset('images/juicylucy.jpeg') }}" alt="Juicy Lucy" class="w-16 h-16 object-cover rounded-md mr-4 flex-shrink-0">
+                        <div class="flex-1">
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-lg font-poppins">Juicy Lucy</span>
+                                <span class="text-purple-500 text-lg font-bold">♥♥♥♥</span>
+                            </div>
+                            <p class="text-sm text-gray-600 leading-tight mt-1">
+                                Juicy Lucy is an Indonesian band known for their vibrant mix of soul, funk, and pop, delivering energetic performances and catchy, groove-filled tracks.
+                            </p>
+                        </div>
                     </div>
                 </div>
-                <p class="text-sm text-gray-600 font-poppins">
-                    Tulus is an Indonesian singer-songwriter known for his soulful voice and heartfelt lyrics, blending jazz, pop, and contemporary styles.
-                </p>
             </div>
         </div>
-
-        <!-- Bernadya -->
-        <div class="flex items-start space-x-4 p-4 border border-gray-200 rounded-lg">
-            <img 
-                src="{{ asset('images/bernadya.jpeg') }}" 
-                alt="Bernadya" 
-                class="w-30 h-20 object-cover rounded-lg"
-            >
-            <div class="flex-1">
-                <div class="flex items-center justify-between mb-2">
-                    <h4 class="text-xl font-bold text-black font-poppins">Bernadya</h4>
-                    <div class="flex space-x-1">
-                        <span class="text-purple-500">♥</span>
-                        <span class="text-purple-500">♥</span>
-                        <span class="text-purple-500">♥</span>
-                        <span class="text-purple-500">♥</span>
-                    </div>
-                </div>
-                <p class="text-sm text-gray-600 font-poppins">
-                    Bernadya is an Indonesian singer-songwriter known for her soothing voice and introspective lyrics, blending folk and pop influences to create heartfelt music.
-                </p>
-            </div>
-        </div>
-
-        <!-- Juicy Lucy -->
-        <div class="flex items-start space-x-4 p-4 border border-gray-200 rounded-lg">
-            <img 
-                src="{{ asset('images/juicylucy.jpeg') }}" 
-                alt="Juicy Lucy" 
-                class="w-30 h-20 object-cover rounded-lg"
-            >
-            <div class="flex-1">
-                <div class="flex items-center justify-between mb-2">
-                    <h4 class="text-xl font-bold text-black font-poppins">Juicy Lucy</h4>
-                    <div class="flex space-x-1">
-                        <span class="text-purple-500">♥</span>
-                        <span class="text-purple-500">♥</span>
-                        <span class="text-purple-500">♥</span>
-                        <span class="text-purple-500">♥</span>
-                    </div>
-                </div>
-                <p class="text-sm text-gray-600 font-poppins">
-                    Juicy Lucy is an Indonesian band known for their vibrant mix of soul, funk, and pop, delivering energetic performances and catchy, groove-filled tracks.
-                </p>
-            </div>
-        </div>
-    </div>
-</div>
     </main>
 
     <!-- JavaScript -->
