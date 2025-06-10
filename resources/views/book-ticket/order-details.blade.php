@@ -44,32 +44,37 @@
                 <h1 class="text-4xl font-bold text-purple-600 mb-2">Order Details</h1>
             </div>
             <div class="columns-2">
-                <div class="mb-6">
-                    <img src="/images/bernadya.jpeg" alt="Concert Image"
-                        class="rounded-lg shadow-md w-full object-cover">
-                </div>
-                <div>
-                    <div class="mg-8 font-semibold text-2xl text-gray-600">
-                        Panic! at The Disco
+                @if ($event)
+                    <div class="mb-6">
+                        <img src="/images/bernadya.jpeg" alt="Concert Image"
+                            class="rounded-lg shadow-md w-full object-cover">
                     </div>
-                    <div class="mg-8 font-medium text-sm text-gray-600">
-                        Saturday, 01 November 2025
+                    <div>
+                        <div class="mg-8 font-semibold text-2xl text-gray-600">
+                            {{ $event->title }}
+                        </div>
+                        <div class="mg-8 font-medium text-sm text-gray-600">
+                            {{ $event->formatted_date }}
+                        </div>
+                        <div class="mg-8 font-medium text-sm text-gray-600">
+                            {{ $event->location }}
+                        </div>
                     </div>
-                    <div class="mg-8 font-medium text-sm text-gray-600">
-                        Icon, BSD
-                    </div>
-                </div>
+                @endif
             </div>
             <div class="space-y-4 mb-6">
                 <!-- Regular Ticket -->
                 <div>
                     <h2 class="text-md font-semibold text-gray-800 mt-2 mb-2">Tickets</h2>
-                    <div class="bg-purple-600 p-4 rounded-xl flex justify-between items-center">
-                        <div>
-                            <div class="text-lg font-semibold text-white">VVIP</div>
+                    @foreach ($order_items as $item)
+                        <div class="bg-purple-600 p-4 rounded-xl flex justify-between items-center">
+                            <div>
+                                <div class="text-lg font-semibold text-white">{{ $item->ticket->ticket_type }}</div>
+                            </div>
+                            <div class="text-lg font-semibold text-white">
+                                Rp{{ number_format($item->price, 0, ',', '.') }} x{{ $item->quantity }}</div>
                         </div>
-                        <div class="text-lg font-semibold text-white">Rp110.000 x3</div>
-                    </div>
+                    @endforeach
                 </div>
                 <div>
                     <h2 class="text-md font-semibold text-gray-800 mb-2">Payment Method</h2>
@@ -91,7 +96,8 @@
                     <div>
                         <div class="text-lg font-semibold text-white">Finish Payment</div>
                     </div>
-                    <div class="text-lg font-semibold text-white">Rp330.000</div>
+                    <div class="text-lg font-semibold text-white">
+                        Rp{{ number_format($item->price * $item->quantity, 0, ',', '.') }}</div>
                 </div>
             </div>
         </div>
