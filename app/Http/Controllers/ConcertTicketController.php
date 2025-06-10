@@ -2,42 +2,60 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\View\View; // Untuk type hinting view
-// Tidak perlu Request atau Model untuk tampilan statis ini
+use Illuminate\View\View;
+use Illuminate\Http\Request; // Import class Request
+use Illuminate\Http\RedirectResponse; // Import class RedirectResponse
+use App\Models\Events;
 
 class ConcertTicketController extends Controller
 {
     /**
-     * Menampilkan halaman statis untuk manajemen tiket konser.
-     * Metode ini dipanggil oleh rute /manageconcertticket
-     *
-     * @return \Illuminate\View\View
+     * Menampilkan halaman edit untuk konser tertentu.
      */
-    public function showPage(): View
+    public function edit(Events $concert): View
     {
-        // Langsung kembalikan view yang berisi HTML Anda.
-        // Pastikan view 'concert_ticket_edit.blade.php' (atau nama yang Anda pilih)
-        // ada di resources/views/
-        return view('concert_ticket_edit'); // Ganti 'concert_ticket_edit' jika nama file view Anda berbeda
+        // ... (kode ini tetap sama)
+        $tickets = $concert->tickets()->orderBy('price', 'desc')->get();
+        return view('organizer.concert_ticket_edit', [
+            'concert' => $concert,
+            'tickets' => $tickets
+        ]);
     }
 
     /**
-     * Metode edit lama bisa Anda simpan untuk penggunaan di masa depan dengan parameter,
-     * atau hapus jika Anda yakin tidak akan menggunakannya.
-     *
-     * public function edit($concertId): View
-     * {
-     * // Jika Anda ingin menggunakan view yang sama:
-     * // return view('concert_ticket_edit');
-     * // Atau jika view ini spesifik untuk data tertentu:
-     * // $concert = Concert::findOrFail($concertId);
-     * // return view('concert_ticket_edit', compact('concert'));
-     * }
+     * Menampilkan form untuk menambahkan tiket.
      */
+    public function showAddTicketForm(Events $concert): View
+    {
+        // ... (kode ini tetap sama)
+        return view('organizer.addnewticket', [
+            'concert' => $concert
+        ]);
+    }
 
-    // Metode 'update' bisa ditambahkan nanti
-    // public function update(Request $request, $concertId)
-    // {
-    //     // ...
-    // }
+    /**
+     * METODE BARU: Validasi dan simpan data tiket baru ke database.
+     */
+    public function storeTicket(Request $request, Events $concert): RedirectResponse
+    {
+        // 1. Validasi data yang masuk dari form
+        $validatedData = $request->validate([
+            'ticket_type' => 'required|string|max:100',
+            'price' => 'required|numeric|min:0',
+            'stock' => 'required|integer|min:1',
+        ]);
+
+        // 2. Buat data tiket baru menggunakan relasi
+        // Ini secara otomatis akan mengisi event_id
+        $concert->tickets()->create([
+            'ticket_type' => $validatedData['ticket_type'],
+            'price' => $validatedData['price'],
+            'stock' => $validatedData['stock'],
+            'sold' => 0, // Atur nilai 'sold' default ke 0
+        ]);
+
+        // 3. Redirect kembali ke halaman edit dengan pesan sukses
+        return redirect()->route('managetickets.edit', $concert)
+                         ->with('success', 'New ticket type has been added successfully!');
+    }
 }
