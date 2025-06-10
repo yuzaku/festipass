@@ -14,12 +14,11 @@ class OrderItemsTableSeeder extends Seeder
      */
     public function run()
     {
-        
-
+        \DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         \DB::table('order_items')->delete();
-        
+
         \DB::table('order_items')->insert(array (
-            0 => 
+            0 =>
             array (
                 'id' => 1,
                 'order_id' => 1,
@@ -30,7 +29,8 @@ class OrderItemsTableSeeder extends Seeder
                 'updated_at' => '2025-06-10 14:04:36',
             ),
         ));
-        
-        
+        \DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+
     }
 }
