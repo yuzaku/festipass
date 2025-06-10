@@ -46,7 +46,7 @@
             <div class="columns-2">
                 @if ($event)
                     <div class="mb-6">
-                        <img src="/images/bernadya.jpeg" alt="Concert Image"
+                        <img src="{{ asset($event->poster) }}" alt="Concert Image"
                             class="rounded-lg shadow-md w-full object-cover">
                     </div>
                     <div>
@@ -72,7 +72,7 @@
                                 <div class="text-lg font-semibold text-white">{{ $item->ticket->ticket_type }}</div>
                             </div>
                             <div class="text-lg font-semibold text-white">
-                                Rp{{ number_format($item->price, 0, ',', '.') }} x{{ $item->quantity }}</div>
+                                Rp{{ number_format($item->ticket->price, 0, ',', '.') }} x{{ $item->quantity }}</div>
                         </div>
                     @endforeach
                 </div>
@@ -97,7 +97,7 @@
                         <div class="text-lg font-semibold text-white">Finish Payment</div>
                     </div>
                     <div class="text-lg font-semibold text-white">
-                        Rp{{ number_format($item->price * $item->quantity, 0, ',', '.') }}</div>
+                        Rp{{ number_format($item->total_price, 0, ',', '.') }}</div>
                 </div>
             </div>
         </div>
