@@ -45,7 +45,7 @@
                 <h2 class="text-xl font-semibold text-gray-800">{{ $event->title }}</h2>
             </div>
             <div class="mb-6">
-                <img src="images/bernadya.jpeg" alt="Concert Image" class="rounded-lg shadow-md w-full object-cover">
+                <img src="{{ asset($event->poster) }}" alt="Concert Image" class="rounded-lg shadow-md w-full object-cover">
             </div>
             <div class="space-y-4 mb-6">
                 @foreach ($event->tickets as $ticket)
@@ -62,7 +62,7 @@
                             <div>
                                 <div class="text-lg font-bold text-purple-600">{{ $ticket->ticket_type }}</div>
                                 <div class="text-lg font-semibold text-gray-600">
-                                    {{ $ticket->stock }}/{{ $ticket->stock }}</div>
+                                    Remaining : {{ $ticket->stock - $ticket->sold }}/{{ $ticket->stock }}</div>
                             </div>
                         </div>
 

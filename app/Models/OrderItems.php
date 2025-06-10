@@ -12,7 +12,7 @@ class OrderItems extends Model
         'order_id',
         'ticket_id',
         'quantity',
-        'price',
+        'total_price',
     ];
 
     public function ticket()
