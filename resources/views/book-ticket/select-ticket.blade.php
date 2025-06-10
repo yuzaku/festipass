@@ -48,111 +48,37 @@
                 <img src="images/bernadya.jpeg" alt="Concert Image" class="rounded-lg shadow-md w-full object-cover">
             </div>
             <div class="space-y-4 mb-6">
-                <!-- Regular Ticket -->
-                <a href="/select-ticket/book"
-                    class="flex items-center justify-between border rounded-xl p-4 hover:shadow-md transition duration-200 ring-2 ring-purple-500">
+                @foreach ($event->tickets as $ticket)
+                    <!-- Regular Ticket -->
+                    <a href="/select-ticket/book/{{$ticket->id}}"
+                        class="flex items-center justify-between border rounded-xl p-4 hover:shadow-md transition duration-200 ring-2 ring-purple-500">
 
-                    <!-- Icon and Info -->
-                    <div class="flex items-center space-x-4">
-                        <!-- Image Icon -->
-                        <img src="/path/to/icon.png" alt="icon" class="w-10 h-10 rounded-full" />
+                        <!-- Icon and Info -->
+                        <div class="flex items-center space-x-4">
+                            <!-- Image Icon -->
+                            <img src="/path/to/icon.png" alt="icon" class="w-10 h-10 rounded-full" />
 
-                        <!-- Ticket Info -->
-                        <div>
-                            <div class="text-lg font-bold text-purple-600">Regular Early</div>
-                            <div class="text-lg font-semibold text-gray-600">30/30 Sold</div>
+                            <!-- Ticket Info -->
+                            <div>
+                                <div class="text-lg font-bold text-purple-600">{{ $ticket->ticket_type }}</div>
+                                <div class="text-lg font-semibold text-gray-600">
+                                    {{ $ticket->stock }}/{{ $ticket->stock }}</div>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Price and Arrow -->
-                    <div class="flex items-center space-x-2">
-                        <div class="text-purple-600 font-bold">Rp80.000</div>
-                        <!-- Arrow Icon -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-purple-500" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </div>
-                </a>
-
-                <a href="/select-ticket/book"
-                    class="flex items-center justify-between border rounded-xl p-4 hover:shadow-md transition duration-200 ring-2 ring-cyan-300">
-
-                    <!-- Icon and Info -->
-                    <div class="flex items-center space-x-4">
-                        <!-- Image Icon -->
-                        <img src="/path/to/icon.png" alt="icon" class="w-10 h-10 rounded-full" />
-
-                        <!-- Ticket Info -->
-                        <div>
-                            <div class="text-lg font-bold text-cyan-300">VIP Early</div>
-                            <div class="text-lg font-semibold text-gray-600">20/20 Sold</div>
+                        <!-- Price and Arrow -->
+                        <div class="flex items-center space-x-2">
+                            <div class="text-purple-600 font-bold">Rp{{ number_format($ticket->price, 0, ',', '.') }}
+                            </div>
+                            <!-- Arrow Icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-purple-500" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5l7 7-7 7" />
+                            </svg>
                         </div>
-                    </div>
-
-                    <!-- Price and Arrow -->
-                    <div class="flex items-center space-x-2">
-                        <div class="text-cyan-300 font-bold">Rp110.000</div>
-                        <!-- Arrow Icon -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-cyan-300" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </div>
-                </a>
-
-                <!-- VVIP Ticket -->
-                <a href="/select-ticket/book"
-                    class="flex items-center justify-between border rounded-xl p-4 hover:shadow-md transition duration-200 ring-2 ring-green-300">
-
-                    <!-- Icon and Info -->
-                    <div class="flex items-center space-x-4">
-                        <!-- Image Icon -->
-                        <img src="/path/to/icon.png" alt="icon" class="w-10 h-10 rounded-full" />
-
-                        <!-- Ticket Info -->
-                        <div>
-                            <div class="text-lg font-bold text-green-300">Regular</div>
-                            <div class="text-lg font-semibold text-gray-600">93/110 Sold</div>
-                        </div>
-                    </div>
-
-                    <!-- Price and Arrow -->
-                    <div class="flex items-center space-x-2">
-                        <div class="text-green-300 font-bold">Rp90.000</div>
-                        <!-- Arrow Icon -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-green-300" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </div>
-                </a>
-
-                <a href="/select-ticket/book"
-                    class="flex items-center justify-between border rounded-xl p-4 hover:shadow-md transition duration-200 ring-2 ring-red-600">
-
-                    <!-- Icon and Info -->
-                    <div class="flex items-center space-x-4">
-                        <!-- Image Icon -->
-                        <img src="/path/to/icon.png" alt="icon" class="w-10 h-10 rounded-full" />
-
-                        <!-- Ticket Info -->
-                        <div>
-                            <div class="text-lg font-bold text-red-600">VVIP</div>
-                            <div class="text-lg font-semibold text-gray-600">0/13 Sold</div>
-                        </div>
-                    </div>
-
-                    <!-- Price and Arrow -->
-                    <div class="flex items-center space-x-2">
-                        <div class="text-red-600 font-bold">Rp190.000</div>
-                        <!-- Arrow Icon -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-red-500" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </div>
-                </a>
+                    </a>
+                @endforeach
             </div>
         </div>
     </div>
