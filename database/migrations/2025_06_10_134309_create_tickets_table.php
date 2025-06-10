@@ -11,12 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('order_items', function (Blueprint $table) {
+        Schema::create('tickets', function (Blueprint $table) {
             $table->integer('id', true);
-            $table->integer('order_id')->index('order_id');
-            $table->integer('ticket_id')->index('ticket_id');
-            $table->integer('quantity');
+            $table->integer('event_id')->index('event_id');
+            $table->string('ticket_type', 100);
             $table->decimal('price', 10);
+            $table->integer('stock');
+            $table->integer('sold');
+            $table->timestamp('created_at');
+            $table->timestamp('updated_at');
         });
     }
 
@@ -25,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('order_items');
+        Schema::dropIfExists('tickets');
     }
 };
