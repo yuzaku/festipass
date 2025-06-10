@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('user_id')->index('user_id');
             $table->timestamp('order_date')->useCurrent();
             $table->enum('status', ['pending', 'paid', 'canceled'])->nullable()->default('pending');
+            $table->timestamps();
         });
     }
 

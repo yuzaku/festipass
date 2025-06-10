@@ -69,6 +69,16 @@ class UsersTableSeeder extends Seeder
                 'created_at' => '2025-05-24 12:20:58',
                 'tel_num' => '000011112222345',
             ),
+            5 => 
+            array (
+                'id' => 6,
+                'email' => 'organizer@email.com',
+                'password_hash' => '$2y$12$/Xnd4CpPjALpzZAX5agSrOhBL1pnvoGbNAaZ.lAkB2vIIR9yyQrnG',
+                'name' => 'Organizer',
+                'is_organizer' => 1,
+                'created_at' => '2025-06-10 21:06:14',
+                'tel_num' => '08123456789',
+            ),
         ));
         
         

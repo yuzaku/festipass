@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('organizer_id')->index('organizer_id');
             $table->string('title');
             $table->text('description')->nullable();
+            $table->string('poster')->nullable();
             $table->string('location');
             $table->dateTime('event_date');
             $table->timestamp('created_at')->useCurrent();

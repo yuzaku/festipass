@@ -45,7 +45,7 @@
                 <h2 class="text-xl font-semibold text-gray-800">{{ $event->title }}</h2>
             </div>
             <div class="mb-6">
-                <img src="/images/bernadya.jpeg" alt="Concert Image" class="rounded-lg shadow-md w-full object-cover">
+                <img src="{{ asset($event->poster) }}" alt="Concert Image" class="rounded-lg shadow-md w-full object-cover">
             </div>
             <div class="space-y-4 mb-6">
                 <div class="text-center mb-8">

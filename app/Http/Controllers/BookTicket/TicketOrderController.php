@@ -22,6 +22,11 @@ class TicketOrderController extends Controller
             'ticket_count' => 'required|integer|min:1|max:3', // BATAS DI SINI
         ]);
 
+        // Cek apakah stok cukup
+        if ($ticket->stock - $ticket->sold < $validated['ticket_count']) {
+            return back()->withErrors(['ticket_count' => 'Stok tiket tidak mencukupi.']);
+        }
+
         // Simpan order
          $order = Orders::create([
         'user_id' => 1, // sesuaikan kalau belum pakai auth
@@ -33,8 +38,12 @@ class TicketOrderController extends Controller
         'order_id' => $order->id,
         'ticket_id' => $ticket->id,
         'quantity' => $validated['ticket_count'],
-        'price' => $ticket->price,
+        'total_price' => $ticket->price * $validated['ticket_count'],
         ]);
+
+        $ticket->sold += $validated['ticket_count'];
+        $ticket->save();
+
         return redirect()->route('order.details', ['orderId' => $order->id])->with('success', 'Tiket berhasil dipesan!');
     }
 
