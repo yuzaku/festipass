@@ -44,87 +44,64 @@
                 <h1 class="text-4xl font-bold text-purple-600 mb-2">Order Details</h1>
             </div>
             <div class="columns-2">
-                <div class="mb-6">
-                    <img src="/images/bernadya.jpeg" alt="Concert Image"
-                        class="rounded-lg shadow-md w-full object-cover">
-                </div>
-                <div>
-                    <div class="mg-8 font-semibold text-2xl text-gray-600">
-                        Panic! at The Disco
+                @if ($event)
+                    <div class="mb-6">
+                        <img src="/images/bernadya.jpeg" alt="Concert Image"
+                            class="rounded-lg shadow-md w-full object-cover">
                     </div>
-                    <div class="mg-8 font-medium text-sm text-gray-600">
-                        Saturday, 01 November 2025
+                    <div>
+                        <div class="mg-8 font-semibold text-2xl text-gray-600">
+                            {{ $event->title }}
+                        </div>
+                        <div class="mg-8 font-medium text-sm text-gray-600">
+                            {{ $event->formatted_date }}
+                        </div>
+                        <div class="mg-8 font-medium text-sm text-gray-600">
+                            {{ $event->location }}
+                        </div>
                     </div>
-                    <div class="mg-8 font-medium text-sm text-gray-600">
-                        Icon, BSD
-                    </div>
-                </div>
+                @endif
             </div>
             <div class="space-y-4 mb-6">
                 <!-- Regular Ticket -->
-                <h2 class="text-md font-semibold text-gray-800 mb-2">Tickets</h2>
-                <div class="bg-purple-100 p-4 rounded-xl flex justify-between items-center">
-                    <div>
-                        <div class="text-md font-semibold text-purple-600">VVIP</div>
-                        <div class="text-gray-700">Rp110.000</div>
-                    </div>
-                    <div class="text-lg font-bold text-gray-800">x3</div>
+                <div>
+                    <h2 class="text-md font-semibold text-gray-800 mt-2 mb-2">Tickets</h2>
+                    @foreach ($order_items as $item)
+                        <div class="bg-purple-600 p-4 rounded-xl flex justify-between items-center">
+                            <div>
+                                <div class="text-lg font-semibold text-white">{{ $item->ticket->ticket_type }}</div>
+                            </div>
+                            <div class="text-lg font-semibold text-white">
+                                Rp{{ number_format($item->price, 0, ',', '.') }} x{{ $item->quantity }}</div>
+                        </div>
+                    @endforeach
                 </div>
                 <div>
                     <h2 class="text-md font-semibold text-gray-800 mb-2">Payment Method</h2>
-                    <div class="bg-purple-100 p-4 rounded-xl">
-                        <div class="flex items-center mb-3">
-                            <input type="radio" checked class="accent-purple-600 w-5 h-5 mr-3">
-                            <span class="font-semibold text-gray-800">DANA</span>
+                    <div class="bg-purple-600 p-4 rounded-xl grid grid-cols-8">
+                        <div><input type="radio" checked class="accent-purple-600 w-5 h-5 mr-3 col-span-1"></div>
+                        <div class="flex items-center mb-2 col-span-7 font-semibold text-white">
+                            DANA
                         </div>
-                        <p class="text-sm text-gray-600">Get a voucher reward of IDR 5,000 for the first transaction use
-                            linked DANA during the period promo.</p>
-                        <button class="mt-3 text-purple-600 underline text-sm">CHOOSE OTHER METHOD</button>
+                        <div class="col-span-1"></div>
+                        <div class="text-sm text-white col-span-7">Get a voucher reward of IDR 5,000 for the first
+                            transaction use
+                            linked DANA during the period promo.</div>
+                        <a href="/select-ticket/order-details/select-payment"
+                            class="mt-4 bg-white p-4 rounded-xl justify-between text-center col-span-8 text-purple-600">CHOOSE
+                            OTHER METHOD</a>
                     </div>
+                </div>
+                <div class="bg-purple-600 p-4 rounded-xl flex justify-between items-center">
+                    <div>
+                        <div class="text-lg font-semibold text-white">Finish Payment</div>
+                    </div>
+                    <div class="text-lg font-semibold text-white">
+                        Rp{{ number_format($item->price * $item->quantity, 0, ',', '.') }}</div>
                 </div>
             </div>
         </div>
     </div>
-    <div id="alertModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center hidden z-50">
-        <div class="bg-white rounded-lg p-6 text-center shadow-xl">
-            <h2 class="text-lg font-bold text-red-600 mb-2">Pembelian Melebihi Batas</h2>
-            <p class="text-gray-700 mb-4">Maksimal pembelian adalah 3 tiket.</p>
-            <button onclick="closeModal()"
-                class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition">Tutup</button>
-        </div>
-    </div>
-    <script>
-        const ticketPrice = 110000;
-        let count = 1;
-
-        const countDisplay = document.getElementById('ticketCount');
-        const totalPriceDisplay = document.getElementById('totalPrice');
-
-        document.getElementById('plusBtn').addEventListener('click', () => {
-            if (count >= 3) {
-                document.getElementById('alertModal').classList.remove('hidden');
-                return;
-            }
-            count++;
-            updateDisplay();
-        });
-
-        document.getElementById('minusBtn').addEventListener('click', () => {
-            if (count > 1) {
-                count--;
-                updateDisplay();
-            }
-        });
-
-        function updateDisplay() {
-            countDisplay.textContent = count;
-            totalPriceDisplay.textContent = `Rp${(ticketPrice * count).toLocaleString('id-ID')}`;
-        }
-
-        function closeModal() {
-            document.getElementById('alertModal').classList.add('hidden');
-        }
-    </script>
 </body>
 
 </html>

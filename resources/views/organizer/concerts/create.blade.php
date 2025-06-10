@@ -55,20 +55,6 @@
             border-color: #667eea;
             background-color: #f0f4ff;
         }
-        .decorative-icon {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #4facfe 100%);
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: float 3s ease-in-out infinite;
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
         .hero-pattern {
             background-image: 
                 radial-gradient(circle at 25px 25px, rgba(102, 126, 234, 0.1) 2px, transparent 0),
@@ -116,12 +102,37 @@
     <main class="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <!-- Page Header -->
         <div class="text-center mb-12 hero-pattern py-16 rounded-2xl relative overflow-hidden">
+            <div class="flex justify-center mb-4">
+                <div class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                    <i class="fas fa-plus-circle text-blue-400 mr-2 text-xs"></i>
+                    Create New Concert
+                </div>
+            </div>
+            
             <h1 class="text-5xl md:text-6xl font-bold gradient-text mb-4">
                 Add Concert
             </h1>
             <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-                Create your concert and start selling tickets to music fans worldwide.
+                Create a new concert event and start selling tickets to music fans worldwide.
             </p>
+
+            <!-- Progress Steps -->
+            <div class="flex items-center justify-center space-x-4 max-w-2xl mx-auto">
+                <div class="flex items-center">
+                    <div class="w-8 h-8 btn-gradient rounded-full flex items-center justify-center text-white text-sm font-bold">1</div>
+                    <span class="ml-2 text-sm font-medium text-gray-700">Concert Details</span>
+                </div>
+                <div class="w-12 h-0.5 bg-gray-300"></div>
+                <div class="flex items-center">
+                    <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-gray-500 text-sm font-bold">2</div>
+                    <span class="ml-2 text-sm font-medium text-gray-500">Ticket Pricing</span>
+                </div>
+                <div class="w-12 h-0.5 bg-gray-300"></div>
+                <div class="flex items-center">
+                    <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-gray-500 text-sm font-bold">3</div>
+                    <span class="ml-2 text-sm font-medium text-gray-500">Publish</span>
+                </div>
+            </div>
         </div>
 
         <!-- Concert Form -->
@@ -138,9 +149,10 @@
                     <input type="text" 
                            id="name" 
                            name="name" 
-                           placeholder="e.g., Rock Festival 2025"
+                           placeholder="e.g., Rock Festival Jakarta 2025"
                            class="form-input w-full px-6 py-4 text-lg border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                            required>
+                    <p class="text-sm text-gray-500 mt-2">Choose an engaging name that attracts your target audience</p>
                 </div>
 
                 <!-- Location -->
@@ -152,9 +164,10 @@
                     <input type="text" 
                            id="location" 
                            name="location" 
-                           placeholder="e.g., Madison Square Garden, New York"
+                           placeholder="e.g., Jakarta International Expo, Kemayoran"
                            class="form-input w-full px-6 py-4 text-lg border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                            required>
+                    <p class="text-sm text-gray-500 mt-2">Include venue name and area for better searchability</p>
                 </div>
 
                 <!-- Date & Time -->
@@ -192,9 +205,10 @@
                     <input type="text" 
                            id="artist" 
                            name="artist" 
-                           placeholder="e.g., The Rolling Stones"
+                           placeholder="e.g., Imagine Dragons, Taylor Swift"
                            class="form-input w-full px-6 py-4 text-lg border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                            required>
+                    <p class="text-sm text-gray-500 mt-2">You can add multiple artists separated by commas</p>
                 </div>
 
                 <!-- Description -->
@@ -206,9 +220,10 @@
                     <textarea id="description" 
                               name="description" 
                               rows="4"
-                              placeholder="Describe your concert..."
+                              placeholder="Describe your concert event, what makes it special, what attendees can expect..."
                               class="form-input w-full px-6 py-4 text-lg border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
                               required></textarea>
+                    <p class="text-sm text-gray-500 mt-2">A compelling description helps attract more attendees</p>
                 </div>
 
                 <!-- Concert Image -->
@@ -226,11 +241,13 @@
                             </div>
                             <p class="text-lg text-gray-600 mb-2">Drop your concert image here, or <span class="text-purple-600 font-semibold">click to browse</span></p>
                             <p class="text-sm text-gray-500">Supports: JPG, PNG, WebP (Max: 5MB)</p>
+                            <p class="text-sm text-gray-500 mt-2">Recommended: 1200x630px for best quality</p>
                         </div>
                         
                         <!-- Preview Area -->
                         <div id="imagePreview" class="hidden">
-                            <img id="previewImg" src="" alt="Concert Preview" class="max-w-full h-64 object-cover rounded-lg mx-auto">
+                            <img id="previewImg" src="" alt="Image Preview" class="max-w-full h-64 object-cover rounded-lg mx-auto">
+                            <p class="text-sm text-gray-600 mt-2" id="fileName"></p>
                             <button type="button" id="removeImage" class="mt-4 text-red-600 hover:text-red-800 font-medium">
                                 <i class="fas fa-trash mr-1"></i>
                                 Remove Image
@@ -241,83 +258,28 @@
                                id="concert_image" 
                                name="concert_image" 
                                accept="image/*" 
-                               class="hidden">
+                               class="hidden"
+                               required>
                     </div>
                 </div>
 
-                <!-- Ticket Pricing Section -->
-                <div class="bg-gray-50 rounded-xl p-6 mb-8">
-                    <h3 class="text-xl font-semibold text-gray-900 mb-4">
-                        <i class="fas fa-ticket-alt mr-2 text-purple-600"></i>
-                        Ticket Categories
-                    </h3>
-                    
-                    <div id="ticketCategories">
-                        <!-- Regular Ticket -->
-                        <div class="bg-white rounded-lg p-4 border border-gray-200 mb-4">
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Category Name</label>
-                                    <input type="text" 
-                                           name="ticket_categories[0][name]" 
-                                           placeholder="e.g., Regular"
-                                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                           required>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Price (Rp)</label>
-                                    <input type="number" 
-                                           name="ticket_categories[0][price]" 
-                                           placeholder="150000"
-                                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                           required>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Quantity</label>
-                                    <input type="number" 
-                                           name="ticket_categories[0][quantity]" 
-                                           placeholder="100"
-                                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                           required>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- VIP Ticket -->
-                        <div class="bg-white rounded-lg p-4 border border-gray-200 mb-4">
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Category Name</label>
-                                    <input type="text" 
-                                           name="ticket_categories[1][name]" 
-                                           placeholder="e.g., VIP"
-                                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                           required>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Price (Rp)</label>
-                                    <input type="number" 
-                                           name="ticket_categories[1][price]" 
-                                           placeholder="300000"
-                                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                           required>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Quantity</label>
-                                    <input type="number" 
-                                           name="ticket_categories[1][quantity]" 
-                                           placeholder="50"
-                                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                           required>
-                                </div>
-                            </div>
-                        </div>
+                <!-- Concert Status -->
+                <div class="mb-8">
+                    <label class="block text-lg font-semibold text-gray-700 mb-3">
+                        <i class="fas fa-toggle-on mr-2 text-purple-600"></i>
+                        Concert Status
+                    </label>
+                    <div class="flex items-center space-x-6">
+                        <label class="flex items-center">
+                            <input type="radio" name="status" value="draft" checked class="text-purple-600 focus:ring-purple-500">
+                            <span class="ml-2 text-gray-700">Save as Draft</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="radio" name="status" value="published" class="text-purple-600 focus:ring-purple-500">
+                            <span class="ml-2 text-gray-700">Publish Immediately</span>
+                        </label>
                     </div>
-                    
-                    <button type="button" id="addTicketCategory" class="text-purple-600 hover:text-purple-800 font-medium">
-                        <i class="fas fa-plus mr-1"></i>
-                        Add Another Category
-                    </button>
+                    <p class="text-sm text-gray-500 mt-2">You can always change this later. Draft concerts are not visible to the public.</p>
                 </div>
 
                 <!-- Form Actions -->
@@ -327,15 +289,15 @@
                         <i class="fas fa-times mr-2"></i>
                         Cancel
                     </a>
-                    <button type="button" 
+                    <button type="submit" name="action" value="draft"
                             class="inline-flex items-center justify-center px-8 py-4 border border-purple-500 text-purple-600 font-semibold rounded-xl hover:bg-purple-50 transition duration-200">
                         <i class="fas fa-save mr-2"></i>
                         Save as Draft
                     </button>
-                    <button type="submit" 
+                    <button type="submit" name="action" value="next"
                             class="inline-flex items-center justify-center px-8 py-4 btn-gradient text-white font-semibold rounded-xl transition duration-200 transform hover:scale-105 shadow-lg">
-                        <i class="fas fa-rocket mr-2"></i>
-                        Create Concert
+                        <i class="fas fa-arrow-right mr-2"></i>
+                        Next: Add Tickets
                     </button>
                 </div>
             </form>
@@ -350,6 +312,7 @@
             const uploadContent = document.getElementById('uploadContent');
             const imagePreview = document.getElementById('imagePreview');
             const previewImg = document.getElementById('previewImg');
+            const fileName = document.getElementById('fileName');
             const removeImageBtn = document.getElementById('removeImage');
 
             // Click to upload
@@ -410,82 +373,103 @@
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     previewImg.src = e.target.result;
+                    fileName.textContent = file.name;
                     uploadContent.classList.add('hidden');
                     imagePreview.classList.remove('hidden');
                 };
                 reader.readAsDataURL(file);
             }
 
-            // Add ticket category functionality
-            let categoryCount = 2;
-            document.getElementById('addTicketCategory').addEventListener('click', function() {
-                const container = document.getElementById('ticketCategories');
-                const newCategory = document.createElement('div');
-                newCategory.className = 'bg-white rounded-lg p-4 border border-gray-200 mb-4';
-                newCategory.innerHTML = `
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Category Name</label>
-                            <input type="text" 
-                                   name="ticket_categories[${categoryCount}][name]" 
-                                   placeholder="e.g., Early Bird"
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                   required>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Price (Rp)</label>
-                            <input type="number" 
-                                   name="ticket_categories[${categoryCount}][price]" 
-                                   placeholder="100000"
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                   required>
-                        </div>
-                        <div class="flex gap-2">
-                            <div class="flex-1">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Quantity</label>
-                                <input type="number" 
-                                       name="ticket_categories[${categoryCount}][quantity]" 
-                                       placeholder="50"
-                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                       required>
-                            </div>
-                            <div class="flex items-end">
-                                <button type="button" class="remove-category px-3 py-2 text-red-600 hover:text-red-800 border border-red-300 rounded-lg hover:bg-red-50">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(newCategory);
-                categoryCount++;
-
-                // Add remove functionality
-                newCategory.querySelector('.remove-category').addEventListener('click', function() {
-                    newCategory.remove();
-                });
-            });
-
             // Form validation and enhancement
             const form = document.querySelector('form');
             form.addEventListener('submit', function(e) {
-                // Add loading state to submit button
-                const submitBtn = form.querySelector('button[type="submit"]');
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Creating Concert...';
+                const submitBtn = e.submitter;
+                const originalText = submitBtn.innerHTML;
+                
+                if (submitBtn.name === 'action' && submitBtn.value === 'next') {
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Creating Concert...';
+                } else {
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Saving Draft...';
+                }
+                
                 submitBtn.disabled = true;
+
+                // Simulate form processing (remove this in production)
+                setTimeout(() => {
+                    if (submitBtn.value === 'next') {
+                        alert('Concert created! Redirecting to ticket pricing... (This is a demo)');
+                    } else {
+                        alert('Concert saved as draft! (This is a demo)');
+                    }
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }, 2000);
+
+                // Prevent actual form submission for demo
+                e.preventDefault();
             });
 
             // Add smooth animations to form inputs
             const inputs = document.querySelectorAll('.form-input');
             inputs.forEach(input => {
                 input.addEventListener('focus', function() {
-                    this.parentElement.style.transform = 'scale(1.02)';
+                    this.parentElement.style.transform = 'scale(1.01)';
                 });
                 
                 input.addEventListener('blur', function() {
                     this.parentElement.style.transform = 'scale(1)';
                 });
             });
+
+            // Auto-save functionality (demo)
+            let autoSaveTimeout;
+            const formInputs = form.querySelectorAll('input, textarea, select');
+            
+            formInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    clearTimeout(autoSaveTimeout);
+                    
+                    // Show auto-save indicator
+                    showAutoSaveIndicator();
+                    
+                    autoSaveTimeout = setTimeout(() => {
+                        // Simulate auto-save
+                        console.log('Auto-saving changes...');
+                        hideAutoSaveIndicator();
+                    }, 2000);
+                });
+            });
+
+            function showAutoSaveIndicator() {
+                let indicator = document.getElementById('autosave-indicator');
+                if (!indicator) {
+                    indicator = document.createElement('div');
+                    indicator.id = 'autosave-indicator';
+                    indicator.className = 'fixed top-20 right-4 bg-yellow-100 text-yellow-800 px-4 py-2 rounded-lg shadow-lg border border-yellow-200 transition-all duration-300';
+                    indicator.innerHTML = '<i class="fas fa-clock mr-2"></i>Auto-saving...';
+                    document.body.appendChild(indicator);
+                }
+                indicator.style.opacity = '1';
+                indicator.style.transform = 'translateX(0)';
+            }
+
+            function hideAutoSaveIndicator() {
+                const indicator = document.getElementById('autosave-indicator');
+                if (indicator) {
+                    indicator.innerHTML = '<i class="fas fa-check mr-2"></i>Changes saved';
+                    indicator.className = 'fixed top-20 right-4 bg-green-100 text-green-800 px-4 py-2 rounded-lg shadow-lg border border-green-200 transition-all duration-300';
+                    
+                    setTimeout(() => {
+                        indicator.style.opacity = '0';
+                        indicator.style.transform = 'translateX(100%)';
+                    }, 1500);
+                }
+            }
+
+            // Set minimum date to today
+            const dateInput = document.getElementById('date');
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.setAttribute('min', today);
         });
     </script>
 </body>
