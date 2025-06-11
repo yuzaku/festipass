@@ -99,7 +99,11 @@ use App\Http\Controllers\TicketController;
 Route::get('/my-tickets', [TicketController::class, 'myTickets'])->name('tickets.my');
 Route::get('/ticketlist', [TicketController::class, 'ticketList'])->name('tickets.list');
 
-require __DIR__ . '/dashboard.php';
+// HomepageUser
+use App\Http\Controllers\HomepageUser\HomepageUserController;
+
+Route::get('/dashboard', [HomepageUserController::class, 'index'])->name('dashboard');
+
 require __DIR__ . '/addingticket.php';
 require __DIR__ . '/orgprofilehistory.php';
 require __DIR__ . '/newtickettype.php';

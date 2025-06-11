@@ -87,10 +87,13 @@
             <h1 class="text-3xl font-bold gradient-text mb-4">Every Concert, One Click Away.</h1>
 
             <!-- Search -->
-            <div class="flex justify-center items-center gap-2 mb-4 flex-wrap">
-                <input type="text" placeholder="Search by events, name, location, and more" class="w-full md:w-2/3 px-4 py-2 border rounded-md" />
-                <button class="btn-gradient text-white px-4 py-2 rounded-md">🔍</button>
-            </div>
+            <form method="GET" action="{{ route('dashboard') }}" class="flex justify-center items-center gap-2 mb-4 flex-wrap">
+    <input type="text" name="search" placeholder="Search by events, name, location, and more"
+        value="{{ request('search') }}"
+        class="w-full md:w-2/3 px-4 py-2 border rounded-md" />
+    <button type="submit" class="btn-gradient text-white px-4 py-2 rounded-md">🔍</button>
+</form>
+
 
             <!-- Filter Tags -->
             <div class="flex justify-center gap-4 flex-wrap mb-8">
@@ -101,127 +104,66 @@
             </div>
 
             <!-- Now Showing -->
-            <h2 class="text-2xl font-bold text-left mb-4">Now Showing</h2>
-            <div class="relative mb-8">
-                <div class="absolute -left-6 top-1/2 transform -translate-y-1/2 z-10">
-                    <button class="now-prev bg-white border shadow-md rounded-full p-2">
-                        <i class="fas fa-chevron-left text-gray-700"></i>
-                    </button>
+<h2 class="text-2xl font-bold text-left mb-4">Now Showing</h2>
+<div class="relative mb-8">
+    <div class="absolute -left-6 top-1/2 transform -translate-y-1/2 z-10">
+        <button class="now-prev bg-white border shadow-md rounded-full p-2">
+            <i class="fas fa-chevron-left text-gray-700"></i>
+        </button>
+    </div>
+
+    <!-- ✅ Tambahkan wrapper .swiper.now-showing -->
+    <div class="swiper now-showing">
+        <div class="swiper-wrapper">
+            @foreach ($nowShowing as $event)
+                <div class="swiper-slide w-64 bg-white shadow-md rounded-md p-4 card-hover">
+                    <img src="{{ asset($event->poster) }}" alt="" class="w-full h-40 object-cover rounded-md mb-2">
+                    <p class="text-sm text-gray-600">{{ \Carbon\Carbon::parse($event->date)->format('M d') }}</p>
+                    <h3 class="text-lg font-semibold">{{ $event->title }}</h3>
+                    <p class="text-sm">{{ $event->price }}</p>
+                    <p class="text-sm text-gray-500">📍 {{ $event->location }}</p>
                 </div>
+            @endforeach
+        </div>
+    </div>
 
-                        <div class="swiper now-showing">
-          <div class="swiper-wrapper">
-            <!-- Slide Item -->
-        <div class="swiper-slide w-64 bg-white shadow-md rounded-md p-4">
-        <img src="https://wp.dailybruin.com/images/2019/02/PATD.ADX_14.jpg" alt="" class="w-full h-40 object-cover rounded-md mb-2">
-        <p class="text-sm text-gray-600">NOV 01</p>
-        <h3 class="text-lg font-semibold">Panic! at the Disco</h3>
-        <p class="text-sm">Rp. 450.000 - 975.000</p>
-        <p class="text-sm text-gray-500">📍 The Icon, BSD</p>
-        </div>
-        <div class="swiper-slide w-64 bg-white shadow-md rounded-md p-4">
-        <img src="https://musicazero.com/wp-content/uploads/2019/05/Hamilton-Logo.jpg" alt="" class="w-full h-40 object-cover rounded-md mb-2">
-        <p class="text-sm text-gray-600">NOV 02</p>
-        <h3 class="text-lg font-semibold">Hamilton the Musical</h3>
-        <p class="text-sm">Rp. 1.500.000 - 3.000.000</p>
-        <p class="text-sm text-gray-500">📍 Ciputra Artpreneur</p>
-        </div>
-        <div class="swiper-slide w-64 bg-white shadow-md rounded-md p-4">
-        <img src="https://th.bing.com/th/id/OIP.Iv3Vn6HNZZtLcTJulNcpPgHaFa?cb=iwp2&rs=1&pid=ImgDetMain" alt="" class="w-full h-40 object-cover rounded-md mb-2">
-        <p class="text-sm text-gray-600">NOV 03</p>
-        <h3 class="text-lg font-semibold">Anastasia the Musical</h3>
-        <p class="text-sm">Rp. 850.000 - 3.000.000</p>
-        <p class="text-sm text-gray-500">📍 The Icon, BSD</p>
-        </div>
-        <div class="swiper-slide w-64 bg-white shadow-md rounded-md p-4">
-        <img src="https://i.pinimg.com/originals/ec/3c/71/ec3c719e3fd73e168907514c9204c767.jpg" alt="" class="w-full h-40 object-cover rounded-md mb-2">
-        <p class="text-sm text-gray-600">NOV 04</p>
-        <h3 class="text-lg font-semibold">My Chemical Romance</h3>
-        <p class="text-sm">Free</p>
-        <p class="text-sm text-gray-500">📍 BXchange, BSD</p>
-        </div>
-        <div class="swiper-slide w-64 bg-white shadow-md rounded-md p-4">
-        <img src="https://i.pinimg.com/originals/4d/60/6f/4d606fa21b943c680ce30d3f4632a783.jpg" alt="" class="w-full h-40 object-cover rounded-md mb-2">
-        <p class="text-sm text-gray-600">NOV 05</p>
-        <h3 class="text-lg font-semibold">Paramore</h3>
-        <p class="text-sm">Rp. 450.000 - 975.000</p>
-        <p class="text-sm text-gray-500">📍 Tunjungan Plaza, Surabaya</p>
-        </div>
-        <div class="swiper-slide w-64 bg-white shadow-md rounded-md p-4">
-        <img src="https://th.bing.com/th/id/OIP.qtHwOE9dlJa-j3d9pz-sRQHaFQ?cb=iwp2&rs=1&pid=ImgDetMain" alt="" class="w-full h-40 object-cover rounded-md mb-2">
-        <p class="text-sm text-gray-600">NOV 06</p>
-        <h3 class="text-lg font-semibold">Linkin Park</h3>
-        <p class="text-sm">Free</p>
-        <p class="text-sm text-gray-500">📍 Jatim Expo, Surabaya</p>
-        </div>
-          </div>
-        </div>
+    <div class="absolute -right-6 top-1/2 transform -translate-y-1/2 z-10">
+        <button class="now-next bg-white border shadow-md rounded-full p-2">
+            <i class="fas fa-chevron-right text-gray-700"></i>
+        </button>
+    </div>
+</div>
 
-                <div class="absolute -right-6 top-1/2 transform -translate-y-1/2 z-10">
-                    <button class="now-next bg-white border shadow-md rounded-full p-2">
-                        <i class="fas fa-chevron-right text-gray-700"></i>
-                    </button>
+
+<!-- Coming Soon -->
+<h2 class="text-2xl font-bold text-left mb-4">Coming Soon</h2>
+<div class="relative mb-8">
+    <div class="absolute -left-6 top-1/2 transform -translate-y-1/2 z-10">
+        <button class="coming-prev bg-white border shadow-md rounded-full p-2">
+            <i class="fas fa-chevron-left text-gray-700"></i>
+        </button>
+    </div>
+
+    <div class="swiper coming-soon">
+        <div class="swiper-wrapper">
+            @foreach ($comingSoon as $event)
+                <div class="swiper-slide w-64 bg-white shadow-md rounded-md p-4 card-hover">
+                    <img src="{{ asset($event->poster) }}" alt="" class="w-full h-40 object-cover rounded-md mb-2">
+                    <p class="text-sm text-gray-600">{{ \Carbon\Carbon::parse($event->date)->format('M d') }}</p>
+                    <h3 class="text-lg font-semibold">{{ $event->title }}</h3>
+                    <p class="text-sm">{{ $event->price }}</p>
+                    <p class="text-sm text-gray-500">📍 {{ $event->location }}</p>
                 </div>
-            </div>
-
-            <!-- Coming Soon -->
-            <h2 class="text-2xl font-bold text-left mb-4">Coming Soon</h2>
-            <div class="relative mb-8">
-                <div class="absolute -left-6 top-1/2 transform -translate-y-1/2 z-10">
-                    <button class="coming-prev bg-white border shadow-md rounded-full p-2">
-                        <i class="fas fa-chevron-left text-gray-700"></i>
-                    </button>
-                </div>
-
-                <div class="swiper coming-soon">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide w-64 bg-white shadow-md rounded-md p-4">
-        <img src="https://i.pinimg.com/originals/7e/0e/f3/7e0ef3859e00c6bdb8a6961fd571d53d.jpg" alt="" class="w-full h-40 object-cover rounded-md mb-2">
-        <p class="text-sm text-gray-600">NOV 10</p>
-        <h3 class="text-lg font-semibold">The Script Live</h3>
-        <p class="text-sm">Rp. 600.000 - 1.200.000</p>
-        <p class="text-sm text-gray-500">📍 Istora Senayan</p>
-      </div>
-      <div class="swiper-slide w-64 bg-white shadow-md rounded-md p-4">
-        <img src="https://www.nme.com/wp-content/uploads/2023/01/2023_coldplay_getty_2000x1270.jpg" alt="" class="w-full h-40 object-cover rounded-md mb-2">
-        <p class="text-sm text-gray-600">NOV 12</p>
-        <h3 class="text-lg font-semibold">Coldplay</h3>
-        <p class="text-sm">Rp. 1.000.000 - 2.500.000</p>
-        <p class="text-sm text-gray-500">📍 GBK Jakarta</p>
-      </div>
-      <div class="swiper-slide w-64 bg-white shadow-md rounded-md p-4">
-        <img src="https://townsquare.media/site/366/files/2021/09/attachment-imagine_dragons_2019.jpg" alt="" class="w-full h-40 object-cover rounded-md mb-2">
-        <p class="text-sm text-gray-600">NOV 13</p>
-        <h3 class="text-lg font-semibold">Imagine Dragon</h3>
-        <p class="text-sm">Rp. 1.500.000 - 2.500.000</p>
-        <p class="text-sm text-gray-500">📍 Jatim Expo, Surabaya</p>
-      </div>
-      <div class="swiper-slide w-64 bg-white shadow-md rounded-md p-4">
-        <img src="https://www.rollingstone.com/wp-content/uploads/2020/02/TheWeeknd.jpg" alt="" class="w-full h-40 object-cover rounded-md mb-2">
-        <p class="text-sm text-gray-600">NOV 14</p>
-        <h3 class="text-lg font-semibold">The Weeknd</h3>
-        <p class="text-sm">Rp. 1.000.000 - 2.500.000</p>
-        <p class="text-sm text-gray-500">📍 Tunjungan Plaza, Surabaya</p>
-      </div>
-      <div class="swiper-slide w-64 bg-white shadow-md rounded-md p-4">
-        <img src="https://th.bing.com/th/id/OIP.7S3ItpPQOZ08bU_VB2IdegHaEK?cb=iwp2&rs=1&pid=ImgDetMain" alt="" class="w-full h-40 object-cover rounded-md mb-2">
-        <p class="text-sm text-gray-600">NOV 15</p>
-        <h3 class="text-lg font-semibold">Daft Punk</h3>
-        <p class="text-sm">Rp. 1.000.000 - 2.500.000</p>
-        <p class="text-sm text-gray-500">📍 GBK Jakarta</p>
-      </div>
-          </div>
+            @endforeach
         </div>
+    </div>
 
-                <div class="absolute -right-6 top-1/2 transform -translate-y-1/2 z-10">
-                    <button class="coming-next bg-white border shadow-md rounded-full p-2">
-                        <i class="fas fa-chevron-right text-gray-700"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
+    <div class="absolute -right-6 top-1/2 transform -translate-y-1/2 z-10">
+        <button class="coming-next bg-white border shadow-md rounded-full p-2">
+            <i class="fas fa-chevron-right text-gray-700"></i>
+        </button>
+    </div>
+</div>
 
     <!-- Swiper Init -->
     <script>
