@@ -99,6 +99,13 @@ use App\Http\Controllers\TicketController;
 Route::get('/my-tickets', [TicketController::class, 'myTickets'])->name('tickets.my');
 Route::get('/ticketlist', [TicketController::class, 'ticketList'])->name('tickets.list');
 
+use App\Http\Controllers\ConcertController;
+
+Route::get('/concert-details/{id}', [ConcertController::class, 'show'])->name('concert.details');
+
+
+
+require __DIR__ . '/dashboard.php';
 // HomepageUser
 use App\Http\Controllers\HomepageUser\HomepageUserController;
 
