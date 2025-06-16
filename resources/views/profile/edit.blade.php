@@ -1,11 +1,9 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en" class="h-full bg-gray-50">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FestiPass - Profile</title>
-    
-    <!-- Tailwind CSS CDN -->
+    <title>FestiPass - Organizer Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -18,18 +16,66 @@
         }
       }
     </script>
-    
-    {{-- Font Poppins --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .btn-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .btn-gradient:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        /* Custom icons styling */
+        .icon-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        /* Decorative elements */
+        .decorative-icon {
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #1e40af 100%);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .hero-pattern {
+            background-image: 
+                radial-gradient(circle at 25px 25px, rgba(59, 130, 246, 0.1) 2px, transparent 0),
+                radial-gradient(circle at 75px 75px, rgba(30, 64, 175, 0.1) 2px, transparent 0);
+            background-size: 100px 100px;
+        }
+    </style>
 </head>
 <body class="bg-gray-100 min-h-screen font-poppins">
     <!-- Header -->
     <header class="bg-white shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-start items-center py-4">
-                <h1 class="text-2xl font-bold text-purple-600 font-poppins">FestiPass - Profile</h1>
+                <h1 class="text-3xl font-bold gradient-text">FestiPass - Profile</h1>
             </div>
         </div>
     </header>
@@ -61,7 +107,7 @@
 
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-        <h2 class="text-4xl font-bold text-center mb-12 font-poppins bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 bg-clip-text text-transparent">My Profile</h2>
+        <h2 class="text-3xl font-bold text-center mb-12 gradient-text">My Profile</h2>
         
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <!-- Left Column - Personal Information -->
@@ -130,29 +176,29 @@
                     </div>
 
                     <!-- Account Type Section -->
-<div class="space-y-4">
-    <h4 class="text-xl font-bold text-black font-poppins">Account Type</h4>
-    <div class="flex items-center space-x-4">
-        <div class="flex-1">
-            <select 
-                id="is_organizer" 
-                name="is_organizer" 
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed font-poppins"
-                disabled
-            >
-                <option value="0" {{ (!($user->is_organizer ?? false)) ? 'selected' : '' }}>Regular User</option>
-                <option value="1" {{ ($user->is_organizer ?? false) ? 'selected' : '' }}>Organizer</option>
-            </select>
-        </div>
-        <div>
-            <span class="text-gray-600 text-sm font-poppins">Request Organizer Account? </span>
-            <!-- Ubah dari form POST menjadi link GET langsung -->
-            <a href="{{ route('organizer.request') }}" class="text-purple-600 hover:text-purple-800 underline text-sm font-poppins">
-                Click Here!
-            </a>
-        </div>
-    </div>
-</div>
+                    <div class="space-y-4">
+                        <h4 class="text-xl font-bold text-black font-poppins">Account Type</h4>
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-1">
+                                <select 
+                                    id="is_organizer" 
+                                    name="is_organizer" 
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed font-poppins"
+                                    disabled
+                                >
+                                    <option value="0" {{ (!($user->is_organizer ?? false)) ? 'selected' : '' }}>Regular User</option>
+                                    <option value="1" {{ ($user->is_organizer ?? false) ? 'selected' : '' }}>Organizer</option>
+                                </select>
+                            </div>
+                            <div>
+                                <span class="text-gray-600 text-sm font-poppins">Request Organizer Account? </span>
+                                <!-- Ubah dari form POST menjadi link GET langsung -->
+                                <a href="{{ route('organizer.request') }}" class="text-blue-600 hover:text-blue-800 underline text-sm font-poppins">
+                                    Click Here!
+                                </a>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Language Section -->
                     <div class="space-y-4">
@@ -172,7 +218,7 @@
                         <button 
                             type="button" 
                             id="changeBtn"
-                            class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 font-poppins"
+                            class="px-6 py-2 btn-gradient text-white py-3 px-6 rounded-lg transition duration-200 transform hover:scale-105 shadow-lg"
                         >
                             Change
                         </button>
@@ -205,7 +251,7 @@
                         <div class="flex-1">
                             <div class="flex justify-between items-center">
                                 <span class="font-bold text-lg font-poppins">Tulus</span>
-                                <span class="text-purple-500 text-lg font-bold">♥♥♥♥</span>
+                                <span class="text-blue-500 text-lg font-bold">♥♥♥♥</span>
                             </div>
                             <p class="text-sm text-gray-600 leading-tight mt-1">
                                 Tulus is an Indonesian singer-songwriter known for his soulful voice and heartfelt lyrics, blending jazz, pop, and contemporary styles.
@@ -218,7 +264,7 @@
                         <div class="flex-1">
                             <div class="flex justify-between items-center">
                                 <span class="font-bold text-lg font-poppins">Bernadya</span>
-                                <span class="text-purple-500 text-lg font-bold">♥♥♥♥</span>
+                                <span class="text-blue-500 text-lg font-bold">♥♥♥♥</span>
                             </div>
                             <p class="text-sm text-gray-600 leading-tight mt-1">
                                 Bernadya is an Indonesian singer-songwriter known for her soothing voice and introspective lyrics, blending folk and pop influences to create heartfelt music.
@@ -231,7 +277,7 @@
                         <div class="flex-1">
                             <div class="flex justify-between items-center">
                                 <span class="font-bold text-lg font-poppins">Juicy Lucy</span>
-                                <span class="text-purple-500 text-lg font-bold">♥♥♥♥</span>
+                                <span class="text-blue-500 text-lg font-bold">♥♥♥♥</span>
                             </div>
                             <p class="text-sm text-gray-600 leading-tight mt-1">
                                 Juicy Lucy is an Indonesian band known for their vibrant mix of soul, funk, and pop, delivering energetic performances and catchy, groove-filled tracks.

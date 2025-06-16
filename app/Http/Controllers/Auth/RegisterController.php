@@ -40,7 +40,7 @@ class RegisterController extends Controller
             'email' => $validated['email'],
             'password_hash' => Hash::make($validated['password']),
             'tel_num' => $cleanPhone,
-            'is_organizer' => $request->has('is_organizer') ? 1 : 0,
+            'is_organizer' => $request->input('is_organizer', 0),
         ]);
 
         return redirect('/')->with('status', 'Akun berhasil dibuat! Silakan login untuk melanjutkan.');
