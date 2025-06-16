@@ -2,23 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\View\View; // Untuk type hinting view
-// Tidak perlu Request atau Model untuk tampilan statis ini
+use Illuminate\View\View;
 
 class AddtickettypeController extends Controller
 {
     /**
-     * Menampilkan halaman statis untuk manajemen tiket konser.
-     * Metode ini dipanggil oleh rute /manageconcertticket
-     *
-     * @return \Illuminate\View\View
+     * Menampilkan form untuk menambahkan jenis tiket baru (View 2).
      */
     public function showPage(): View
     {
-        // Langsung kembalikan view yang berisi HTML Anda.
-        // Pastikan view 'concert_ticket_edit.blade.php' (atau nama yang Anda pilih)
-        // ada di resources/views/
-        return view('ticket.addnewticket'); // Ganti 'concert_ticket_edit' jika nama file view Anda berbeda
+        // PERUBAHAN: dari 'addnewticket' menjadi 'organizer.addnewticket'
+        return view('organizer.addnewticket');
     }
 
     /**

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Hash;
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable;
-
+    const UPDATED_AT = null;
     /**
      * The attributes that are mass assignable.
      */

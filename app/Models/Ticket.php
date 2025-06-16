@@ -14,6 +14,7 @@ class Ticket extends Model
         'ticket_type',
         'price',
         'stock',
+        'sold', // <-- TAMBAHKAN INI
     ];
 
     /**
