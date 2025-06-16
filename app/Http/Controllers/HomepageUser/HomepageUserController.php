@@ -2,24 +2,35 @@
 
 namespace App\Http\Controllers\HomepageUser;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Event;
+use Illuminate\Http\Request;
+use App\Models\Events;
 
-class HomepageUserController extends Controller
+class HomepageUserController extends \App\Http\Controllers\Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Data dummy sementara
-        $nowShowing = [
-            ['title' => 'Event A', 'description' => 'Deskripsi A'],
-            ['title' => 'Event B', 'description' => 'Deskripsi B'],
-        ];
+        $query = Events::query();
 
-        $comingSoon = [
-            ['title' => 'Event C', 'description' => 'Deskripsi C'],
-            ['title' => 'Event D', 'description' => 'Deskripsi D'],
-        ];
+        // Search filter
+        if ($request->has('search') && $request->search != '') {
+            $query->where(function ($q) use ($request) {
+                $q->where('title', 'like', '%' . $request->search . '%')
+                  ->orWhere('location', 'like', '%' . $request->search . '%')
+                  ->orWhere('description', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        $now = now();
+
+        $nowShowing = (clone $query)->whereDate('event_date', '<=', $now)
+                                    ->orderBy('event_date', 'desc')
+                                    ->take(5)
+                                    ->get();
+
+        $comingSoon = (clone $query)->whereDate('event_date', '>', $now)
+                                    ->orderBy('event_date', 'asc')
+                                    ->take(5)
+                                    ->get();
 
         return view('dashboard.dashboard', compact('nowShowing', 'comingSoon'));
     }

@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomepageUser\HomepageUserController;
 
-Route::view('/dashboard', 'dashboard.dashboard');
-
+Route::get('/dashboard', function () {
+    return view('dashboard.dashboard');
+})->name('dashboard');
