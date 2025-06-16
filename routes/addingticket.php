@@ -1,16 +1,16 @@
-<!-- 
+<?php
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ConcertTicketController;
 
-Route::view('/managetickets', 'concert_ticket_edit'); -->
+// Rute untuk menampilkan halaman edit konser (GET)
+Route::get('/managetickets/{concert}/edit', [ConcertTicketController::class, 'edit'])
+     ->name('managetickets.edit');
 
-<?php
+// Rute untuk menampilkan form tambah tiket (GET)
+Route::get('/managetickets/{concert}/add-ticket', [ConcertTicketController::class, 'showAddTicketForm'])
+     ->name('managetickets.add_form');
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ConcertTicketController; // Pastikan namespace ini benar
-
-// Mengarahkan URL /managetickets ke metode showPage di ConcertTicketController
-// dan memberinya nama 'managetickets.show'
-Route::get('/managetickets', [ConcertTicketController::class, 'showPage'])
-     ->name('managetickets.show');
+// RUTE BARU: Untuk menyimpan data tiket dari form (POST)
+Route::post('/managetickets/{concert}/add-ticket', [ConcertTicketController::class, 'storeTicket'])
+      ->name('managetickets.store_ticket');
