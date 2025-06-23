@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <title>Your Report - FestiPass</title>
 
-    <!-- Import Google Font Poppins -->
+    <!-- Font & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
 
     <style>
         body {
@@ -37,17 +38,36 @@
         .profile-icon {
             width: 40px;
             height: 40px;
-            background-color: #d3d6dd;
+            background-color: #6a93f8;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            color: #6c4cf1;
-            font-size: 20px;
+            color: white;
+            font-size: 16px;
+            text-decoration: none;
+        }
+
+        .back-wrapper {
+            padding: 20px 40px 0;
+        }
+
+        .back-button {
+            color: #6a93f8;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 20px;
+        }
+
+        .back-button i {
+            font-size: 16px;
         }
 
         .container {
-            padding: 40px 20px;
+            padding: 20px 40px 40px;
             max-width: 900px;
             margin: auto;
         }
@@ -121,25 +141,26 @@
             font-size: 14px;
             color: #555;
         }
-
-        .btn-gradient {
-            background: linear-gradient(to right, #6a93f8, #9b59f6);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 8px;
-            border: none;
-            font-weight: 600;
-            font-family: 'Poppins', sans-serif;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
+    <!-- Navbar -->
     <div class="header">
         <div class="logo">FestiPass</div>
-        <div class="profile-icon">👤</div>
+        <a href="{{ route('profile.show') }}" class="profile-icon">
+            <i class="fas fa-user"></i>
+        </a>
     </div>
 
+    <!-- Back button -->
+    <div class="back-wrapper">
+        <a href="{{ route('tickets.my') }}" class="back-button">
+            <i class="fas fa-arrow-left"></i> Back to My Tickets
+        </a>
+
+    </div>
+
+    <!-- Main Content -->
     <div class="container">
         <h1>Your Report</h1>
 

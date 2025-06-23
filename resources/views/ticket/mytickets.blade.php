@@ -46,6 +46,7 @@
       align-items: center;
       justify-content: center;
       font-size: 20px;
+      text-decoration: none;
     }
 
     h2 {
@@ -148,6 +149,11 @@
       transform: scale(1.03);
     }
 
+    .back-button-container {
+      text-align: left;
+      padding: 20px 40px 0;
+    }
+
     @media (max-width: 768px) {
       h2 {
         font-size: 28px;
@@ -174,15 +180,29 @@
         width: 80%;
         justify-content: center;
       }
+
+      .back-button-container {
+        padding: 20px;
+      }
     }
   </style>
 </head>
 <body>
 
+  <!-- Navbar -->
   <div class="navbar">
     <h1>FestiPass</h1>
-    <div class="profile">👤</div>
+    <a href="{{ route('profile.show') }}" class="profile">👤</a>
   </div>
+
+
+    <!-- Back button -->
+    <div class="back-wrapper">
+        <a href="{{ route('dashboard') }}" class="back-button">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+
+    </div>
 
   <h2>My Tickets</h2>
 
