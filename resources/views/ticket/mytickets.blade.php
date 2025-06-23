@@ -191,7 +191,7 @@
     <div>
       <div class="ticket-date">17 August 2025</div>
       <div class="ticket-card">
-        <img src="https://via.placeholder.com/250x130.png?text=Event+1" alt="Event 1">
+        <img src="https://www.centralpark.com/downloads/9882/download/summerstage-EmilyGoncalves.jpg?cb=b379bf412bd7ae8db9d7f451df9ef7bb&w=640" alt="Event 1">
         <div class="ticket-info">
           <strong>Sisforia : TGIF!</strong><br>
           x3 Tickets<br>
@@ -203,7 +203,7 @@
     <div>
       <div class="ticket-date">01 November 2025</div>
       <div class="ticket-card">
-        <img src="https://via.placeholder.com/250x130.png?text=Event+2" alt="Event 2">
+        <img src="https://images.stockcake.com/public/7/0/a/70aec8d4-e329-417f-9da0-cf271c3c2278_large/disco-party-vibes-stockcake.jpg" alt="Event 2">
         <div class="ticket-info">
           <strong>Panic! at The Disco</strong><br>
           x3 Tickets<br>
@@ -215,7 +215,7 @@
     <div>
       <div class="ticket-date">05 June 2025</div>
       <div class="ticket-card">
-        <img src="https://via.placeholder.com/250x130.png?text=Event+3" alt="Event 3">
+        <img src="https://asset-2.tstatic.net/tribunnews/foto/bank/images/anang-syahrini-ashanty_20150124_163558.jpg" alt="Event 3">
         <div class="ticket-info">
           <strong>Anang Herman</strong><br>
           x3 Tickets<br>
