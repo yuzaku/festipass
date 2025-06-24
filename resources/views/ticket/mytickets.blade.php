@@ -15,7 +15,6 @@
       background-color: #fafafa;
       margin: 0;
       padding: 0;
-      text-align: center;
     }
 
     .navbar {
@@ -49,10 +48,26 @@
       text-decoration: none;
     }
 
+    /* Back to Dashboard */
+    .back-link {
+      display: inline-block;
+      margin: 24px 0 0 40px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #6a93f8;
+      text-decoration: none;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+      color: #4b75f1;
+    }
+
     h2 {
       font-size: 36px;
       font-weight: 700;
-      margin: 30px 0 10px 0;
+      margin: 10px 0 10px 0;
+      text-align: center;
       background: linear-gradient(90deg, #6a93f8, #9b59f6);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -62,6 +77,7 @@
       font-size: 18px;
       font-weight: 600;
       margin-top: 40px;
+      text-align: center;
       color: #333;
     }
 
@@ -149,11 +165,6 @@
       transform: scale(1.03);
     }
 
-    .back-button-container {
-      text-align: left;
-      padding: 20px 40px 0;
-    }
-
     @media (max-width: 768px) {
       h2 {
         font-size: 28px;
@@ -181,8 +192,8 @@
         justify-content: center;
       }
 
-      .back-button-container {
-        padding: 20px;
+      .back-link {
+        margin: 20px;
       }
     }
   </style>
@@ -195,17 +206,13 @@
     <a href="{{ route('profile.show') }}" class="profile">👤</a>
   </div>
 
+  <!-- Back to Dashboard -->
+  <a href="{{ route('dashboard') }}" class="back-link">Back to Dashboard</a>
 
-    <!-- Back button -->
-    <div class="back-wrapper">
-        <a href="{{ route('dashboard') }}" class="back-button">
-            <i class="fas fa-arrow-left"></i> Back to Dashboard
-        </a>
-
-    </div>
-
+  <!-- Page Title -->
   <h2>My Tickets</h2>
 
+  <!-- Section 1 -->
   <div class="section-title">Upcoming Events</div>
   <div class="ticket-row">
     <div>
@@ -246,6 +253,7 @@
     </div>
   </div>
 
+  <!-- Section 2 -->
   <div class="section-title">Past Activities</div>
   <div class="button-row">
     <a href="/ticketlist" class="button">🎟️ YOUR TICKET LIST</a>
