@@ -39,12 +39,14 @@
 <body class="bg-white font-poppins">
   <!-- Header -->
   <header class="flex justify-between items-center p-4 border-b">
-    <div class="flex items-center gap-4">
-      <div class="text-2xl font-bold gradient-text">FestiPass</div>
-      <a href="/dashboard" class="btn-gradient text-white px-4 py-2 rounded-md">Dashboard</a>
-    </div>
-    <div class="w-10 h-10 rounded-full bg-gray-300"></div>
-  </header>
+  <div class="flex items-center gap-4">
+    <div class="text-2xl font-bold gradient-text">FestiPass</div>
+    <a href="/organizer/concerts" class="btn-gradient text-white px-4 py-2 rounded-md">Concert Manager</a>
+  </div>
+  <a href="/organizer/profile" class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center hover:ring-2 ring-purple-400 transition">
+    <i class="fas fa-user text-white"></i>
+  </a>
+</header>
 
   <!-- Sales Report -->
   <section class="max-w-6xl mx-auto p-6">
@@ -54,15 +56,15 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
       <div class="bg-white p-6 rounded-xl shadow-md border">
         <p class="text-sm text-gray-500">Total Sales</p>
-        <h2 class="text-2xl font-semibold">Rp. 12.500.000</h2>
+        <h2 class="text-2xl font-semibold">{{ $totalSales }}</h2>
       </div>
       <div class="bg-white p-6 rounded-xl shadow-md border">
         <p class="text-sm text-gray-500">Tickets Sold</p>
-        <h2 class="text-2xl font-semibold">835 Tickets</h2>
+        <h2 class="text-2xl font-semibold">{{ $totalTickets }} Tickets</h2>
       </div>
       <div class="bg-white p-6 rounded-xl shadow-md border">
         <p class="text-sm text-gray-500">Events Hosted</p>
-        <h2 class="text-2xl font-semibold">12 Events</h2>
+        <h2 class="text-2xl font-semibold">{{ $totalEvents }} Events</h2>
       </div>
     </div>
 
@@ -79,27 +81,15 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="border-t">
-            <td class="px-6 py-4">Panic! at the Disco</td>
-            <td class="px-6 py-4">01 Nov 2025</td>
-            <td class="px-6 py-4">The Icon, BSD</td>
-            <td class="px-6 py-4">250</td>
-            <td class="px-6 py-4">Rp. 2.000.000</td>
-          </tr>
-          <tr class="border-t">
-            <td class="px-6 py-4">Hamilton the Musical</td>
-            <td class="px-6 py-4">02 Nov 2025</td>
-            <td class="px-6 py-4">Ciputra Artpreneur</td>
-            <td class="px-6 py-4">300</td>
-            <td class="px-6 py-4">Rp. 5.000.000</td>
-          </tr>
-          <tr class="border-t">
-            <td class="px-6 py-4">Paramore</td>
-            <td class="px-6 py-4">05 Nov 2025</td>
-            <td class="px-6 py-4">Tunjungan Plaza</td>
-            <td class="px-6 py-4">150</td>
-            <td class="px-6 py-4">Rp. 1.500.000</td>
-          </tr>
+          @foreach ($eventData as $event)
+            <tr class="border-t">
+              <td class="px-6 py-4">{{ $event['title'] }}</td>
+              <td class="px-6 py-4">{{ $event['date'] }}</td>
+              <td class="px-6 py-4">{{ $event['location'] }}</td>
+              <td class="px-6 py-4">{{ $event['tickets_sold'] }}</td>
+              <td class="px-6 py-4">{{ $event['revenue'] }}</td>
+            </tr>
+          @endforeach
         </tbody>
       </table>
     </div>
