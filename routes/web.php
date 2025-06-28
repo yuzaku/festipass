@@ -112,7 +112,6 @@ use App\Http\Controllers\HomepageUser\HomepageUserController;
 Route::get('/dashboard', [HomepageUserController::class, 'index'])->name('dashboard');
 
 require __DIR__ . '/addingticket.php';
-require __DIR__ . '/orgprofilehistory.php';
 require __DIR__ . '/newtickettype.php';
 
 use App\Http\Controllers\OrganizerController;
@@ -164,8 +163,8 @@ Route::prefix('manageconcertticket')      // Kita tetap menggunakan prefix URL
 // Help Center
 use App\Http\Controllers\OrgProfileHelpController;
 
-Route::get('/profile/help', [OrgProfileHelpController::class, 'index'])->name('orgprofilehelp.index');
-Route::post('/profile/help', [OrgProfileHelpController::class, 'sendQuestion'])->name('orgprofilehelp.send');
+Route::get('organizer/profile/help', [OrgProfileHelpController::class, 'index'])->name('orgprofilehelp.index');
+Route::post('organizer/profile/help', [OrgProfileHelpController::class, 'sendQuestion'])->name('orgprofilehelp.send');
 
 
 //Sales Report
@@ -173,3 +172,6 @@ use App\Http\Controllers\SalesReportController;
 
 Route::get('/organizer/salesreport', [SalesReportController::class, 'index'])->name('salesreport.index');
 
+//History
+use App\Http\Controllers\OrgProfileHistoryController;
+Route::get('organizer/profile/history', [OrgProfileHistoryController::class, 'index'])->name('organizer.history');

@@ -70,20 +70,25 @@
 
     <div class="border-b border-gray-200 mb-8">
         <nav class="-mb-px flex space-x-8 overflow-x-auto">
-            <button class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap">
+            <a href="/organizer/profile"
+               class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap">
                 My Profile
-            </button>
-            <button class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap">
+            </a>
+            <a href="/organizer/profile/reviews"
+               class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap">
                 Reviews
-            </button>
-            <button class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap">
+            </a>
+            <a href="/organizer/profile/history"
+               class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap">
                 Events History
-            </button>
-            <button class="tab-active py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
+            </a>
+            <a href="/organizer/profile/help"
+               class="tab-active py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
                 Help Center
-            </button>
+            </a>
         </nav>
     </div>
+
 
     @if(session('success'))
         <div class="bg-green-100 text-green-800 px-4 py-2 rounded mb-4">

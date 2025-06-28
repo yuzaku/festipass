@@ -109,63 +109,61 @@
             <!-- Now Showing -->
 <h2 class="text-2xl font-bold text-left mb-4">Now Showing</h2>
 <div class="relative mb-8">
-    <div class="absolute -left-6 top-1/2 transform -translate-y-1/2 z-10">
-        <button class="now-prev bg-white border shadow-md rounded-full p-2">
-            <i class="fas fa-chevron-left text-gray-700"></i>
-        </button>
-    </div>
+  <div class="absolute -left-6 top-1/2 transform -translate-y-1/2 z-10">
+    <button class="now-prev bg-white border shadow-md rounded-full p-2">
+      <i class="fas fa-chevron-left text-gray-700"></i>
+    </button>
+  </div>
 
-    <!-- ✅ Tambahkan wrapper .swiper.now-showing -->
-    <div class="swiper now-showing">
-        <div class="swiper-wrapper">
-            @foreach ($nowShowing as $event)
-                <div class="swiper-slide w-64 bg-white shadow-md rounded-md p-4 card-hover">
-                    <img src="{{ asset($event->poster) }}" alt="" class="w-full h-40 object-cover rounded-md mb-2">
-                    <p class="text-sm text-gray-600">{{ \Carbon\Carbon::parse($event->date)->format('M d') }}</p>
-                    <h3 class="text-lg font-semibold">{{ $event->title }}</h3>
-                    <p class="text-sm">{{ $event->price }}</p>
-                    <p class="text-sm text-gray-500">📍 {{ $event->location }}</p>
-                </div>
-            @endforeach
-        </div>
+  <div class="swiper now-showing">
+    <div class="swiper-wrapper">
+      @foreach ($nowShowing as $event)
+        <a href="{{ url('/select-ticket/' . $event->id) }}" class="swiper-slide w-64 bg-white shadow-md rounded-md p-4 card-hover block">
+          <img src="{{ asset($event->poster) }}" alt="" class="w-full h-40 object-cover rounded-md mb-2">
+          <p class="text-sm text-gray-600">{{ \Carbon\Carbon::parse($event->date)->format('M d') }}</p>
+          <h3 class="text-lg font-semibold">{{ $event->title }}</h3>
+          <p class="text-sm">{{ $event->price }}</p>
+          <p class="text-sm text-gray-500">📍 {{ $event->location }}</p>
+        </a>
+      @endforeach
     </div>
+  </div>
 
-    <div class="absolute -right-6 top-1/2 transform -translate-y-1/2 z-10">
-        <button class="now-next bg-white border shadow-md rounded-full p-2">
-            <i class="fas fa-chevron-right text-gray-700"></i>
-        </button>
-    </div>
+  <div class="absolute -right-6 top-1/2 transform -translate-y-1/2 z-10">
+    <button class="now-next bg-white border shadow-md rounded-full p-2">
+      <i class="fas fa-chevron-right text-gray-700"></i>
+    </button>
+  </div>
 </div>
-
 
 <!-- Coming Soon -->
 <h2 class="text-2xl font-bold text-left mb-4">Coming Soon</h2>
 <div class="relative mb-8">
-    <div class="absolute -left-6 top-1/2 transform -translate-y-1/2 z-10">
-        <button class="coming-prev bg-white border shadow-md rounded-full p-2">
-            <i class="fas fa-chevron-left text-gray-700"></i>
-        </button>
-    </div>
+  <div class="absolute -left-6 top-1/2 transform -translate-y-1/2 z-10">
+    <button class="coming-prev bg-white border shadow-md rounded-full p-2">
+      <i class="fas fa-chevron-left text-gray-700"></i>
+    </button>
+  </div>
 
-    <div class="swiper coming-soon">
-        <div class="swiper-wrapper">
-            @foreach ($comingSoon as $event)
-                <div class="swiper-slide w-64 bg-white shadow-md rounded-md p-4 card-hover">
-                    <img src="{{ asset($event->poster) }}" alt="" class="w-full h-40 object-cover rounded-md mb-2">
-                    <p class="text-sm text-gray-600">{{ \Carbon\Carbon::parse($event->date)->format('M d') }}</p>
-                    <h3 class="text-lg font-semibold">{{ $event->title }}</h3>
-                    <p class="text-sm">{{ $event->price }}</p>
-                    <p class="text-sm text-gray-500">📍 {{ $event->location }}</p>
-                </div>
-            @endforeach
-        </div>
+  <div class="swiper coming-soon">
+    <div class="swiper-wrapper">
+      @foreach ($comingSoon as $event)
+        <a href="{{ url('/select-ticket/' . $event->id) }}" class="swiper-slide w-64 bg-white shadow-md rounded-md p-4 card-hover block">
+          <img src="{{ asset($event->poster) }}" alt="" class="w-full h-40 object-cover rounded-md mb-2">
+          <p class="text-sm text-gray-600">{{ \Carbon\Carbon::parse($event->date)->format('M d') }}</p>
+          <h3 class="text-lg font-semibold">{{ $event->title }}</h3>
+          <p class="text-sm">{{ $event->price }}</p>
+          <p class="text-sm text-gray-500">📍 {{ $event->location }}</p>
+        </a>
+      @endforeach
     </div>
+  </div>
 
-    <div class="absolute -right-6 top-1/2 transform -translate-y-1/2 z-10">
-        <button class="coming-next bg-white border shadow-md rounded-full p-2">
-            <i class="fas fa-chevron-right text-gray-700"></i>
-        </button>
-    </div>
+  <div class="absolute -right-6 top-1/2 transform -translate-y-1/2 z-10">
+    <button class="coming-next bg-white border shadow-md rounded-full p-2">
+      <i class="fas fa-chevron-right text-gray-700"></i>
+    </button>
+  </div>
 </div>
 
     <!-- Swiper Init -->
