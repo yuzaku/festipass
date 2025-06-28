@@ -67,88 +67,51 @@
         <h1 class="text-4xl font-bold text-gray-900 mb-2">Events History</h1>
     </div>
 
-    <div class="border-b border-gray-200 mb-8">
+        <div class="border-b border-gray-200 mb-8">
         <nav class="-mb-px flex space-x-8 overflow-x-auto">
-            <button class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap">
+
+            <a href="/organizer/profile"
+            class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap">
                 My Profile
-            </button>
-            <button class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap">
+            </a>
+
+            <a href="#"
+            class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap">
                 Reviews
-            </button>
-            <button class="tab-active py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
+            </a>
+
+            <a href="/organizer/profile/history"
+            class="tab-active py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
                 Events History
-            </button>
-            <button class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap">
+            </a>
+
+            <a href="/organizer/profile/help"
+            class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap">
                 Help Center
-            </button>
+            </a>
+
         </nav>
     </div>
 
-    <!-- Carousel Content -->
+    <!-- Carousel -->
     <div class="space-y-10">
-        <!-- Carousel Row 1 -->
+        @foreach ($events->chunk(4) as $chunk)
         <div class="overflow-x-auto pb-2">
             <div class="flex space-x-4 min-w-full">
-                @for ($i = 0; $i < 4; $i++)
+                @foreach ($chunk as $event)
                 <div class="min-w-[220px] bg-white rounded-xl shadow-md card-hover">
-                    <img src="https://source.unsplash.com/300x200/?concert,{{ $i }}" alt="event" class="rounded-t-xl object-cover w-full h-36">
+                    <img src="{{ asset($event->poster) }}" alt="" class="w-full h-40 object-cover rounded-md mb-2">
                     <div class="p-4">
-                        <p class="text-sm text-gray-500 mb-1">NOV 0{{ $i+1 }}</p>
-                        <h3 class="text-lg font-semibold mb-1">
-                            @switch($i)
-                                @case(0) Panic! at the Disco @break
-                                @case(1) Hamilton the Musical @break
-                                @case(2) Anastasia the Musical @break
-                                @default AI Abdadi Seminar
-                            @endswitch
-                        </h3>
-                        <p class="text-sm text-gray-600">Status: {{ $i === 3 ? 'Upcoming' : 'Finished' }}</p>
-                        <p class="text-sm text-gray-500">
-                            📍
-                            @switch($i)
-                                @case(0) The Icon, BSD @break
-                                @case(1) Ciputra Artpreneur @break
-                                @case(2) Intercon, Pkl Indah @break
-                                @default Online
-                            @endswitch
-                        </p>
+                        <p class="text-sm text-gray-500 mb-1">{{ \Carbon\Carbon::parse($event->event_date)->format('d M Y') }}</p>
+                        <h3 class="text-lg font-semibold mb-1">{{ $event->title }}</h3>
+                        <p class="text-sm text-gray-600">Status: {{ \Carbon\Carbon::parse($event->event_date)->isPast() ? 'Finished' : 'Upcoming' }}</p>
+                        <p class="text-sm text-gray-500">📍 {{ $event->location }}</p>
                     </div>
                 </div>
-                @endfor
+                @endforeach
             </div>
         </div>
-
-        <!-- Carousel Row 2 -->
-        <div class="overflow-x-auto pb-2">
-            <div class="flex space-x-4 min-w-full">
-                @for ($i = 0; $i < 4; $i++)
-                <div class="min-w-[220px] bg-white rounded-xl shadow-md card-hover">
-                    <img src="https://source.unsplash.com/300x200/?music,event,{{ $i+4 }}" alt="event" class="rounded-t-xl object-cover w-full h-36">
-                    <div class="p-4">
-                        <p class="text-sm text-gray-500 mb-1">NOV 1{{ $i }}</p>
-                        <h3 class="text-lg font-semibold mb-1">
-                            @switch($i)
-                                @case(0) Panic! at the Disco @break
-                                @case(1) Hamilton the Musical @break
-                                @case(2) Anastasia the Musical @break
-                                @default AI Abdadi Seminar
-                            @endswitch
-                        </h3>
-                        <p class="text-sm text-gray-600">Status: {{ $i === 3 ? 'Upcoming' : 'Finished' }}</p>
-                        <p class="text-sm text-gray-500">
-                            📍
-                            @switch($i)
-                                @case(0) The Icon, BSD @break
-                                @case(1) Ciputra Artpreneur @break
-                                @case(2) Intercon, Pkl Indah @break
-                                @default Online
-                            @endswitch
-                        </p>
-                    </div>
-                </div>
-                @endfor
-            </div>
-        </div>
+        @endforeach
     </div>
 </main>
 </body>
