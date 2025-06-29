@@ -175,3 +175,20 @@ Route::get('/organizer/salesreport', [SalesReportController::class, 'index'])->n
 //History
 use App\Http\Controllers\OrgProfileHistoryController;
 Route::get('organizer/profile/history', [OrgProfileHistoryController::class, 'index'])->name('organizer.history');
+
+
+use App\Http\Controllers\OrgProfileReviewsController;
+
+// Rute untuk halaman Reviews
+Route::get('/organizer/profile/reviews', [OrgProfileReviewsController::class, 'index'])->name('organizer.profile.reviews');
+
+
+// Rute untuk halaman Reviews (yang akan redirect)
+// Diberi nama 'organizer.profile.reviews' agar cocok dengan link di tab navigasi
+Route::get('/organizer/profile/reviews', [OrgProfileReviewsController::class, 'index'])
+     ->name('organizer.profile.reviews');
+
+// Rute untuk menampilkan ulasan event spesifik
+// Diberi nama 'organizer.profile.reviews.show' agar cocok dengan link di kartu konser
+Route::get('/organizer/profile/reviews/{event}', [OrgProfileReviewsController::class, 'show'])
+     ->name('organizer.profile.reviews.show');

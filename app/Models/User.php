@@ -108,4 +108,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return $query->where('is_organizer', 0);
     }
 
+    // di dalam class User
+    public function reviews()
+    {
+        return $this->hasMany(EventReview::class, 'user_id');
+    }
 }
