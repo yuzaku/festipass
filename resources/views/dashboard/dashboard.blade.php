@@ -76,7 +76,7 @@
     <header class="flex justify-between items-center p-4 border-b">
     <div class="flex items-center gap-4">
         <div class="text-2xl font-bold gradient-text">FestiPass</div>
-        <a href="{{ route('tickets.my') }}" class="btn-gradient text-white px-4 py-2 rounded-md">My Tickets</a>
+        <a href="{{ route('my.tickets') }}" class="btn-gradient text-white px-4 py-2 rounded-md">My Tickets</a>
     </div>
     <!-- Avatar link -->
     <a href="{{ route('profile.show') }}" class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center hover:ring-2 ring-purple-400 transition">
@@ -120,7 +120,7 @@
       @foreach ($nowShowing as $event)
         <a href="{{ url('/select-ticket/' . $event->id) }}" class="swiper-slide w-64 bg-white shadow-md rounded-md p-4 card-hover block">
           <img src="{{ asset($event->poster) }}" alt="" class="w-full h-40 object-cover rounded-md mb-2">
-          <p class="text-sm text-gray-600">{{ \Carbon\Carbon::parse($event->date)->format('M d') }}</p>
+          <p class="text-sm text-gray-600">{{ \Carbon\Carbon::parse($event->event_date)->format('M d') }}</p>
           <h3 class="text-lg font-semibold">{{ $event->title }}</h3>
           <p class="text-sm">{{ $event->price }}</p>
           <p class="text-sm text-gray-500">📍 {{ $event->location }}</p>
@@ -150,7 +150,7 @@
       @foreach ($comingSoon as $event)
         <a href="{{ url('/select-ticket/' . $event->id) }}" class="swiper-slide w-64 bg-white shadow-md rounded-md p-4 card-hover block">
           <img src="{{ asset($event->poster) }}" alt="" class="w-full h-40 object-cover rounded-md mb-2">
-          <p class="text-sm text-gray-600">{{ \Carbon\Carbon::parse($event->date)->format('M d') }}</p>
+          <p class="text-sm text-gray-600">{{ \Carbon\Carbon::parse($event->event_date)->format('M d') }}</p>
           <h3 class="text-lg font-semibold">{{ $event->title }}</h3>
           <p class="text-sm">{{ $event->price }}</p>
           <p class="text-sm text-gray-500">📍 {{ $event->location }}</p>

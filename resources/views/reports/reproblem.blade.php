@@ -47,7 +47,7 @@
 
   <!-- Back Button -->
   <div class="px-6 mt-4">
-    <a href="{{ route('tickets.my') }}"
+    <a href="{{ route('my.tickets') }}"
        class="inline-flex items-center gap-2 px-4 py-2 text-white text-sm rounded-full btn-gradient shadow-md font-semibold">
       ⬅️ Back
     </a>

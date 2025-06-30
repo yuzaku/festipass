@@ -21,7 +21,7 @@ class SignInController extends Controller
         if (Auth::check()) {
             return $this->redirectBasedOnRole(Auth::user());
         }
-        
+
         return view('auth.sign-in');
     }
 
@@ -46,16 +46,16 @@ class SignInController extends Controller
         // Custom authentication karena menggunakan password_hash
         $user = User::where('email', $credentials['email'])->first();
 
-        if ($user && Hash::check($credentials['password'], $user->password)) {
+        if ($user && Hash::check($credentials['password'], $user->password_hash)) {
             // Login berhasil
             Auth::login($user, $request->boolean('remember'));
-            
+
             // Regenerate session untuk keamanan
             $request->session()->regenerate();
-            
+
             // Clear failed attempts
             $this->clearFailedAttempts($request);
-            
+
             // Redirect berdasarkan role
             return $this->redirectBasedOnRole($user);
         }
@@ -74,9 +74,9 @@ class SignInController extends Controller
     public function destroy(Request $request): RedirectResponse
     {
         $userName = Auth::user()->name ?? 'User';
-        
+
         Auth::logout();
-        
+
         // Invalidate session dan regenerate token
         $request->session()->invalidate();
         $request->session()->regenerateToken();
@@ -94,7 +94,7 @@ class SignInController extends Controller
             return redirect()->intended('/organizer/dashboard')
                 ->with('status', "Selamat datang kembali, {$user->name}! (Organizer)");
         }
-        
+
         return redirect()->intended('/dashboard')
             ->with('status', "Selamat datang kembali, {$user->name}!");
     }
@@ -106,7 +106,7 @@ class SignInController extends Controller
     {
         $key = $this->getFailedAttemptsKey($request);
         $attempts = session($key, 0);
-        
+
         if ($attempts >= 5) {
             $lockoutTime = session($key . '_lockout', 0);
             if (time() < $lockoutTime) {
@@ -127,7 +127,7 @@ class SignInController extends Controller
         $key = $this->getFailedAttemptsKey($request);
         $attempts = session($key, 0) + 1;
         session([$key => $attempts]);
-        
+
         if ($attempts >= 5) {
             // Lockout selama 15 menit
             session([$key . '_lockout' => time() + (15 * 60)]);
