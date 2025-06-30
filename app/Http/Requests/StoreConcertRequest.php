@@ -29,7 +29,7 @@ class StoreConcertRequest extends FormRequest
             'date' => 'required|date|after_or_equal:today',
             'time' => 'required|date_format:H:i',
             'description' => 'required|string|min:10|max:2000',
-            'concert_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120', // 5MB max
+            'concert_image' => 'nullable|file|max:5120', // 5MB max, remove strict image validation
             'status' => 'required|in:draft,published',
         ];
     }

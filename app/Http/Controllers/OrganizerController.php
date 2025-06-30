@@ -15,7 +15,7 @@ class OrganizerController extends Controller
 {
     protected $imageUploadService;
 
-    public function __construct(ImageUploadService $imageUploadService)
+    public function __construct(?ImageUploadService $imageUploadService = null)
     {
         $this->imageUploadService = $imageUploadService;
     }
@@ -142,11 +142,17 @@ class OrganizerController extends Controller
             
             $validatedData = $request->validated();
             
-            // Handle image upload
+            // Handle image upload - simplified version
             if ($request->hasFile('concert_image')) {
-                $validatedData['poster'] = $this->imageUploadService->uploadConcertImage(
-                    $request->file('concert_image')
-                );
+                $file = $request->file('concert_image');
+                if ($file && $file->isValid()) {
+                    $extension = $file->getClientOriginalExtension();
+                    $filename = time() . '_' . uniqid() . '.' . $extension;
+                    
+                    // Move file to public directory directly
+                    $file->move(public_path('images/concerts'), $filename);
+                    $validatedData['poster'] = 'images/concerts/' . $filename;
+                }
             }
 
             // Combine date and time
@@ -204,10 +210,25 @@ class OrganizerController extends Controller
             
             // Handle image upload
             if ($request->hasFile('concert_image')) {
-                $validatedData['poster'] = $this->imageUploadService->uploadConcertImage(
-                    $request->file('concert_image'),
-                    $concert->poster
-                );
+                try {
+                    $file = $request->file('concert_image');
+                    
+                    // Simple upload without service dependency
+                    if ($file && $file->isValid()) {
+                        $extension = $file->getClientOriginalExtension();
+                        $filename = 'concerts/' . uniqid() . '_' . time() . '.' . $extension;
+                        
+                        // Store directly
+                        $path = $file->storeAs('concerts', basename($filename), 'public');
+                        
+                        if ($path) {
+                            $validatedData['poster'] = $path;
+                        }
+                    }
+                } catch (\Exception $uploadError) {
+                    // Continue without updating image if upload fails
+                    \Log::warning('Image upload failed: ' . $uploadError->getMessage());
+                }
             }
 
             // Combine date and time

@@ -53,17 +53,12 @@ Route::middleware('auth')->group(function () {
     // Logout route
     Route::post('/logout', [SignInController::class, 'destroy'])->name('logout');
 
-    // User dashboard
-    Route::get('/dashboard', function() {
-        $user = auth()->user();
-        return view('dashboard', compact('user'));
-    })->name('dashboard');
+    // User dashboard (will be overridden by HomepageUserController below)
 
     // Profile routes
     Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::post('/profile/request-organizer', [ProfileController::class, 'requestOrganizer'])->name('profile.request-organizer');
     Route::post('/profile/request-organizer', [ProfileController::class, 'requestOrganizer'])->name('profile.request-organizer');
 
     // Organizer request routes
@@ -99,9 +94,9 @@ use App\Http\Controllers\TicketController;
 Route::get('/my-tickets', [TicketController::class, 'myTickets'])->name('tickets.my');
 Route::get('/ticketlist', [TicketController::class, 'ticketList'])->name('tickets.list');
 
-// use App\Http\Controllers\ConcertController;
+use App\Http\Controllers\ConcertController;
 
-// Route::get('/concert-details/{id}', [ConcertController::class, 'show'])->name('concert.details');
+Route::get('/concert-details/{id}', [ConcertController::class, 'show'])->name('concert.details');
 
 
 
@@ -181,3 +176,11 @@ Route::get('/organizer/salesreport', [SalesReportController::class, 'index'])->n
 use App\Http\Controllers\OrgProfileHistoryController;
 Route::get('organizer/profile/history', [OrgProfileHistoryController::class, 'index'])->name('organizer.history');
 
+use App\Http\Controllers\OrgProfileReviewsController;
+
+// Rute untuk halaman Reviews
+Route::get('/organizer/profile/reviews', [OrgProfileReviewsController::class, 'index'])->name('organizer.profile.reviews');
+
+// Rute untuk menampilkan ulasan event spesifik
+Route::get('/organizer/profile/reviews/{event}', [OrgProfileReviewsController::class, 'show'])
+     ->name('organizer.profile.reviews.show');
