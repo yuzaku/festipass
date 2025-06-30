@@ -87,7 +87,7 @@
                         <i class="fas fa-calendar-plus mr-2"></i>
                         Concerts Manager
                     </a>
-                    <a href="{{ route('organizer.reports') }}" 
+                    <a href="{{ route('salesreport.index') }}" 
                        class="inline-flex items-center px-4 py-2 border border-purple-500 text-purple-600 hover:bg-purple-50 font-medium rounded-lg transition duration-200">
                         <i class="fas fa-chart-line mr-2"></i>
                         Sales Reports
@@ -116,24 +116,27 @@
                 Manage your concerts, track sales, and create unforgettable music experiences for your audience.
             </p>
             
-            <!-- Search Bar (Visual Only) -->
+            <!-- Search Bar -->
             <div class="max-w-2xl mx-auto">
-                <div class="relative">
-                    <input type="text" 
-                           placeholder="Search by events, name, location, and more"
-                           class="w-full px-6 py-4 text-lg border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent shadow-lg pr-16">
-                    <button class="absolute right-2 top-1/2 transform -translate-y-1/2 btn-gradient text-white w-12 h-12 rounded-full transition duration-200 flex items-center justify-center shadow-lg hover:scale-105">
-                        <i class="fas fa-search text-lg"></i>
-                    </button>
-                </div>
+                <form method="GET" action="{{ route('organizer.concerts') }}">
+                    <div class="relative">
+                        <input type="text" 
+                               name="search"
+                               value="{{ request('search') }}"
+                               placeholder="Search by events, name, location, and more"
+                               class="w-full px-6 py-4 text-lg border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent shadow-lg pr-16">
+                        <button type="submit" class="absolute right-2 top-1/2 transform -translate-y-1/2 btn-gradient text-white w-12 h-12 rounded-full transition duration-200 flex items-center justify-center shadow-lg hover:scale-105">
+                            <i class="fas fa-search text-lg"></i>
+                        </button>
+                    </div>
+                </form>
             </div>
             
             <!-- Filter Buttons -->
             <div class="flex flex-wrap justify-center gap-4 mt-6">
-                <button class="px-6 py-2 btn-gradient text-white rounded-full transition duration-200 transform hover:scale-105 shadow-lg">Artist</button>
-                <button class="px-6 py-2 btn-gradient text-white rounded-full transition duration-200 transform hover:scale-105 shadow-lg">Genre</button>
-                <button class="px-6 py-2 btn-gradient text-white rounded-full transition duration-200 transform hover:scale-105 shadow-lg">Location</button>
-                <button class="px-6 py-2 btn-gradient text-white rounded-full transition duration-200 transform hover:scale-105 shadow-lg">Price</button>
+                <a href="{{ route('organizer.concerts', ['status' => 'published']) }}" class="px-6 py-2 btn-gradient text-white rounded-full transition duration-200 transform hover:scale-105 shadow-lg">Published</a>
+                <a href="{{ route('organizer.concerts', ['status' => 'draft']) }}" class="px-6 py-2 btn-gradient text-white rounded-full transition duration-200 transform hover:scale-105 shadow-lg">Draft</a>
+                <a href="{{ route('organizer.concerts') }}" class="px-6 py-2 btn-gradient text-white rounded-full transition duration-200 transform hover:scale-105 shadow-lg">All Concerts</a>
             </div>
         </div>
 
@@ -163,10 +166,68 @@
                     </a>
                 </div>
             @else
-                <!-- Concert Grid (akan ditampilkan ketika ada data) -->
+                <!-- Concert Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <!-- Concert cards akan ditampilkan di sini -->
+                    @foreach($recentConcerts as $concert)
+                        <div class="bg-white rounded-xl shadow-lg border border-gray-200 card-hover overflow-hidden">
+                            <!-- Concert Image -->
+                            <div class="h-48 bg-cover bg-center relative" style="background-image: url('{{ $concert->poster_url }}')">
+                                <div class="absolute top-4 left-4">
+                                    {!! $concert->status_badge !!}
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/50 to-transparent p-4">
+                                    <div class="text-white">
+                                        <h3 class="text-lg font-bold truncate">{{ $concert->title }}</h3>
+                                        <p class="text-sm opacity-90">{{ $concert->artist }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Concert Info -->
+                            <div class="p-6">
+                                <p class="text-sm text-gray-600 mb-2 truncate">
+                                    <i class="fas fa-map-marker-alt mr-1"></i>
+                                    <span class="truncate">{{ $concert->location }}</span>
+                                </p>
+                                <p class="text-sm text-gray-600 mb-4">
+                                    <i class="fas fa-calendar mr-1"></i>
+                                    {{ $concert->formatted_date }} at {{ $concert->formatted_time }}
+                                </p>
+                                
+                                <!-- Stats -->
+                                <div class="grid grid-cols-2 gap-4 mb-4 text-center">
+                                    <div class="bg-gray-50 rounded-lg p-3">
+                                        <div class="text-xl font-bold text-purple-600">{{ $concert->getTicketsSoldCount() }}</div>
+                                        <div class="text-xs text-gray-500">Tickets Sold</div>
+                                    </div>
+                                    <div class="bg-gray-50 rounded-lg p-3">
+                                        @php
+                                            $concertRevenue = $concert->getTotalRevenue();
+                                            if ($concertRevenue >= 1000000000) {
+                                                $revFormat = number_format($concertRevenue / 1000000000, 1) . 'B';
+                                            } elseif ($concertRevenue >= 1000000) {
+                                                $revFormat = number_format($concertRevenue / 1000000, 0) . 'M';
+                                            } elseif ($concertRevenue >= 1000) {
+                                                $revFormat = number_format($concertRevenue / 1000, 0) . 'K';
+                                            } else {
+                                                $revFormat = number_format($concertRevenue, 0);
+                                            }
+                                        @endphp
+                                        <div class="text-xl font-bold text-green-600 whitespace-nowrap">{{ $revFormat }}</div>
+                                        <div class="text-xs text-gray-500">Revenue</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex justify-end items-center">
+                                    <span class="text-xs text-gray-500 text-right whitespace-nowrap">
+                                        Created {{ $concert->created_at->diffForHumans() }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
+
             @endif
         </div>
 
@@ -192,7 +253,7 @@
                     <div>
                         <p class="text-sm font-medium text-gray-600 mb-1">Tickets Sold</p>
                         <p class="text-3xl font-bold text-gray-900">{{ number_format($ticketsSold) }}</p>
-                        <p class="text-sm text-green-600">+0% from last month</p>
+                        <p class="text-sm text-green-600">{{ $ticketsSold > 0 ? '+21% this month' : 'No sales yet' }}</p>
                     </div>
                     <div class="flex items-center justify-center w-14 h-14 bg-gradient-to-r from-green-500 to-teal-600 rounded-xl">
                         <i class="fas fa-ticket-alt text-white text-xl"></i>
@@ -205,8 +266,20 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-600 mb-1">Total Revenue</p>
-                        <p class="text-3xl font-bold text-gray-900">Rp {{ number_format($totalRevenue, 0, ',', '.') }}</p>
-                        <p class="text-sm text-yellow-600">+0% from last month</p>
+                        @php
+                            $revenue = $totalRevenue;
+                            if ($revenue >= 1000000000) {
+                                $formatted = 'Rp ' . number_format($revenue / 1000000000, 1) . 'B';
+                            } elseif ($revenue >= 1000000) {
+                                $formatted = 'Rp ' . number_format($revenue / 1000000, 0) . 'M';
+                            } elseif ($revenue >= 1000) {
+                                $formatted = 'Rp ' . number_format($revenue / 1000, 0) . 'K';
+                            } else {
+                                $formatted = 'Rp ' . number_format($revenue, 0);
+                            }
+                        @endphp
+                        <p class="text-3xl font-bold text-gray-900 whitespace-nowrap">{{ $formatted }}</p>
+                        <p class="text-sm text-yellow-600">{{ $totalRevenue > 0 ? '+18% this month' : 'No revenue yet' }}</p>
                     </div>
                     <div class="flex items-center justify-center w-14 h-14 bg-gradient-to-r from-yellow-500 to-orange-600 rounded-xl">
                         <i class="fas fa-dollar-sign text-white text-xl"></i>
@@ -249,7 +322,7 @@
             </a>
 
             <!-- Sales Analytics -->
-            <a href="{{ route('organizer.reports') }}" 
+            <a href="{{ route('salesreport.index') }}" 
                class="bg-white rounded-xl shadow-lg p-8 border border-gray-200 card-hover group">
                 <div class="flex items-center mb-6">
                     <div class="flex items-center justify-center w-14 h-14 bg-gradient-to-r from-green-500 to-teal-600 rounded-xl mr-4 group-hover:scale-110 transition duration-200">

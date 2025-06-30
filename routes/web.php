@@ -71,18 +71,18 @@ Route::middleware('auth')->group(function () {
     Route::post('/organizer/request', [ProfileController::class, 'storeOrganizerRequest'])->name('organizer.request.store');
 });
 
-    // Organizer routes
-    Route::middleware(['organizer'])->prefix('organizer')->name('organizer.')->group(function () {
-        Route::get('/dashboard', function() {
-            $user = auth()->user();
-            $stats = [
-                'total_events' => 0, // Implement sesuai kebutuhan
-                'active_events' => 0,
-                'total_participants' => 0,
-            ];
-            return view('organizer.dashboard', compact('user', 'stats'));
-        })->name('dashboard');
-    });
+    // Organizer routes - COMMENTED OUT: Replaced with OrganizerController dashboard
+    // Route::middleware(['organizer'])->prefix('organizer')->name('organizer.')->group(function () {
+    //     Route::get('/dashboard', function() {
+    //         $user = auth()->user();
+    //         $stats = [
+    //             'total_events' => 0, // Implement sesuai kebutuhan
+    //             'active_events' => 0,
+    //             'total_participants' => 0,
+    //         ];
+    //         return view('organizer.dashboard', compact('user', 'stats'));
+    //     })->name('dashboard');
+    // });
 });
 
 use App\Http\Controllers\ReportController;
@@ -99,9 +99,9 @@ use App\Http\Controllers\TicketController;
 Route::get('/my-tickets', [TicketController::class, 'myTickets'])->name('tickets.my');
 Route::get('/ticketlist', [TicketController::class, 'ticketList'])->name('tickets.list');
 
-use App\Http\Controllers\ConcertController;
+// use App\Http\Controllers\ConcertController;
 
-Route::get('/concert-details/{id}', [ConcertController::class, 'show'])->name('concert.details');
+// Route::get('/concert-details/{id}', [ConcertController::class, 'show'])->name('concert.details');
 
 
 
@@ -128,13 +128,18 @@ Route::prefix('organizer')->name('organizer.')->group(function () {
     Route::post('/concerts', [OrganizerController::class, 'storeConcert'])->name('concerts.store');
     Route::get('/concerts/{id}/edit', [OrganizerController::class, 'editConcert'])->name('concerts.edit');
     Route::put('/concerts/{id}', [OrganizerController::class, 'updateConcert'])->name('concerts.update');
-
+    Route::delete('/concerts/{id}', [OrganizerController::class, 'deleteConcert'])->name('concerts.delete');
+    
+    // AJAX Routes for statistics
+    Route::get('/concerts/{id}/stats', [OrganizerController::class, 'getConcertStats'])->name('concerts.stats');
+    
     // Sales reports
     Route::get('/reports', [OrganizerController::class, 'reports'])->name('reports');
 
     // Profile
     Route::get('/profile', [OrganizerController::class, 'profile'])->name('profile');
-
+    Route::put('/profile', [OrganizerController::class, 'updateProfile'])->name('profile.update');
+    
 });
 
 
@@ -176,19 +181,3 @@ Route::get('/organizer/salesreport', [SalesReportController::class, 'index'])->n
 use App\Http\Controllers\OrgProfileHistoryController;
 Route::get('organizer/profile/history', [OrgProfileHistoryController::class, 'index'])->name('organizer.history');
 
-
-use App\Http\Controllers\OrgProfileReviewsController;
-
-// Rute untuk halaman Reviews
-Route::get('/organizer/profile/reviews', [OrgProfileReviewsController::class, 'index'])->name('organizer.profile.reviews');
-
-
-// Rute untuk halaman Reviews (yang akan redirect)
-// Diberi nama 'organizer.profile.reviews' agar cocok dengan link di tab navigasi
-Route::get('/organizer/profile/reviews', [OrgProfileReviewsController::class, 'index'])
-     ->name('organizer.profile.reviews');
-
-// Rute untuk menampilkan ulasan event spesifik
-// Diberi nama 'organizer.profile.reviews.show' agar cocok dengan link di kartu konser
-Route::get('/organizer/profile/reviews/{event}', [OrgProfileReviewsController::class, 'show'])
-     ->name('organizer.profile.reviews.show');
