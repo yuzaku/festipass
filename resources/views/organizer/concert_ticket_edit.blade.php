@@ -19,23 +19,31 @@
     </style>
 </head>
 <body class="bg-white font-poppins">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <header class="flex flex-col sm:flex-row justify-between items-center mb-10 space-y-4 sm:space-y-0">
-            <h1 class="text-2xl md:text-3xl font-bold gradient-text">FestiPass</h1>
-            <button class="w-full sm:w-auto border border-gray-300 rounded-full px-4 py-2 text-sm text-gray-700 flex items-center justify-center sm:justify-start">
-                @auth {{ auth()->user()->name }} @else Regular User @endauth
-                <span class="ml-2 btn-gradient text-white rounded-full w-6 h-6 flex items-center justify-center transition duration-200 transform hover:scale-105">
-                    <i class="fas fa-user"></i>
-                </span>
-            </button>
-        </header>
+    {{-- PERUBAHAN: Header diganti dengan versi baru yang lebih konsisten --}}
+    <header class="bg-white shadow-sm border-b sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="{{ route('organizer.dashboard') }}" class="text-3xl font-bold gradient-text">FestiPass</a>
+                </div>
 
+                <div class="flex items-center space-x-3">
+                    <span class="text-sm text-gray-600">Organizer</span>
+                    <a href="{{ route('organizer.profile') }}" 
+                       class="w-10 h-10 btn-gradient rounded-full flex items-center justify-center text-white transition duration-200 transform hover:scale-105 shadow-lg">
+                        <i class="fas fa-user"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <section class="text-center mb-4">
             <h2 class="text-3xl md:text-4xl font-bold gradient-text">Edit Concert</h2>
             <p class="text-gray-600 text-lg md:text-xl mt-1">{{ $concert->title }}</p>
         </section>
 
-        {{-- Blok untuk menampilkan pesan sukses setelah redirect --}}
         @if (session('success'))
             <div class="max-w-xl mx-auto mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
                 <span class="block sm:inline">{{ session('success') }}</span>
@@ -45,34 +53,31 @@
         <section class="mb-10">
             <div class="max-w-xl mx-auto p-3 sm:p-4 bg-gray-100 rounded-lg shadow">
                 <div class="flex justify-center">
+                    <!-- <img src="{{ asset('storage/' . $concert->poster) }}" alt="Poster for {{ $concert->title }}" class="w-full h-auto rounded"> -->
                     <img src="https://images.squarespace-cdn.com/content/v1/6234e8b7aacc0141c3c4512e/2a2bba4e-ad05-4b96-b981-e7fbef11fea8/arch+new+map.jpg" alt="Stage and Seating Plan" class="w-full h-auto rounded">
                 </div>
             </div>
-        <!-- <div class="max-w-xl mx-auto p-3 sm:p-4 bg-gray-100 rounded-lg shadow">
-                <div class="flex justify-center">
-                    {{-- Menampilkan poster event secara dinamis --}}
-                    <img src="{{ asset('storage/' . $concert->poster) }}" alt="Poster for {{ $concert->title }}" class="w-full h-auto rounded">
-                </div>
-            </div> -->
         </section>
 
         <section class="space-y-4 mb-8 max-w-sm mx-auto">
             @forelse ($tickets as $ticket)
-            <div class="card-interactive-effect border border-gray-200 rounded-lg p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between">
-                <div class="flex items-center mb-3 sm:mb-0">
-                    <div class="btn-gradient text-white rounded-full w-10 h-10 md:w-12 md:h-12 flex items-center justify-center mr-3 sm:mr-4 flex-shrink-0">
-                        <i class="fas fa-ticket-alt text-xl md:text-2xl"></i>
+            <a href="{{ route('managetickets.ticket.edit', ['concert' => $concert, 'ticket' => $ticket]) }}" class="block card-interactive-effect border border-gray-200 rounded-lg p-4 transition-all duration-300">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between">
+                    <div class="flex items-center mb-3 sm:mb-0">
+                        <div class="btn-gradient text-white rounded-full w-10 h-10 md:w-12 md:h-12 flex items-center justify-center mr-3 sm:mr-4 flex-shrink-0">
+                            <i class="fas fa-ticket-alt text-xl md:text-2xl"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gray-800 text-base md:text-lg uppercase">{{ $ticket->ticket_type }}</p>
+                            <p class="text-xs md:text-sm text-gray-500">{{ $ticket->sold }}/{{ $ticket->stock }} SOLD</p>
+                        </div>
                     </div>
-                    <div>
-                        <p class="font-semibold text-gray-800 text-base md:text-lg uppercase">{{ $ticket->ticket_type }}</p>
-                        <p class="text-xs md:text-sm text-gray-500">{{ $ticket->sold }}/{{ $ticket->stock }} SOLD</p>
+                    <div class="flex items-center self-end sm:self-center">
+                        <p class="text-indigo-600 font-semibold mr-3 text-base md:text-lg">RP{{ number_format($ticket->price, 0, ',', '.') }}</p>
+                        <i class="fas fa-chevron-right text-gray-400"></i>
                     </div>
                 </div>
-                <div class="flex items-center self-end sm:self-center">
-                    <p class="text-indigo-600 font-semibold mr-3 text-base md:text-lg">RP{{ number_format($ticket->price, 0, ',', '.') }}</p>
-                    <i class="fas fa-chevron-right text-gray-400"></i>
-                </div>
-            </div>
+            </a>
             @empty
             <div class="text-center py-4">
                 <p class="text-gray-500">No ticket types have been added yet.</p>
@@ -81,7 +86,6 @@
         </section>
 
         <div class="flex justify-center mb-6">
-            {{-- Tautan tombol plus sekarang menyertakan ID konser yang sedang diedit --}}
             <a href="{{ route('managetickets.add_form', $concert) }}"
                class="btn-gradient text-white rounded-full w-12 h-12 md:w-14 md:h-14 flex items-center justify-center text-2xl md:text-3xl shadow-lg transition duration-200 transform hover:scale-105">
                 <i class="fas fa-plus"></i>
@@ -89,9 +93,9 @@
         </div>
         
         <div class="flex justify-center">
-            <button class="w-full sm:w-auto btn-gradient text-white font-semibold py-3 px-16 rounded-lg shadow-lg transition duration-200 transform hover:scale-105 text-base md:text-lg">
-                Save
-            </button>
+            <a href="{{ route('organizer.dashboard') }}" class="w-full sm:w-auto btn-gradient text-white font-semibold py-3 px-16 rounded-lg shadow-lg transition duration-200 transform hover:scale-105 text-base md:text-lg text-center">
+                Finish Editing
+            </a>
         </div>
 
         <footer class="text-center mt-12 py-4 border-t border-gray-200">
