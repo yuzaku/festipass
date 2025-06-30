@@ -227,6 +227,19 @@
                         Save
                     </button>
                 </div>
+                
+                <!-- Logout Button -->
+                <div class="mt-8 pt-6 border-t border-gray-200">
+                    <form method="POST" action="{{ route('logout') }}" class="w-full">
+                        @csrf
+                        <button type="submit" 
+                                onclick="return confirm('Are you sure you want to logout?')"
+                                class="w-full inline-flex items-center justify-center px-6 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition duration-200 transform hover:scale-105 shadow-lg">
+                            <i class="fas fa-sign-out-alt mr-2"></i>
+                            Logout
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </main>

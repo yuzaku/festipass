@@ -253,7 +253,7 @@
                     <div>
                         <p class="text-sm font-medium text-gray-600 mb-1">Tickets Sold</p>
                         <p class="text-3xl font-bold text-gray-900">{{ number_format($ticketsSold) }}</p>
-                        <p class="text-sm text-green-600">{{ $ticketsSold > 0 ? '+21% this month' : 'No sales yet' }}</p>
+                        <p class="text-sm text-green-600">From {{ $totalConcerts }} concerts</p>
                     </div>
                     <div class="flex items-center justify-center w-14 h-14 bg-gradient-to-r from-green-500 to-teal-600 rounded-xl">
                         <i class="fas fa-ticket-alt text-white text-xl"></i>
@@ -279,7 +279,7 @@
                             }
                         @endphp
                         <p class="text-3xl font-bold text-gray-900 whitespace-nowrap">{{ $formatted }}</p>
-                        <p class="text-sm text-yellow-600">{{ $totalRevenue > 0 ? '+18% this month' : 'No revenue yet' }}</p>
+                        <p class="text-sm text-yellow-600">From {{ $totalConcerts }} concerts</p>
                     </div>
                     <div class="flex items-center justify-center w-14 h-14 bg-gradient-to-r from-yellow-500 to-orange-600 rounded-xl">
                         <i class="fas fa-dollar-sign text-white text-xl"></i>

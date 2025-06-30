@@ -111,7 +111,7 @@
                         <input type="text" 
                                id="organizer_name" 
                                name="organizer_name" 
-                               value="Mas John Doe"
+                               value="{{ $organizer->name }}"
                                class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent">
                     </div>
 
@@ -123,7 +123,7 @@
                         <input type="email" 
                                id="organizer_email" 
                                name="organizer_email" 
-                               value="johndoe@example.com"
+                               value="{{ $organizer->email }}"
                                class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent">
                     </div>
 
@@ -139,7 +139,8 @@
                             <input type="tel" 
                                    id="organizer_tel" 
                                    name="organizer_tel" 
-                                   value="812345678"
+                                   value="{{ $organizer->phone ?? '' }}"
+                                   placeholder="Enter phone number"
                                    class="form-input flex-1 px-4 py-3 border border-gray-300 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent">
                         </div>
                     </div>
