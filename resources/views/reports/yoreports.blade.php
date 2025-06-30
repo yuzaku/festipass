@@ -154,7 +154,7 @@
 
     <!-- Back button -->
     <div class="back-wrapper">
-        <a href="{{ route('tickets.my') }}" class="back-button">
+        <a href="{{ route('my.tickets') }}" class="back-button">
             <i class="fas fa-arrow-left"></i> Back to My Tickets
         </a>
 

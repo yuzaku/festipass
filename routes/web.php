@@ -89,10 +89,6 @@ use App\Http\Controllers\YoReportsController;
 
 Route::get('/your-reports', [YoReportsController::class, 'index'])->name('your.reports');
 
-use App\Http\Controllers\TicketController;
-
-Route::get('/my-tickets', [TicketController::class, 'myTickets'])->name('tickets.my');
-Route::get('/ticketlist', [TicketController::class, 'ticketList'])->name('tickets.list');
 
 use App\Http\Controllers\ConcertController;
 
@@ -101,6 +97,7 @@ Route::get('/concert-details/{id}', [ConcertController::class, 'show'])->name('c
 
 
 require __DIR__ . '/dashboard.php';
+require __DIR__ . '/myticket.php';
 // HomepageUser
 use App\Http\Controllers\HomepageUser\HomepageUserController;
 
@@ -124,17 +121,17 @@ Route::prefix('organizer')->name('organizer.')->group(function () {
     Route::get('/concerts/{id}/edit', [OrganizerController::class, 'editConcert'])->name('concerts.edit');
     Route::put('/concerts/{id}', [OrganizerController::class, 'updateConcert'])->name('concerts.update');
     Route::delete('/concerts/{id}', [OrganizerController::class, 'deleteConcert'])->name('concerts.delete');
-    
+
     // AJAX Routes for statistics
     Route::get('/concerts/{id}/stats', [OrganizerController::class, 'getConcertStats'])->name('concerts.stats');
-    
+
     // Sales reports
     Route::get('/reports', [OrganizerController::class, 'reports'])->name('reports');
 
     // Profile
     Route::get('/profile', [OrganizerController::class, 'profile'])->name('profile');
     Route::put('/profile', [OrganizerController::class, 'updateProfile'])->name('profile.update');
-    
+
 });
 
 

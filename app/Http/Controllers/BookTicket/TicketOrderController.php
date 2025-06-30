@@ -10,6 +10,7 @@ use App\Models\Ticket;
 use App\Models\Events;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class TicketOrderController extends Controller
 {
@@ -29,7 +30,7 @@ class TicketOrderController extends Controller
 
         // Simpan order
          $order = Orders::create([
-        'user_id' => 1, // sesuaikan kalau belum pakai auth
+        'user_id' => Auth::id(), // sesuaikan kalau belum pakai auth
         'order_date' => Carbon::now(),
         'status' => 'pending', // atau 'belum dibayar'
         ]);
