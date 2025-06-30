@@ -71,18 +71,18 @@ Route::middleware('auth')->group(function () {
     Route::post('/organizer/request', [ProfileController::class, 'storeOrganizerRequest'])->name('organizer.request.store');
 });
 
-    // Organizer routes
-    Route::middleware(['organizer'])->prefix('organizer')->name('organizer.')->group(function () {
-        Route::get('/dashboard', function() {
-            $user = auth()->user();
-            $stats = [
-                'total_events' => 0, // Implement sesuai kebutuhan
-                'active_events' => 0,
-                'total_participants' => 0,
-            ];
-            return view('organizer.dashboard', compact('user', 'stats'));
-        })->name('dashboard');
-    });
+    // Organizer routes - COMMENTED OUT: Replaced with OrganizerController dashboard
+    // Route::middleware(['organizer'])->prefix('organizer')->name('organizer.')->group(function () {
+    //     Route::get('/dashboard', function() {
+    //         $user = auth()->user();
+    //         $stats = [
+    //             'total_events' => 0, // Implement sesuai kebutuhan
+    //             'active_events' => 0,
+    //             'total_participants' => 0,
+    //         ];
+    //         return view('organizer.dashboard', compact('user', 'stats'));
+    //     })->name('dashboard');
+    // });
 });
 
 use App\Http\Controllers\ReportController;
@@ -99,9 +99,19 @@ use App\Http\Controllers\TicketController;
 Route::get('/my-tickets', [TicketController::class, 'myTickets'])->name('tickets.my');
 Route::get('/ticketlist', [TicketController::class, 'ticketList'])->name('tickets.list');
 
+// use App\Http\Controllers\ConcertController;
+
+// Route::get('/concert-details/{id}', [ConcertController::class, 'show'])->name('concert.details');
+
+
+
 require __DIR__ . '/dashboard.php';
+// HomepageUser
+use App\Http\Controllers\HomepageUser\HomepageUserController;
+
+Route::get('/dashboard', [HomepageUserController::class, 'index'])->name('dashboard');
+
 require __DIR__ . '/addingticket.php';
-require __DIR__ . '/orgprofilehistory.php';
 require __DIR__ . '/newtickettype.php';
 
 use App\Http\Controllers\OrganizerController;
@@ -118,12 +128,17 @@ Route::prefix('organizer')->name('organizer.')->group(function () {
     Route::post('/concerts', [OrganizerController::class, 'storeConcert'])->name('concerts.store');
     Route::get('/concerts/{id}/edit', [OrganizerController::class, 'editConcert'])->name('concerts.edit');
     Route::put('/concerts/{id}', [OrganizerController::class, 'updateConcert'])->name('concerts.update');
+    Route::delete('/concerts/{id}', [OrganizerController::class, 'deleteConcert'])->name('concerts.delete');
+    
+    // AJAX Routes for statistics
+    Route::get('/concerts/{id}/stats', [OrganizerController::class, 'getConcertStats'])->name('concerts.stats');
     
     // Sales reports
     Route::get('/reports', [OrganizerController::class, 'reports'])->name('reports');
     
     // Profile
     Route::get('/profile', [OrganizerController::class, 'profile'])->name('profile');
+    Route::put('/profile', [OrganizerController::class, 'updateProfile'])->name('profile.update');
     
 });
 
@@ -138,7 +153,7 @@ use App\Http\Controllers\ConcertTicketController; // Pastikan ini di-import
 Route::prefix('manageconcertticket')      // Kita tetap menggunakan prefix URL
      ->name('manageconcertticket.')       // Kita tetap menggunakan prefix nama rute
      ->group(function () {
-    
+
     // Rute untuk menampilkan halaman utama "Manage Ticket" (View 1)
     Route::get('/', [ConcertTicketController::class, 'showPage'])->name('show');
 
@@ -149,3 +164,20 @@ Route::prefix('manageconcertticket')      // Kita tetap menggunakan prefix URL
     // Route::post('/store-ticket-type', [ConcertTicketController::class, 'storeTicketType'])->name('store_type');
 });
 // == AKHIR DARI GRUP MANAGE CONCERT TICKET ==
+
+// Help Center
+use App\Http\Controllers\OrgProfileHelpController;
+
+Route::get('organizer/profile/help', [OrgProfileHelpController::class, 'index'])->name('orgprofilehelp.index');
+Route::post('organizer/profile/help', [OrgProfileHelpController::class, 'sendQuestion'])->name('orgprofilehelp.send');
+
+
+//Sales Report
+use App\Http\Controllers\SalesReportController;
+
+Route::get('/organizer/salesreport', [SalesReportController::class, 'index'])->name('salesreport.index');
+
+//History
+use App\Http\Controllers\OrgProfileHistoryController;
+Route::get('organizer/profile/history', [OrgProfileHistoryController::class, 'index'])->name('organizer.history');
+
