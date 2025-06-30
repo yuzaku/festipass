@@ -18,16 +18,15 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'name',
         'email',
-        'password_hash',
+        'password',
         'is_organizer',
-        'tel_num',
     ];
 
     /**
      * The attributes that should be hidden for serialization.
      */
     protected $hidden = [
-        'password_hash',
+        'password',
         'remember_token',
     ];
 
@@ -38,7 +37,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return [
             'email_verified_at' => 'datetime',
-            'password_hash' => 'hashed',
+            'password' => 'hashed',
             'is_organizer' => 'boolean',
             'created_at' => 'datetime',
             //'updated_at' => 'datetime',
@@ -50,15 +49,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getAuthPassword()
     {
-        return $this->password_hash;
-    }
-
-    /**
-     * Set the password attribute.
-     */
-    public function setPasswordAttribute($value)
-    {
-        $this->attributes['password_hash'] = Hash::make($value);
+        return $this->password;
     }
 
     /**

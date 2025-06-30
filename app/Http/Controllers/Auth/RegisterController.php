@@ -28,18 +28,13 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:100'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'tel_num' => ['required', 'string', 'max:15', 'regex:/^[0-9+\-\s]+$/'],
             'is_organizer' => ['boolean'],
         ]);
-
-        // Clean phone number (remove spaces and special chars except +)
-        $cleanPhone = preg_replace('/[^\d+]/', '', $validated['tel_num']);
 
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
-            'password_hash' => Hash::make($validated['password']),
-            'tel_num' => $cleanPhone,
+            'password' => Hash::make($validated['password']),
             'is_organizer' => $request->input('is_organizer', 0),
         ]);
 
