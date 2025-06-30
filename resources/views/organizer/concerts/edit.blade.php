@@ -334,6 +334,11 @@
                         <i class="fas fa-times mr-2"></i>
                         Cancel Changes
                     </a>
+                    <a href="{{ route('manageconcertticket.show') }}?concert_id={{ $concert->id }}" 
+                       class="inline-flex items-center justify-center px-8 py-4 border border-blue-500 text-blue-600 font-semibold rounded-xl hover:bg-blue-50 transition duration-200">
+                        <i class="fas fa-ticket-alt mr-2"></i>
+                        Edit Tickets
+                    </a>
                     <button type="submit" 
                             class="inline-flex items-center justify-center px-8 py-4 btn-gradient text-white font-semibold rounded-xl transition duration-200 transform hover:scale-105 shadow-lg">
                         <i class="fas fa-check mr-2"></i>

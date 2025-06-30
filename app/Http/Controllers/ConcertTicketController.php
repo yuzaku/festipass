@@ -11,6 +11,23 @@ use App\Models\Ticket; // <-- PERUBAHAN UTAMA ADA DI SINI
 class ConcertTicketController extends Controller
 {
     /**
+     * Menampilkan halaman utama manage ticket berdasarkan concert_id dari parameter
+     */
+    public function showPage(Request $request): View
+    {
+        $concertId = $request->get('concert_id');
+        
+        if ($concertId) {
+            $concert = Events::findOrFail($concertId);
+            return $this->edit($concert);
+        }
+        
+        // Jika tidak ada concert_id, tampilkan list concerts untuk dipilih
+        $concerts = Events::with('tickets')->get();
+        return view('organizer.concert_ticket_select', compact('concerts'));
+    }
+
+    /**
      * Menampilkan halaman edit untuk konser tertentu.
      */
     public function edit(Events $concert): View

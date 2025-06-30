@@ -14,24 +14,48 @@ class ImageUploadService
      */
     public function uploadConcertImage(UploadedFile $file, $oldImagePath = null): string
     {
-        // Delete old image if exists
-        if ($oldImagePath && Storage::disk('public')->exists($oldImagePath)) {
-            Storage::disk('public')->delete($oldImagePath);
+        try {
+            // Delete old image if exists
+            if ($oldImagePath && Storage::disk('public')->exists($oldImagePath)) {
+                Storage::disk('public')->delete($oldImagePath);
+            }
+
+            // Validate file
+            if (!$file->isValid()) {
+                throw new \Exception('Invalid file upload');
+            }
+
+            // Generate unique filename
+            $extension = $file->getClientOriginalExtension();
+            $filename = 'concerts/' . Str::uuid() . '_' . time() . '.' . $extension;
+
+            // Ensure concerts directory exists
+            if (!Storage::disk('public')->exists('concerts')) {
+                Storage::disk('public')->makeDirectory('concerts');
+            }
+
+            // Store the image
+            $path = $file->storeAs('concerts', basename($filename), 'public');
+            
+            if (!$path) {
+                throw new \Exception('Failed to store image file');
+            }
+
+            // Skip image processing for now to avoid dependency issues
+            // if (class_exists(Image::class)) {
+            //     try {
+            //         $this->resizeImage(storage_path('app/public/' . $path));
+            //     } catch (\Exception $e) {
+            //         // Log but don't fail if image processing fails
+            //         \Log::warning('Image processing failed: ' . $e->getMessage());
+            //     }
+            // }
+
+            return $path;
+        } catch (\Exception $e) {
+            \Log::error('Image upload failed: ' . $e->getMessage());
+            throw new \Exception('Image upload failed: ' . $e->getMessage());
         }
-
-        // Generate unique filename
-        $extension = $file->getClientOriginalExtension();
-        $filename = 'concerts/' . Str::uuid() . '_' . time() . '.' . $extension;
-
-        // Store the image
-        $path = $file->storeAs('concerts', basename($filename), 'public');
-
-        // If Intervention Image is available, resize the image
-        if (class_exists(Image::class)) {
-            $this->resizeImage(storage_path('app/public/' . $path));
-        }
-
-        return $path;
     }
 
     /**
