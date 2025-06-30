@@ -15,7 +15,7 @@ class OrganizerController extends Controller
 {
     protected $imageUploadService;
 
-    public function __construct(?ImageUploadService $imageUploadService = null)
+    public function __construct(ImageUploadService $imageUploadService)
     {
         $this->imageUploadService = $imageUploadService;
     }
@@ -40,8 +40,14 @@ class OrganizerController extends Controller
             return $concert->getTotalRevenue();
         });
         
-        // Set average rating to 4.8 for seeded concerts
-        $averageRating = $totalConcerts > 0 ? 4.8 : 0;
+        // Calculate average rating from actual concerts
+        $ratingsSum = $publishedConcerts->sum(function ($concert) {
+            return $concert->getAverageRating();
+        });
+        $concertsWithRatings = $publishedConcerts->filter(function ($concert) {
+            return $concert->getAverageRating() > 0;
+        })->count();
+        $averageRating = $concertsWithRatings > 0 ? $ratingsSum / $concertsWithRatings : 0;
         
         // Get recent concerts for display
         $recentConcerts = Concert::byOrganizer($organizerId)
@@ -113,7 +119,14 @@ class OrganizerController extends Controller
         $totalRevenue = $publishedConcerts->sum(function ($concert) {
             return $concert->getTotalRevenue();
         });
-        $averageRating = $totalConcerts > 0 ? 4.8 : 0;
+        // Calculate average rating from actual concerts
+        $ratingsSum = $publishedConcerts->sum(function ($concert) {
+            return $concert->getAverageRating();
+        });
+        $concertsWithRatings = $publishedConcerts->filter(function ($concert) {
+            return $concert->getAverageRating() > 0;
+        })->count();
+        $averageRating = $concertsWithRatings > 0 ? $ratingsSum / $concertsWithRatings : 0;
         
         return view('organizer.concerts.manager', compact(
             'concerts',
@@ -143,15 +156,30 @@ class OrganizerController extends Controller
             $validatedData = $request->validated();
             
             // Handle image upload - simplified version
+            $uploadMessage = null;
             if ($request->hasFile('concert_image')) {
-                $file = $request->file('concert_image');
-                if ($file && $file->isValid()) {
-                    $extension = $file->getClientOriginalExtension();
-                    $filename = time() . '_' . uniqid() . '.' . $extension;
-                    
-                    // Move file to public directory directly
-                    $file->move(public_path('images/concerts'), $filename);
-                    $validatedData['poster'] = 'images/concerts/' . $filename;
+                try {
+                    $file = $request->file('concert_image');
+                    if ($file && $file->isValid()) {
+                        $extension = $file->getClientOriginalExtension();
+                        $filename = time() . '_' . uniqid() . '.' . $extension;
+                        
+                        // Ensure directory exists
+                        $uploadPath = public_path('images/concerts');
+                        if (!is_dir($uploadPath)) {
+                            mkdir($uploadPath, 0755, true);
+                        }
+                        
+                        // Move file to public directory directly
+                        $file->move($uploadPath, $filename);
+                        $validatedData['poster'] = 'images/concerts/' . $filename;
+                    } else {
+                        $uploadMessage = 'The concert image failed to upload. Concert created without image.';
+                    }
+                } catch (\Exception $e) {
+                    // Set error message for session
+                    $uploadMessage = 'The concert image failed to upload. Concert created without image.';
+                    \Log::warning('Image upload failed: ' . $e->getMessage());
                 }
             }
 
@@ -171,10 +199,17 @@ class OrganizerController extends Controller
             $message = $concert->status === 'published' 
                 ? 'Concert created and published successfully!' 
                 : 'Concert saved as draft successfully!';
+            
+            // Add upload warning if there was an upload issue
+            if ($uploadMessage) {
+                $message .= ' However, ' . strtolower($uploadMessage);
+            }
+                
+            $messageType = $uploadMessage ? 'warning' : 'success';
                 
             return redirect()
                 ->route('organizer.concerts')
-                ->with('success', $message);
+                ->with($messageType, $message);
                 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -209,6 +244,7 @@ class OrganizerController extends Controller
             $validatedData = $request->validated();
             
             // Handle image upload
+            $uploadMessage = null;
             if ($request->hasFile('concert_image')) {
                 try {
                     $file = $request->file('concert_image');
@@ -216,17 +252,23 @@ class OrganizerController extends Controller
                     // Simple upload without service dependency
                     if ($file && $file->isValid()) {
                         $extension = $file->getClientOriginalExtension();
-                        $filename = 'concerts/' . uniqid() . '_' . time() . '.' . $extension;
+                        $filename = time() . '_' . uniqid() . '.' . $extension;
                         
-                        // Store directly
-                        $path = $file->storeAs('concerts', basename($filename), 'public');
-                        
-                        if ($path) {
-                            $validatedData['poster'] = $path;
+                        // Ensure directory exists
+                        $uploadPath = public_path('images/concerts');
+                        if (!is_dir($uploadPath)) {
+                            mkdir($uploadPath, 0755, true);
                         }
+                        
+                        // Move file to public directory directly
+                        $file->move($uploadPath, $filename);
+                        $validatedData['poster'] = 'images/concerts/' . $filename;
+                    } else {
+                        $uploadMessage = 'The concert image failed to upload. Concert updated without new image.';
                     }
                 } catch (\Exception $uploadError) {
-                    // Continue without updating image if upload fails
+                    // Set error message for session
+                    $uploadMessage = 'The concert image failed to upload. Concert updated without new image.';
                     \Log::warning('Image upload failed: ' . $uploadError->getMessage());
                 }
             }
@@ -244,9 +286,18 @@ class OrganizerController extends Controller
             
             DB::commit();
             
+            $message = 'Concert updated successfully!';
+            
+            // Add upload warning if there was an upload issue
+            if ($uploadMessage) {
+                $message .= ' However, ' . strtolower($uploadMessage);
+            }
+                
+            $messageType = $uploadMessage ? 'warning' : 'success';
+            
             return redirect()
                 ->route('organizer.concerts')
-                ->with('success', 'Concert updated successfully!');
+                ->with($messageType, $message);
                 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -275,7 +326,11 @@ class OrganizerController extends Controller
             
             // Delete image if exists
             if ($concert->poster) {
-                $this->imageUploadService->deleteConcertImage($concert->poster);
+                try {
+                    $this->imageUploadService->deleteConcertImage($concert->poster);
+                } catch (\Exception $e) {
+                    \Log::warning('Failed to delete concert image: ' . $e->getMessage());
+                }
             }
             
             $concert->delete();

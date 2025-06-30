@@ -46,7 +46,7 @@ class SignInController extends Controller
         // Custom authentication karena menggunakan password_hash
         $user = User::where('email', $credentials['email'])->first();
 
-        if ($user && Hash::check($credentials['password'], $user->password_hash)) {
+        if ($user && Hash::check($credentials['password'], $user->password)) {
             // Login berhasil
             Auth::login($user, $request->boolean('remember'));
             
