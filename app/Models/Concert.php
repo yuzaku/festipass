@@ -175,11 +175,18 @@ class Concert extends Model
     public function getTicketsSoldCount()
     {
         // TODO: Will be implemented when ticket tables are created by teammates
-        // For now, return sample data only for seeded concerts (ID 1-3)
+        // For now, return sample data only for ACTUAL seeded concerts
         if ($this->status === 'draft') return 0;
         
-        // Only generate sample data for the original seeded concerts
-        if ($this->id <= 3) {
+        // Check if this is actually a seeded concert by exact title match only
+        $seededTitles = [
+            'ADO World Tour 2025 - Jakarta',
+            'Yorushika Live Concert - Bandung', 
+            'yanaginagi Acoustic Session - Surabaya'
+        ];
+        
+        // Only generate sample data for actual seeded concerts
+        if (in_array($this->title, $seededTitles)) {
             // Specific tickets sold per artist
             $ticketsSoldByArtist = [
                 'ADO' => 241,
@@ -223,5 +230,71 @@ class Concert extends Model
     {
         // TODO: Will be implemented when ticket tables are created by teammates
         return 0; // Return 0 for now
+    }
+
+    public function getAverageRating()
+    {
+        // TODO: Will be implemented when review tables are created by teammates
+        // For now, return sample rating only for ACTUAL seeded concerts
+        if ($this->status === 'draft') return 0;
+        
+        // Only past events can have ratings
+        if ($this->event_date && $this->event_date->isFuture()) return 0;
+        
+        // Check if this is actually a seeded concert by exact title match only
+        $seededTitles = [
+            'ADO World Tour 2025 - Jakarta',
+            'Yorushika Live Concert - Bandung', 
+            'yanaginagi Acoustic Session - Surabaya'
+        ];
+        
+        // Only generate sample rating for actual seeded concerts that have passed
+        if (in_array($this->title, $seededTitles)) {
+            // Specific average ratings per artist (out of 5)
+            $ratingsByArtist = [
+                'ADO' => 4.8,        // ADO: High rating
+                'Yorushika' => 4.6,  // Yorushika: Good rating
+                'yanaginagi' => 4.4, // yanaginagi: Good rating
+            ];
+            
+            return $ratingsByArtist[$this->artist] ?? 0;
+        }
+        
+        // Return 0 for manually created concerts
+        return 0;
+    }
+
+    public function getFormattedRating()
+    {
+        $rating = $this->getAverageRating();
+        if ($rating == 0) return 'No ratings yet';
+        
+        return number_format($rating, 1) . '/5.0';
+    }
+
+    public function getRatingStars()
+    {
+        $rating = $this->getAverageRating();
+        if ($rating == 0) return '';
+        
+        $fullStars = floor($rating);
+        $halfStar = ($rating - $fullStars) >= 0.5 ? 1 : 0;
+        $emptyStars = 5 - $fullStars - $halfStar;
+        
+        $stars = '';
+        // Full stars
+        for ($i = 0; $i < $fullStars; $i++) {
+            $stars .= '<i class="fas fa-star text-yellow-400"></i>';
+        }
+        // Half star
+        if ($halfStar) {
+            $stars .= '<i class="fas fa-star-half-alt text-yellow-400"></i>';
+        }
+        // Empty stars
+        for ($i = 0; $i < $emptyStars; $i++) {
+            $stars .= '<i class="far fa-star text-gray-300"></i>';
+        }
+        
+        return $stars;
     }
 }

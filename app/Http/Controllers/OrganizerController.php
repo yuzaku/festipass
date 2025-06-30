@@ -40,8 +40,14 @@ class OrganizerController extends Controller
             return $concert->getTotalRevenue();
         });
         
-        // Set average rating to 4.8 for seeded concerts
-        $averageRating = $totalConcerts > 0 ? 4.8 : 0;
+        // Calculate average rating from actual concerts
+        $ratingsSum = $publishedConcerts->sum(function ($concert) {
+            return $concert->getAverageRating();
+        });
+        $concertsWithRatings = $publishedConcerts->filter(function ($concert) {
+            return $concert->getAverageRating() > 0;
+        })->count();
+        $averageRating = $concertsWithRatings > 0 ? $ratingsSum / $concertsWithRatings : 0;
         
         // Get recent concerts for display
         $recentConcerts = Concert::byOrganizer($organizerId)
@@ -113,7 +119,14 @@ class OrganizerController extends Controller
         $totalRevenue = $publishedConcerts->sum(function ($concert) {
             return $concert->getTotalRevenue();
         });
-        $averageRating = $totalConcerts > 0 ? 4.8 : 0;
+        // Calculate average rating from actual concerts
+        $ratingsSum = $publishedConcerts->sum(function ($concert) {
+            return $concert->getAverageRating();
+        });
+        $concertsWithRatings = $publishedConcerts->filter(function ($concert) {
+            return $concert->getAverageRating() > 0;
+        })->count();
+        $averageRating = $concertsWithRatings > 0 ? $ratingsSum / $concertsWithRatings : 0;
         
         return view('organizer.concerts.manager', compact(
             'concerts',
