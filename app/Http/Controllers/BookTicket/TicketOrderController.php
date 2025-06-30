@@ -47,7 +47,7 @@ class TicketOrderController extends Controller
         return redirect()->route('order.details', ['orderId' => $order->id])->with('success', 'Tiket berhasil dipesan!');
     }
 
-        public function order_details($orderId)
+    public function order_details($orderId)
     {
         $order = Orders::findOrFail($orderId);
         $order_items = $order->order_items()->with('ticket.event')->get();
@@ -55,5 +55,33 @@ class TicketOrderController extends Controller
         $event->formatted_date = Carbon::parse($event->event_date)->locale('id') // pastikan ini diset agar bulan & hari dalam Bahasa Indonesia
         ->translatedFormat('l, d F Y');
         return view('/book-ticket/order-details', compact('order','order_items','event'));
+    }
+
+    public function selectPayment(Orders $order)
+    {
+    return view('book-ticket.select-payment', compact('order'));
+    }
+
+    public function savePayment(Request $request, Orders $order)
+    {
+        $validated = $request->validate([
+            'payment_method' => 'required|string|max:30',
+        ]);
+
+        $order->payment_method = $validated['payment_method'];
+        $order->save();
+
+        return redirect()->route('order.details', ['orderId' => $order->id])
+           ->with('success', 'Metode pembayaran diperbarui!');
+    }
+
+    public function pay(Request $request, Orders $order)
+    {
+        // Jika perlu, tambahkan pengecekan apakah order masih “pending”
+        $order->status = 'paid';
+        $order->save();
+
+        // response JSON supaya bisa dipanggil AJAX
+        return response()->json(['success' => true]);
     }
 }
