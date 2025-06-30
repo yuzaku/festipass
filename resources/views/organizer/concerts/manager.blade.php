@@ -46,20 +46,6 @@
         .icon-bg {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
-        .decorative-icon {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #4facfe 100%);
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: float 3s ease-in-out infinite;
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
         .hero-pattern {
             background-image: 
                 radial-gradient(circle at 25px 25px, rgba(102, 126, 234, 0.1) 2px, transparent 0),
@@ -85,7 +71,7 @@
                         <i class="fas fa-arrow-left mr-2"></i>
                         Back to Dashboard
                     </a>
-                    <a href="{{ route('organizer.reports') }}" 
+                    <a href="{{ route('salesreport.index') }}" 
                        class="inline-flex items-center px-4 py-2 border border-purple-500 text-purple-600 hover:bg-purple-50 font-medium rounded-lg transition duration-200">
                         <i class="fas fa-chart-line mr-2"></i>
                         Sales Reports
@@ -105,40 +91,66 @@
 
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        
+        <!-- Success/Error Messages -->
+        @if(session('success'))
+            <div id="success-message" class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative transition-all duration-300">
+                <span>{{ session('success') }}</span>
+                <button onclick="hideMessage('success-message')" class="absolute top-1/2 transform -translate-y-1/2 right-2 text-green-600 hover:text-green-800 w-6 h-6 flex items-center justify-center">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div id="error-message" class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative transition-all duration-300">
+                <span>{{ session('error') }}</span>
+                <button onclick="hideMessage('error-message')" class="absolute top-1/2 transform -translate-y-1/2 right-2 text-red-600 hover:text-red-800 w-6 h-6 flex items-center justify-center">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        @endif
+
         <!-- Page Header with Search -->
         <div class="text-center mb-12 hero-pattern py-16 rounded-2xl relative overflow-hidden">
             <h1 class="text-5xl md:text-6xl font-bold gradient-text mb-4">
                 My Concerts
             </h1>
             <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-                Manage and track all your concerts in one place.
+                Manage and track all your concerts in one place. Real data from database.
             </p>
             
             <!-- Search Bar -->
             <div class="max-w-2xl mx-auto mb-6">
-                <div class="relative">
-                    <input type="text" 
-                           placeholder="Search by events, name, location, and more"
-                           class="w-full px-6 py-4 text-lg border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent shadow-lg pr-16">
-                    <button class="absolute right-2 top-1/2 transform -translate-y-1/2 btn-gradient text-white w-12 h-12 rounded-full transition duration-200 flex items-center justify-center shadow-lg hover:scale-105">
-                        <i class="fas fa-search text-lg"></i>
-                    </button>
-                </div>
+                <form method="GET" action="{{ route('organizer.concerts') }}">
+                    <div class="relative">
+                        <input type="text" 
+                               name="search"
+                               value="{{ request('search') }}"
+                               placeholder="Search by events, name, location, and more"
+                               class="w-full px-6 py-4 text-lg border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent shadow-lg pr-16">
+                        <button type="submit" class="absolute right-2 top-1/2 transform -translate-y-1/2 btn-gradient text-white w-12 h-12 rounded-full transition duration-200 flex items-center justify-center shadow-lg hover:scale-105">
+                            <i class="fas fa-search text-lg"></i>
+                        </button>
+                    </div>
+                </form>
             </div>
             
             <!-- Filter Buttons -->
             <div class="flex flex-wrap justify-center gap-4">
-                <button class="px-6 py-2 btn-gradient text-white rounded-full transition duration-200 transform hover:scale-105 shadow-lg">Artist</button>
-                <button class="px-6 py-2 btn-gradient text-white rounded-full transition duration-200 transform hover:scale-105 shadow-lg">Genre</button>
-                <button class="px-6 py-2 btn-gradient text-white rounded-full transition duration-200 transform hover:scale-105 shadow-lg">Location</button>
-                <button class="px-6 py-2 btn-gradient text-white rounded-full transition duration-200 transform hover:scale-105 shadow-lg">Price</button>
+                <a href="{{ route('organizer.concerts', ['status' => 'published']) }}" 
+                   class="px-6 py-2 btn-gradient text-white rounded-full transition duration-200 transform hover:scale-105 shadow-lg">Published</a>
+                <a href="{{ route('organizer.concerts', ['status' => 'draft']) }}" 
+                   class="px-6 py-2 btn-gradient text-white rounded-full transition duration-200 transform hover:scale-105 shadow-lg">Draft</a>
+                <a href="{{ route('organizer.concerts') }}" 
+                   class="px-6 py-2 btn-gradient text-white rounded-full transition duration-200 transform hover:scale-105 shadow-lg">All Concerts</a>
             </div>
         </div>
 
         <!-- Concerts Section -->
         <div class="mb-12">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-3xl font-bold text-gray-900">Your Concerts</h2>
+                <h2 class="text-3xl font-bold text-gray-900">Your Concerts ({{ $totalConcerts }} total)</h2>
                 <div class="flex items-center space-x-4">
                     <!-- Create New Concert Button -->
                     <a href="{{ route('organizer.concerts.create') }}" 
@@ -146,21 +158,6 @@
                         <i class="fas fa-plus mr-2"></i>
                         Create New Concert
                     </a>
-                    <!-- View Toggle -->
-                    <div class="flex bg-gray-100 rounded-lg p-1">
-                        <button class="px-4 py-2 btn-gradient text-white rounded-md text-sm font-medium transition duration-200">
-                            <i class="fas fa-th-large mr-2"></i>Grid
-                        </button>
-                        <button class="px-4 py-2 text-gray-600 hover:text-gray-900 rounded-md text-sm font-medium transition duration-200">
-                            <i class="fas fa-list mr-2"></i>List
-                        </button>
-                    </div>
-                    <!-- Sort -->
-                    <select class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
-                        <option>Sort by Date</option>
-                        <option>Sort by Name</option>
-                        <option>Sort by Status</option>
-                    </select>
                 </div>
             </div>
 
@@ -184,42 +181,98 @@
                             Create Your First Concert
                         </a>
                     </div>
-
-                    <!-- Getting Started Tips -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-                        <div class="text-center">
-                            <div class="flex items-center justify-center w-16 h-16 btn-gradient rounded-full mx-auto mb-4">
-                                <i class="fas fa-pencil-alt text-white text-xl"></i>
-                            </div>
-                            <h4 class="text-lg font-semibold text-gray-900 mb-2">1. Concert Details</h4>
-                            <p class="text-sm text-gray-600">Add concert details, date, venue, and artist information</p>
-                        </div>
-                        <div class="text-center">
-                            <div class="flex items-center justify-center w-16 h-16 btn-gradient rounded-full mx-auto mb-4">
-                                <i class="fas fa-tag text-white text-xl"></i>
-                            </div>
-                            <h4 class="text-lg font-semibold text-gray-900 mb-2">2. Ticket Pricing</h4>
-                            <p class="text-sm text-gray-600">Configure ticket categories and pricing tiers</p>
-                        </div>
-                        <div class="text-center">
-                            <div class="flex items-center justify-center w-16 h-16 btn-gradient rounded-full mx-auto mb-4">
-                                <i class="fas fa-rocket text-white text-xl"></i>
-                            </div>
-                            <h4 class="text-lg font-semibold text-gray-900 mb-2">3. Publish</h4>
-                            <p class="text-sm text-gray-600">Publish your concert and start selling tickets</p>
-                        </div>
-                    </div>
                 </div>
             @else
-                <!-- Concert Grid (akan ditampilkan ketika ada data) -->
+                <!-- Concert Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     @foreach($concerts as $concert)
-                        <!-- Concert Card akan ditampilkan di sini -->
-                        <div class="bg-white rounded-xl shadow-lg border border-gray-200 card-hover">
-                            <!-- Concert card content -->
+                        <div class="bg-white rounded-xl shadow-lg border border-gray-200 card-hover overflow-hidden">
+                            <!-- Concert Image -->
+                            <div class="h-48 bg-cover bg-center relative" style="background-image: url('{{ $concert->poster_url }}')">
+                                <div class="absolute top-4 left-4">
+                                    {!! $concert->status_badge !!}
+                                </div>
+                                <div class="absolute top-4 right-4">
+                                    <div class="flex space-x-2">
+                                        <a href="{{ route('organizer.concerts.edit', $concert->id) }}" 
+                                           class="bg-white bg-opacity-90 hover:bg-opacity-100 text-purple-600 w-8 h-8 rounded-full flex items-center justify-center transition duration-200">
+                                            <i class="fas fa-edit text-sm"></i>
+                                        </a>
+                                        <form method="POST" action="{{ route('organizer.concerts.delete', $concert->id) }}" 
+                                              onsubmit="return confirm('Are you sure you want to delete this concert?')" class="inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" 
+                                                    class="bg-white bg-opacity-90 hover:bg-opacity-100 text-red-600 w-8 h-8 rounded-full flex items-center justify-center transition duration-200">
+                                                <i class="fas fa-trash text-sm"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/50 to-transparent p-4">
+                                    <div class="text-white">
+                                        <h3 class="text-lg font-bold truncate">{{ $concert->title }}</h3>
+                                        <p class="text-sm opacity-90">{{ $concert->artist }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Concert Info -->
+                            <div class="p-6">
+                                <p class="text-sm text-gray-600 mb-2 truncate">
+                                    <i class="fas fa-map-marker-alt mr-1"></i>
+                                    <span class="truncate">{{ $concert->location }}</span>
+                                </p>
+                                <p class="text-sm text-gray-600 mb-4">
+                                    <i class="fas fa-calendar mr-1"></i>
+                                    {{ $concert->formatted_date }} at {{ $concert->formatted_time }}
+                                </p>
+                                
+                                <!-- Stats -->
+                                <div class="grid grid-cols-2 gap-4 mb-4 text-center">
+                                    <div class="bg-gray-50 rounded-lg p-3">
+                                        <div class="text-xl font-bold text-purple-600">{{ $concert->getTicketsSoldCount() }}</div>
+                                        <div class="text-xs text-gray-500">Tickets Sold</div>
+                                    </div>
+                                    <div class="bg-gray-50 rounded-lg p-3">
+                                        @php
+                                            $concertRevenue = $concert->getTotalRevenue();
+                                            if ($concertRevenue >= 1000000000) {
+                                                $revFormat = number_format($concertRevenue / 1000000000, 1) . 'B';
+                                            } elseif ($concertRevenue >= 1000000) {
+                                                $revFormat = number_format($concertRevenue / 1000000, 0) . 'M';
+                                            } elseif ($concertRevenue >= 1000) {
+                                                $revFormat = number_format($concertRevenue / 1000, 0) . 'K';
+                                            } else {
+                                                $revFormat = number_format($concertRevenue, 0);
+                                            }
+                                        @endphp
+                                        <div class="text-xl font-bold text-green-600 whitespace-nowrap">{{ $revFormat }}</div>
+                                        <div class="text-xs text-gray-500">Revenue</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex justify-between items-center">
+                                    <a href="{{ route('organizer.concerts.edit', $concert->id) }}" 
+                                       class="text-purple-600 hover:text-purple-800 font-medium text-sm whitespace-nowrap">
+                                        <i class="fas fa-edit mr-1"></i>
+                                        Edit
+                                    </a>
+                                    <span class="text-xs text-gray-500 text-right whitespace-nowrap">
+                                        Created {{ $concert->created_at->diffForHumans() }}
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     @endforeach
                 </div>
+
+                <!-- Pagination -->
+                @if($concerts->hasPages())
+                    <div class="mt-8">
+                        {{ $concerts->appends(request()->query())->links() }}
+                    </div>
+                @endif
             @endif
         </div>
 
@@ -245,7 +298,7 @@
                     <div>
                         <p class="text-sm font-medium text-gray-600 mb-1">Tickets Sold</p>
                         <p class="text-3xl font-bold text-gray-900">{{ number_format($ticketsSold) }}</p>
-                        <p class="text-sm text-green-600">+0% from last month</p>
+                        <p class="text-sm text-green-600">{{ $ticketsSold > 0 ? '+21% this month' : 'No sales yet' }}</p>
                     </div>
                     <div class="flex items-center justify-center w-14 h-14 bg-gradient-to-r from-green-500 to-teal-600 rounded-xl">
                         <i class="fas fa-ticket-alt text-white text-xl"></i>
@@ -258,8 +311,20 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-600 mb-1">Total Revenue</p>
-                        <p class="text-3xl font-bold text-gray-900">Rp {{ number_format($totalRevenue, 0, ',', '.') }}</p>
-                        <p class="text-sm text-yellow-600">+0% from last month</p>
+                        @php
+                            $revenue = $totalRevenue;
+                            if ($revenue >= 1000000000) {
+                                $formatted = 'Rp ' . number_format($revenue / 1000000000, 1) . 'B';
+                            } elseif ($revenue >= 1000000) {
+                                $formatted = 'Rp ' . number_format($revenue / 1000000, 0) . 'M';
+                            } elseif ($revenue >= 1000) {
+                                $formatted = 'Rp ' . number_format($revenue / 1000, 0) . 'K';
+                            } else {
+                                $formatted = 'Rp ' . number_format($revenue, 0);
+                            }
+                        @endphp
+                        <p class="text-3xl font-bold text-gray-900 whitespace-nowrap">{{ $formatted }}</p>
+                        <p class="text-sm text-yellow-600">{{ $totalRevenue > 0 ? '+18% this month' : 'No revenue yet' }}</p>
                     </div>
                     <div class="flex items-center justify-center w-14 h-14 bg-gradient-to-r from-yellow-500 to-orange-600 rounded-xl">
                         <i class="fas fa-dollar-sign text-white text-xl"></i>
@@ -285,7 +350,7 @@
         <!-- Quick Actions -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <!-- Sales Analytics -->
-            <a href="{{ route('organizer.reports') }}" 
+            <a href="{{ route('salesreport.index') }}" 
                class="bg-white rounded-xl shadow-lg p-8 border border-gray-200 card-hover group">
                 <div class="flex items-center mb-6">
                     <div class="flex items-center justify-center w-14 h-14 bg-gradient-to-r from-green-500 to-teal-600 rounded-xl mr-4 group-hover:scale-110 transition duration-200">
@@ -338,18 +403,36 @@
     </main>
 
     <script>
+        // Auto-hide messages function
+        function hideMessage(messageId) {
+            const message = document.getElementById(messageId);
+            if (message) {
+                message.style.opacity = '0';
+                message.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    message.remove();
+                }, 300);
+            }
+        }
+
         // Simple hover animations and interactions
         document.addEventListener('DOMContentLoaded', function() {
-            // Add smooth scrolling for internal links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    document.querySelector(this.getAttribute('href')).scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                });
-            });
-
+            // Auto-hide success/error messages after 5 seconds
+            const successMessage = document.getElementById('success-message');
+            const errorMessage = document.getElementById('error-message');
+            
+            if (successMessage) {
+                setTimeout(() => {
+                    hideMessage('success-message');
+                }, 5000); // 5 seconds
+            }
+            
+            if (errorMessage) {
+                setTimeout(() => {
+                    hideMessage('error-message');
+                }, 7000); // 7 seconds for errors (longer to read)
+            }
+            
             // Add click effect to buttons
             document.querySelectorAll('button, a').forEach(element => {
                 element.addEventListener('click', function() {
@@ -359,26 +442,6 @@
                     }, 150);
                 });
             });
-
-            // View toggle functionality
-            const gridBtn = document.querySelector('button:has(.fa-th-large)');
-            const listBtn = document.querySelector('button:has(.fa-list)');
-            
-            if (gridBtn && listBtn) {
-                listBtn.addEventListener('click', function() {
-                    gridBtn.classList.remove('btn-gradient', 'text-white');
-                    gridBtn.classList.add('text-gray-600', 'hover:text-gray-900');
-                    listBtn.classList.add('btn-gradient', 'text-white');
-                    listBtn.classList.remove('text-gray-600', 'hover:text-gray-900');
-                });
-                
-                gridBtn.addEventListener('click', function() {
-                    listBtn.classList.remove('btn-gradient', 'text-white');
-                    listBtn.classList.add('text-gray-600', 'hover:text-gray-900');
-                    gridBtn.classList.add('btn-gradient', 'text-white');
-                    gridBtn.classList.remove('text-gray-600', 'hover:text-gray-900');
-                });
-            }
         });
     </script>
 </body>

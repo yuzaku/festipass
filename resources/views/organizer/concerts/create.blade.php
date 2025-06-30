@@ -100,6 +100,30 @@
 
     <!-- Main Content -->
     <main class="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        
+        <!-- Success/Error Messages -->
+        @if($errors->any())
+            <div id="validation-errors" class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative transition-all duration-300">
+                <ul class="list-disc list-inside">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                <button onclick="hideMessage('validation-errors')" class="absolute top-1/2 transform -translate-y-1/2 right-2 text-red-600 hover:text-red-800 w-6 h-6 flex items-center justify-center">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div id="error-message" class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative transition-all duration-300">
+                <span>{{ session('error') }}</span>
+                <button onclick="hideMessage('error-message')" class="absolute top-1/2 transform -translate-y-1/2 right-2 text-red-600 hover:text-red-800 w-6 h-6 flex items-center justify-center">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        @endif
+
         <!-- Page Header -->
         <div class="text-center mb-12 hero-pattern py-16 rounded-2xl relative overflow-hidden">
             <div class="flex justify-center mb-4">
@@ -113,11 +137,11 @@
                 Add Concert
             </h1>
             <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-                Create a new concert event and start selling tickets to music fans worldwide.
+                Create a new concert event. Ticket management will be handled separately after creation.
             </p>
 
-            <!-- Progress Steps -->
-            <div class="flex items-center justify-center space-x-4 max-w-2xl mx-auto">
+            <!-- Simplified Progress Steps -->
+            <div class="flex items-center justify-center space-x-4 max-w-xl mx-auto">
                 <div class="flex items-center">
                     <div class="w-8 h-8 btn-gradient rounded-full flex items-center justify-center text-white text-sm font-bold">1</div>
                     <span class="ml-2 text-sm font-medium text-gray-700">Concert Details</span>
@@ -125,11 +149,6 @@
                 <div class="w-12 h-0.5 bg-gray-300"></div>
                 <div class="flex items-center">
                     <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-gray-500 text-sm font-bold">2</div>
-                    <span class="ml-2 text-sm font-medium text-gray-500">Ticket Pricing</span>
-                </div>
-                <div class="w-12 h-0.5 bg-gray-300"></div>
-                <div class="flex items-center">
-                    <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-gray-500 text-sm font-bold">3</div>
                     <span class="ml-2 text-sm font-medium text-gray-500">Publish</span>
                 </div>
             </div>
@@ -149,6 +168,7 @@
                     <input type="text" 
                            id="name" 
                            name="name" 
+                           value="{{ old('name') }}"
                            placeholder="e.g., Rock Festival Jakarta 2025"
                            class="form-input w-full px-6 py-4 text-lg border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                            required>
@@ -164,6 +184,7 @@
                     <input type="text" 
                            id="location" 
                            name="location" 
+                           value="{{ old('location') }}"
                            placeholder="e.g., Jakarta International Expo, Kemayoran"
                            class="form-input w-full px-6 py-4 text-lg border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                            required>
@@ -180,6 +201,7 @@
                         <input type="date" 
                                id="date" 
                                name="date" 
+                               value="{{ old('date') }}"
                                class="form-input w-full px-6 py-4 text-lg border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                                required>
                     </div>
@@ -191,6 +213,7 @@
                         <input type="time" 
                                id="time" 
                                name="time" 
+                               value="{{ old('time') }}"
                                class="form-input w-full px-6 py-4 text-lg border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                                required>
                     </div>
@@ -205,6 +228,7 @@
                     <input type="text" 
                            id="artist" 
                            name="artist" 
+                           value="{{ old('artist') }}"
                            placeholder="e.g., Imagine Dragons, Taylor Swift"
                            class="form-input w-full px-6 py-4 text-lg border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                            required>
@@ -222,7 +246,7 @@
                               rows="4"
                               placeholder="Describe your concert event, what makes it special, what attendees can expect..."
                               class="form-input w-full px-6 py-4 text-lg border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
-                              required></textarea>
+                              required>{{ old('description') }}</textarea>
                     <p class="text-sm text-gray-500 mt-2">A compelling description helps attract more attendees</p>
                 </div>
 
@@ -258,8 +282,7 @@
                                id="concert_image" 
                                name="concert_image" 
                                accept="image/*" 
-                               class="hidden"
-                               required>
+                               class="hidden">
                     </div>
                 </div>
 
@@ -271,15 +294,15 @@
                     </label>
                     <div class="flex items-center space-x-6">
                         <label class="flex items-center">
-                            <input type="radio" name="status" value="draft" checked class="text-purple-600 focus:ring-purple-500">
+                            <input type="radio" name="status" value="draft" {{ old('status', 'draft') == 'draft' ? 'checked' : '' }} class="text-purple-600 focus:ring-purple-500">
                             <span class="ml-2 text-gray-700">Save as Draft</span>
                         </label>
                         <label class="flex items-center">
-                            <input type="radio" name="status" value="published" class="text-purple-600 focus:ring-purple-500">
+                            <input type="radio" name="status" value="published" {{ old('status') == 'published' ? 'checked' : '' }} class="text-purple-600 focus:ring-purple-500">
                             <span class="ml-2 text-gray-700">Publish Immediately</span>
                         </label>
                     </div>
-                    <p class="text-sm text-gray-500 mt-2">You can always change this later. Draft concerts are not visible to the public.</p>
+                    <p class="text-sm text-gray-500 mt-2">You can always change this later. Draft concerts are not visible to the public. Tickets can be added after creation.</p>
                 </div>
 
                 <!-- Form Actions -->
@@ -289,15 +312,10 @@
                         <i class="fas fa-times mr-2"></i>
                         Cancel
                     </a>
-                    <button type="submit" name="action" value="draft"
-                            class="inline-flex items-center justify-center px-8 py-4 border border-purple-500 text-purple-600 font-semibold rounded-xl hover:bg-purple-50 transition duration-200">
-                        <i class="fas fa-save mr-2"></i>
-                        Save as Draft
-                    </button>
-                    <button type="submit" name="action" value="next"
+                    <button type="submit" 
                             class="inline-flex items-center justify-center px-8 py-4 btn-gradient text-white font-semibold rounded-xl transition duration-200 transform hover:scale-105 shadow-lg">
-                        <i class="fas fa-arrow-right mr-2"></i>
-                        Next: Add Tickets
+                        <i class="fas fa-save mr-2"></i>
+                        Create Concert
                     </button>
                 </div>
             </form>
@@ -305,7 +323,34 @@
     </main>
 
     <script>
+        // Auto-hide messages function
+        function hideMessage(messageId) {
+            const message = document.getElementById(messageId);
+            if (message) {
+                message.style.opacity = '0';
+                message.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    message.remove();
+                }, 300);
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
+            // Auto-hide validation errors and messages
+            const validationErrors = document.getElementById('validation-errors');
+            const errorMessage = document.getElementById('error-message');
+            
+            if (validationErrors) {
+                setTimeout(() => {
+                    hideMessage('validation-errors');
+                }, 8000); // 8 seconds for validation errors (longer to read)
+            }
+            
+            if (errorMessage) {
+                setTimeout(() => {
+                    hideMessage('error-message');
+                }, 7000); // 7 seconds for error messages
+            }
             // Image Upload Functionality
             const uploadArea = document.getElementById('uploadArea');
             const fileInput = document.getElementById('concert_image');
@@ -385,28 +430,24 @@
             form.addEventListener('submit', function(e) {
                 const submitBtn = e.submitter;
                 const originalText = submitBtn.innerHTML;
+                const statusRadios = document.querySelectorAll('input[name="status"]');
+                let selectedStatus = 'draft';
                 
-                if (submitBtn.name === 'action' && submitBtn.value === 'next') {
-                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Creating Concert...';
+                // Get selected status from radio buttons
+                statusRadios.forEach(radio => {
+                    if (radio.checked) {
+                        selectedStatus = radio.value;
+                    }
+                });
+                
+                // Update button text based on selected status
+                if (selectedStatus === 'published') {
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Creating & Publishing...';
                 } else {
-                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Saving Draft...';
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Saving as Draft...';
                 }
                 
                 submitBtn.disabled = true;
-
-                // Simulate form processing (remove this in production)
-                setTimeout(() => {
-                    if (submitBtn.value === 'next') {
-                        alert('Concert created! Redirecting to ticket pricing... (This is a demo)');
-                    } else {
-                        alert('Concert saved as draft! (This is a demo)');
-                    }
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.disabled = false;
-                }, 2000);
-
-                // Prevent actual form submission for demo
-                e.preventDefault();
             });
 
             // Add smooth animations to form inputs
@@ -420,51 +461,6 @@
                     this.parentElement.style.transform = 'scale(1)';
                 });
             });
-
-            // Auto-save functionality (demo)
-            let autoSaveTimeout;
-            const formInputs = form.querySelectorAll('input, textarea, select');
-            
-            formInputs.forEach(input => {
-                input.addEventListener('input', function() {
-                    clearTimeout(autoSaveTimeout);
-                    
-                    // Show auto-save indicator
-                    showAutoSaveIndicator();
-                    
-                    autoSaveTimeout = setTimeout(() => {
-                        // Simulate auto-save
-                        console.log('Auto-saving changes...');
-                        hideAutoSaveIndicator();
-                    }, 2000);
-                });
-            });
-
-            function showAutoSaveIndicator() {
-                let indicator = document.getElementById('autosave-indicator');
-                if (!indicator) {
-                    indicator = document.createElement('div');
-                    indicator.id = 'autosave-indicator';
-                    indicator.className = 'fixed top-20 right-4 bg-yellow-100 text-yellow-800 px-4 py-2 rounded-lg shadow-lg border border-yellow-200 transition-all duration-300';
-                    indicator.innerHTML = '<i class="fas fa-clock mr-2"></i>Auto-saving...';
-                    document.body.appendChild(indicator);
-                }
-                indicator.style.opacity = '1';
-                indicator.style.transform = 'translateX(0)';
-            }
-
-            function hideAutoSaveIndicator() {
-                const indicator = document.getElementById('autosave-indicator');
-                if (indicator) {
-                    indicator.innerHTML = '<i class="fas fa-check mr-2"></i>Changes saved';
-                    indicator.className = 'fixed top-20 right-4 bg-green-100 text-green-800 px-4 py-2 rounded-lg shadow-lg border border-green-200 transition-all duration-300';
-                    
-                    setTimeout(() => {
-                        indicator.style.opacity = '0';
-                        indicator.style.transform = 'translateX(100%)';
-                    }, 1500);
-                }
-            }
 
             // Set minimum date to today
             const dateInput = document.getElementById('date');

@@ -125,12 +125,12 @@
 
             <!-- Concert Info Quick View -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-xl mx-auto">
-                <div class="bg-white/80 backdrop-blur rounded-lg p-4">
-                    <div class="text-lg font-bold text-purple-600">ADO World Tour 2025</div>
+                <div class="bg-white/80 backdrop-blur rounded-lg p-4 flex flex-col items-center justify-center text-center min-h-[80px]">
+                    <div class="text-lg font-bold text-purple-600">{{ $concert->title ?? 'Concert Name' }}</div>
                     <div class="text-sm text-gray-600">Concert Series</div>
                 </div>
-                <div class="bg-white/80 backdrop-blur rounded-lg p-4">
-                    <div class="text-lg font-bold text-purple-600">Sep 15, 2025</div>
+                <div class="bg-white/80 backdrop-blur rounded-lg p-4 flex flex-col items-center justify-center text-center min-h-[80px]">
+                    <div class="text-lg font-bold text-purple-600">{{ $concert->event_date ? $concert->event_date->format('M d, Y') : 'Event Date' }}</div>
                     <div class="text-sm text-gray-600">Event Date</div>
                 </div>
             </div>
@@ -138,20 +138,52 @@
 
         <!-- Concert Form -->
         <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-            <form action="{{ route('organizer.concerts.update', ['id' => 1]) }}" method="POST" enctype="multipart/form-data" class="p-8">
+            <!-- Success/Error Messages -->
+            @if($errors->any())
+                <div id="validation-errors" class="mx-8 mt-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative transition-all duration-300">
+                    <ul class="list-disc list-inside">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button onclick="hideMessage('validation-errors')" class="absolute top-1/2 transform -translate-y-1/2 right-2 text-red-600 hover:text-red-800 w-6 h-6 flex items-center justify-center">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            @endif
+
+            @if(session('error'))
+                <div id="error-message" class="mx-8 mt-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative transition-all duration-300">
+                    <span>{{ session('error') }}</span>
+                    <button onclick="hideMessage('error-message')" class="absolute top-1/2 transform -translate-y-1/2 right-2 text-red-600 hover:text-red-800 w-6 h-6 flex items-center justify-center">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            @endif
+
+            @if(session('success'))
+                <div id="success-message" class="mx-8 mt-6 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative transition-all duration-300">
+                    <span>{{ session('success') }}</span>
+                    <button onclick="hideMessage('success-message')" class="absolute top-1/2 transform -translate-y-1/2 right-2 text-green-600 hover:text-green-800 w-6 h-6 flex items-center justify-center">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            @endif
+
+            <form action="{{ route('organizer.concerts.update', ['id' => $concert->id]) }}" method="POST" enctype="multipart/form-data" class="p-8">
                 @csrf
                 @method('PUT')
                 
                 <!-- Concert Name -->
                 <div class="mb-8">
-                    <label for="name" class="block text-lg font-semibold text-gray-700 mb-3">
+                    <label for="title" class="block text-lg font-semibold text-gray-700 mb-3">
                         <i class="fas fa-music mr-2 text-purple-600"></i>
                         Concert Name
                     </label>
                     <input type="text" 
-                           id="name" 
-                           name="name" 
-                           value="ADO World Tour 2025 - Jakarta"
+                           id="title" 
+                           name="title" 
+                           value="{{ old('title', $concert->title) }}"
                            class="form-input w-full px-6 py-4 text-lg border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                            required>
                 </div>
@@ -165,7 +197,7 @@
                     <input type="text" 
                            id="location" 
                            name="location" 
-                           value="Indonesia Convention Exhibition (ICE), BSD City"
+                           value="{{ old('location', $concert->location) }}"
                            class="form-input w-full px-6 py-4 text-lg border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                            required>
                 </div>
@@ -180,7 +212,7 @@
                         <input type="date" 
                                id="date" 
                                name="date" 
-                               value="2025-09-15"
+                               value="{{ old('date', $concert->date_input) }}"
                                class="form-input w-full px-6 py-4 text-lg border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                                required>
                     </div>
@@ -192,7 +224,7 @@
                         <input type="time" 
                                id="time" 
                                name="time" 
-                               value="19:30"
+                               value="{{ old('time', $concert->time_input) }}"
                                class="form-input w-full px-6 py-4 text-lg border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                                required>
                     </div>
@@ -207,7 +239,7 @@
                     <input type="text" 
                            id="artist" 
                            name="artist" 
-                           value="ADO"
+                           value="{{ old('artist', $concert->artist) }}"
                            class="form-input w-full px-6 py-4 text-lg border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                            required>
                 </div>
@@ -222,7 +254,7 @@
                               name="description" 
                               rows="4"
                               class="form-input w-full px-6 py-4 text-lg border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
-                              required>Experience the phenomenal Japanese singer ADO live in Jakarta! Known for her powerful vocals and hit songs like "Usseewa", "Show", and "New Genesis". This will be her first concert in Indonesia as part of the ADO World Tour 2025.</textarea>
+                              required>{{ old('description', $concert->description) }}</textarea>
                 </div>
 
                 <!-- Concert Image -->
@@ -236,8 +268,8 @@
                     <div class="mb-4 text-center">
                         <p class="text-sm text-gray-600 mb-2">Current Image:</p>
                         <div class="relative inline-block">
-                            <img id="currentImage" src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=250&fit=crop" 
-                                 alt="ADO Concert Image" 
+                            <img id="currentImage" src="{{ $concert->poster_url }}" 
+                                 alt="{{ $concert->title ?? 'Concert' }} Image" 
                                  class="w-full max-w-md h-48 object-cover rounded-lg shadow-md mx-auto">
                             <button type="button" id="changeImageBtn" 
                                     class="absolute top-2 right-2 bg-white text-gray-700 w-10 h-10 rounded-full shadow-lg hover:bg-gray-100 transition duration-200 flex items-center justify-center">
@@ -281,15 +313,15 @@
                     </label>
                     <div class="flex items-center space-x-6">
                         <label class="flex items-center">
-                            <input type="radio" name="status" value="draft" class="text-purple-600 focus:ring-purple-500">
+                            <input type="radio" name="status" value="draft" {{ old('status', $concert->status) == 'draft' ? 'checked' : '' }} class="text-purple-600 focus:ring-purple-500">
                             <span class="ml-2 text-gray-700">Draft</span>
                         </label>
                         <label class="flex items-center">
-                            <input type="radio" name="status" value="published" checked class="text-purple-600 focus:ring-purple-500">
+                            <input type="radio" name="status" value="published" {{ old('status', $concert->status) == 'published' ? 'checked' : '' }} class="text-purple-600 focus:ring-purple-500">
                             <span class="ml-2 text-gray-700">Published</span>
                         </label>
                         <label class="flex items-center">
-                            <input type="radio" name="status" value="cancelled" class="text-purple-600 focus:ring-purple-500">
+                            <input type="radio" name="status" value="cancelled" {{ old('status', $concert->status) == 'cancelled' ? 'checked' : '' }} class="text-purple-600 focus:ring-purple-500">
                             <span class="ml-2 text-gray-700">Cancelled</span>
                         </label>
                     </div>
@@ -302,11 +334,11 @@
                         <i class="fas fa-times mr-2"></i>
                         Cancel Changes
                     </a>
-                    <button type="button" 
-                            class="inline-flex items-center justify-center px-8 py-4 border border-purple-500 text-purple-600 font-semibold rounded-xl hover:bg-purple-50 transition duration-200">
-                        <i class="fas fa-save mr-2"></i>
-                        Save as Draft
-                    </button>
+                    <a href="{{ route('manageconcertticket.show') }}?concert_id={{ $concert->id }}" 
+                       class="inline-flex items-center justify-center px-8 py-4 border border-blue-500 text-blue-600 font-semibold rounded-xl hover:bg-blue-50 transition duration-200">
+                        <i class="fas fa-ticket-alt mr-2"></i>
+                        Edit Tickets
+                    </a>
                     <button type="submit" 
                             class="inline-flex items-center justify-center px-8 py-4 btn-gradient text-white font-semibold rounded-xl transition duration-200 transform hover:scale-105 shadow-lg">
                         <i class="fas fa-check mr-2"></i>
@@ -318,7 +350,41 @@
     </main>
 
     <script>
+        // Auto-hide messages function
+        function hideMessage(messageId) {
+            const message = document.getElementById(messageId);
+            if (message) {
+                message.style.opacity = '0';
+                message.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    message.remove();
+                }, 300);
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
+            // Auto-hide validation errors and messages
+            const validationErrors = document.getElementById('validation-errors');
+            const errorMessage = document.getElementById('error-message');
+            const successMessage = document.getElementById('success-message');
+            
+            if (validationErrors) {
+                setTimeout(() => {
+                    hideMessage('validation-errors');
+                }, 8000); // 8 seconds for validation errors
+            }
+            
+            if (errorMessage) {
+                setTimeout(() => {
+                    hideMessage('error-message');
+                }, 7000); // 7 seconds for error messages
+            }
+            
+            if (successMessage) {
+                setTimeout(() => {
+                    hideMessage('success-message');
+                }, 5000); // 5 seconds for success messages
+            }
             // Image Upload Functionality
             const uploadArea = document.getElementById('uploadArea');
             const fileInput = document.getElementById('concert_image');
@@ -406,19 +472,10 @@
             form.addEventListener('submit', function(e) {
                 // Add loading state to submit button
                 const submitBtn = form.querySelector('button[type="submit"]');
-                const originalText = submitBtn.innerHTML;
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Updating Concert...';
                 submitBtn.disabled = true;
-
-                // Simulate form processing (remove this in production)
-                setTimeout(() => {
-                    alert('Concert updated successfully! (This is a demo)');
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.disabled = false;
-                }, 2000);
-
-                // Prevent actual form submission for demo
-                e.preventDefault();
+                
+                // Form will submit normally to the controller
             });
 
             // Add smooth animations to form inputs
@@ -433,50 +490,6 @@
                 });
             });
 
-            // Auto-save functionality (demo)
-            let autoSaveTimeout;
-            const formInputs = form.querySelectorAll('input, textarea, select');
-            
-            formInputs.forEach(input => {
-                input.addEventListener('input', function() {
-                    clearTimeout(autoSaveTimeout);
-                    
-                    // Show auto-save indicator
-                    showAutoSaveIndicator();
-                    
-                    autoSaveTimeout = setTimeout(() => {
-                        // Simulate auto-save
-                        console.log('Auto-saving changes...');
-                        hideAutoSaveIndicator();
-                    }, 2000);
-                });
-            });
-
-            function showAutoSaveIndicator() {
-                let indicator = document.getElementById('autosave-indicator');
-                if (!indicator) {
-                    indicator = document.createElement('div');
-                    indicator.id = 'autosave-indicator';
-                    indicator.className = 'fixed top-20 right-4 bg-yellow-100 text-yellow-800 px-4 py-2 rounded-lg shadow-lg border border-yellow-200 transition-all duration-300';
-                    indicator.innerHTML = '<i class="fas fa-clock mr-2"></i>Auto-saving...';
-                    document.body.appendChild(indicator);
-                }
-                indicator.style.opacity = '1';
-                indicator.style.transform = 'translateX(0)';
-            }
-
-            function hideAutoSaveIndicator() {
-                const indicator = document.getElementById('autosave-indicator');
-                if (indicator) {
-                    indicator.innerHTML = '<i class="fas fa-check mr-2"></i>Changes saved';
-                    indicator.className = 'fixed top-20 right-4 bg-green-100 text-green-800 px-4 py-2 rounded-lg shadow-lg border border-green-200 transition-all duration-300';
-                    
-                    setTimeout(() => {
-                        indicator.style.opacity = '0';
-                        indicator.style.transform = 'translateX(100%)';
-                    }, 1500);
-                }
-            }
 
             // Concert status change handling
             const statusRadios = document.querySelectorAll('input[name="status"]');
