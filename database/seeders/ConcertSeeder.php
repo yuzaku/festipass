@@ -25,7 +25,7 @@ class ConcertSeeder extends Seeder
                 'location' => 'Jakarta International Expo, Kemayoran',
                 'event_date' => Carbon::now()->addDays(45),
                 'status' => 'published',
-                'poster' => 'concerts/ado-concert.jpg', // Taruh file ado-concert.jpg di storage/app/public/concerts/
+                'poster' => 'images/concerts/ado-concert.jpg',
                 'created_at' => Carbon::now()->subDays(10),
                 'updated_at' => Carbon::now()->subDays(5),
             ],
@@ -37,7 +37,7 @@ class ConcertSeeder extends Seeder
                 'location' => 'Gedung Sate Concert Hall, Bandung',
                 'event_date' => Carbon::now()->addDays(60),
                 'status' => 'published',
-                'poster' => 'concerts/yorushika-concert.jpg', // Taruh file yorushika-concert.jpg di storage/app/public/concerts/
+                'poster' => 'images/concerts/yorushika-concert.jpg',
                 'created_at' => Carbon::now()->subDays(8),
                 'updated_at' => Carbon::now()->subDays(3),
             ],
@@ -49,7 +49,7 @@ class ConcertSeeder extends Seeder
                 'location' => 'Balai Pemuda Surabaya',
                 'event_date' => Carbon::now()->addDays(90),
                 'status' => 'published',
-                'poster' => 'concerts/yanaginagi-concert.jpg', // Taruh file yanaginagi-concert.jpg di storage/app/public/concerts/
+                'poster' => 'images/concerts/yanaginagi-concert.jpg',
                 'created_at' => Carbon::now()->subDays(6),
                 'updated_at' => Carbon::now()->subDays(1),
             ],

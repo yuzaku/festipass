@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Event;
+use Illuminate\Http\Request;
+use App\Models\Events;
 
-class OrgController extends Controller
+class OrgProfileHistoryController extends Controller
 {
     public function index()
     {
-        // Fetch all events ordered by date
-        $event = Org::orderBy('date', 'asc')->get();
+        // Ambil semua event milik organizer yang sedang login, urutkan berdasarkan tanggal
+        $events = Events::where('organizer_id', auth()->id())
+                        ->orderBy('event_date', 'asc')
+                        ->get();
 
-        // Pass to the view
+        // Kirim ke view yang benar
         return view('profile.orgprofilehistory', compact('events'));
     }
 }

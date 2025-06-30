@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Hash;
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable;
-
+    const UPDATED_AT = null;
     /**
      * The attributes that are mass assignable.
      */
@@ -108,4 +108,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return $query->where('is_organizer', 0);
     }
 
+    // di dalam class User
+    public function reviews()
+    {
+        return $this->hasMany(EventReview::class, 'user_id');
+    }
 }

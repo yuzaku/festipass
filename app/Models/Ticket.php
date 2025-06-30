@@ -14,6 +14,7 @@ class Ticket extends Model
         'ticket_type',
         'price',
         'stock',
+        'sold', // <-- TAMBAHKAN INI
     ];
 
     /**
@@ -21,7 +22,12 @@ class Ticket extends Model
      */
     public function event()
     {
-        return $this->belongsTo(Event::class);
+        return $this->belongsTo(Events::class, 'event_id');
+    }
+
+    public function order_items()
+    {
+        return $this->belongsTo(OrderItems::class,'id');
     }
 
     /**

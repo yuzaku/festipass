@@ -84,7 +84,7 @@
                 <a href="{{ route('organizer.profile') }}" class="tab-active py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
                     Profile
                 </a>
-                <a href="{{ route('your.reports') }}" class="py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap">
+                <a href="{{ route('organizer.profile.reviews') }}" class="py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap">
                     Reviews
                 </a>
                 <a href="{{ route('organizer.history') }}" class="py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap">

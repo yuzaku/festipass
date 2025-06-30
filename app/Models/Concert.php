@@ -123,6 +123,12 @@ class Concert extends Model
 
     public function getPosterUrlAttribute()
     {
+        // Check if poster exists in public directory (for GitHub repo images)
+        if ($this->poster && file_exists(public_path($this->poster))) {
+            return asset($this->poster);
+        }
+        
+        // Check if poster exists in storage (for uploaded images)
         if ($this->poster && file_exists(public_path('storage/' . $this->poster))) {
             return asset('storage/' . $this->poster);
         }
