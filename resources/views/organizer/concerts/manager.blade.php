@@ -102,6 +102,15 @@
             </div>
         @endif
 
+        @if(session('warning'))
+            <div id="warning-message" class="mb-4 bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative transition-all duration-300">
+                <span>{{ session('warning') }}</span>
+                <button onclick="hideMessage('warning-message')" class="absolute top-1/2 transform -translate-y-1/2 right-2 text-yellow-600 hover:text-yellow-800 w-6 h-6 flex items-center justify-center">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        @endif
+
         @if(session('error'))
             <div id="error-message" class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative transition-all duration-300">
                 <span>{{ session('error') }}</span>
@@ -417,14 +426,21 @@
 
         // Simple hover animations and interactions
         document.addEventListener('DOMContentLoaded', function() {
-            // Auto-hide success/error messages after 5 seconds
+            // Auto-hide success/error/warning messages after 5 seconds
             const successMessage = document.getElementById('success-message');
             const errorMessage = document.getElementById('error-message');
+            const warningMessage = document.getElementById('warning-message');
             
             if (successMessage) {
                 setTimeout(() => {
                     hideMessage('success-message');
                 }, 5000); // 5 seconds
+            }
+            
+            if (warningMessage) {
+                setTimeout(() => {
+                    hideMessage('warning-message');
+                }, 6000); // 6 seconds for warnings
             }
             
             if (errorMessage) {

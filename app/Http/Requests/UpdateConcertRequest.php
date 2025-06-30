@@ -29,7 +29,7 @@ class UpdateConcertRequest extends FormRequest
             'date' => 'required|date',
             'time' => 'required|date_format:H:i',
             'description' => 'required|string|min:10|max:2000',
-            'concert_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120', // 5MB max
+            'concert_image' => 'nullable', // Remove strict validation, handle in controller
             'status' => 'required|in:draft,published,cancelled',
         ];
     }
@@ -54,9 +54,7 @@ class UpdateConcertRequest extends FormRequest
             'description.required' => 'Concert description is required.',
             'description.min' => 'Description must be at least 10 characters.',
             'description.max' => 'Description cannot exceed 2000 characters.',
-            'concert_image.image' => 'File must be an image.',
-            'concert_image.mimes' => 'Image must be jpeg, png, jpg, or webp format.',
-            'concert_image.max' => 'Image size cannot exceed 5MB.',
+            // Image validation messages removed - handled in controller
             'status.required' => 'Concert status is required.',
             'status.in' => 'Status must be draft, published, or cancelled.',
         ];
